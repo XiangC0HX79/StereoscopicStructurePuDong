@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 mouseMove="contentGroup_mouseMoveHandler(event)" mouseOut="contentGroup_MouseOutHandle(event)">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[		
+			public static const GROUPMOVE:String = "GroupMove";	
+			public static const GROUPOUT:String = "GroupOut";	
+			
+			[Bindable]private var buildBitmap:Bitmap;
+			public function set BuildBitmap(value:Bitmap):void
+			{
+				buildBitmap = value;
+			}
+				
+			private var mousePoint:Point = new Point;
+			public function get MousePoint():Point
+			{
+				return mousePoint;
+			}
+			
+			
+			protected function contentGroup_mouseMoveHandler(event:MouseEvent):void
+			{
+				if(event.target != this)
+				{					
+					var pointLocal:Point = this.globalToLocal(event.target.localToGlobal(new Point(event.localX,event.localY)));
+					
+					mousePoint.x = pointLocal.x;
+					mousePoint.y = pointLocal.y;
+				}
+				else
+				{
+					mousePoint.x = event.localX;
+					mousePoint.y = event.localY;					
+				}
+				
+				dispatchEvent(new Event(GROUPMOVE));
+			}			
+			
+			protected function contentGroup_MouseOutHandle(event:MouseEvent):void
+			{				
+				dispatchEvent(new Event(GROUPOUT));
+			}			
+		]]>
+	</fx:Script>
+	
+	<s:Image source="{buildBitmap}" mouseEnabled="false"/>
+</s:Group>

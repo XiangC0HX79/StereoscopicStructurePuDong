@@ -1,6 +1,6 @@
 package app.controller
 {	
-	import app.view.ApplicationMediator;
+	import app.view.*;
 	
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.command.SimpleCommand;
@@ -20,6 +20,11 @@ package app.controller
 			application.styleManager.getStyleDeclaration("mx.controls.ToolTip").setStyle("backgroundColor","#A8A8A8");
 			
 			facade.registerMediator(new ApplicationMediator(application));	
+			
+			facade.registerMediator(new MenuSurroundingMediator);	
+			facade.registerMediator(new MenuStereoScopicStructureMediator);
+			
+			facade.registerMediator(new PanelStereoScopicStructureMediator);
 		}
 	}
 }

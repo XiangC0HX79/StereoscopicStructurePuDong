@@ -29,9 +29,10 @@ package app
 		public static const NOTIFY_TITLEWINDOW_FLOOR:String	= "titlewindow_floor";
 		public static const NOTIFY_TITLEWINDOW_IMAGE:String	= "titlewindow_image";
 		public static const NOTIFY_TITLEWINDOW_MOVIE:String	= "titlewindow_movie";
+		
 		public static const NOTIFY_MOVIE_POPUP:String		= "movie_popup";
 		
-		public static const NOTIFY_MENU_LAYER:String		= "menu_layer";
+		public static const NOTIFY_STEREO_LAYER:String		= "StereoLayer";
 		
 		public static const NOTIFY_FLOOR_ROTATION:String	= "floor_rotation";
 		

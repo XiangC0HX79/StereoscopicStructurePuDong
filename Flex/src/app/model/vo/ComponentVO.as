@@ -15,12 +15,12 @@ package app.model.vo
 		
 		public var componentBitmapName:String;
 		
-		public var type:Number;
+		public var layer:LayerVO;
 		
 		public var xOffset:Number;
 		public var yOffset:Number;
 		
-		public var visible:Boolean;
+		//public var visible:Boolean;
 						
 		public var videoName:String = "";
 		
@@ -34,7 +34,7 @@ package app.model.vo
 			this.xOffset = item.T_FloorDetailX;
 			this.yOffset = item.T_FloorDetailY;
 			
-			this.type = item.T_FloorDetailType;
+			//this.type = item.T_FloorDetailType;
 		}
 	}
 }

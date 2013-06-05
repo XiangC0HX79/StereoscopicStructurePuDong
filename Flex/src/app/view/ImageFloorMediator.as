@@ -2,6 +2,7 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
+	import app.model.LayerSettingStereoScopicProxy;
 	import app.model.vo.ComponentVO;
 	import app.model.vo.FloorVO;
 	import app.view.components.ImageFloor;
@@ -24,9 +25,7 @@ package app.view
 	public class ImageFloorMediator extends Mediator implements IMediator
 	{
 		private var _alpha:Number;
-		
-		private var _aComVisible:Array = new Array(false,false,false,false,false);
-		
+				
 		public function ImageFloorMediator(mediatorName:String=null, viewComponent:Object=null)
 		{
 			super(mediatorName, viewComponent);
@@ -62,12 +61,8 @@ package app.view
 		{
 			if(isNaN(alpha))
 			{
-				var comVisible:Boolean = false;
-				for each(var item:Boolean in _aComVisible)
-				{
-					comVisible ||= item;
-				}
-				alpha = comVisible?imageFloor.floor.alpha:0.01;
+				var layerSettingStereoScopicProxy:LayerSettingStereoScopicProxy = facade.retrieveProxy(LayerSettingStereoScopicProxy.NAME) as LayerSettingStereoScopicProxy;
+				alpha = layerSettingStereoScopicProxy.visible?imageFloor.floor.alpha:0.01;
 			}
 			
 			_alpha = alpha;
@@ -91,7 +86,7 @@ package app.view
 						
 			for each(var component:ComponentVO in imageFloor.floor.components)
 			{
-				if(component.visible)
+				if(component.layer.LayerVisible)
 				{
 					var matrix:Matrix = new Matrix(1,0,0,1,component.xOffset,component.yOffset);
 					floorBitmapData.draw(component.componentBitmap,matrix);
@@ -176,7 +171,7 @@ package app.view
 		override public function listNotificationInterests():Array
 		{
 			return [
-				ApplicationFacade.NOTIFY_MENU_LAYER,
+				ApplicationFacade.NOTIFY_STEREO_LAYER,
 				ApplicationFacade.NOTIFY_FLOOR_ROTATION,				
 				ApplicationFacade.NOTIFY_FLOOR_FOCUS
 			];
@@ -186,21 +181,7 @@ package app.view
 		{
 			switch(notification.getName())
 			{
-				case ApplicationFacade.NOTIFY_MENU_LAYER:
-					var type:Number = notification.getBody()[0];
-					var visible:Boolean = notification.getBody()[1];
-					
-					for each(var component:ComponentVO in imageFloor.floor.components)
-					{
-						if((component.type == type)
-							&& (component.visible != visible))
-						{							
-							component.visible = visible;
-						}
-					}
-					
-					_aComVisible[type - 1] = visible;
-					
+				case ApplicationFacade.NOTIFY_STEREO_LAYER:					
 					updateFloor();
 					break;
 				

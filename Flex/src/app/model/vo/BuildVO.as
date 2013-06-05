@@ -17,8 +17,10 @@ package app.model.vo
 		
 		public var floors:ArrayCollection = new ArrayCollection;
 		
+		public var contingencyPlans:String;
+		
 		public var edit:Boolean;
-				
+		
 		public function BuildVO()
 		{
 		}

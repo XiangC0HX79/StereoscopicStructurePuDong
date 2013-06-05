@@ -2,6 +2,7 @@ package app.controller
 {	
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
+	import app.model.LayerSettingStereoScopicProxy;
 	import app.model.vo.ComponentVO;
 	import app.model.vo.FloorVO;
 	import app.view.TitleWindowFloorMediator;
@@ -38,6 +39,8 @@ package app.controller
 		
 		private var buildProxy:BuildProxy;
 		
+		private var layerSettingStereoScopicProxy:LayerSettingStereoScopicProxy;
+		
 		override public function execute(note:INotification):void
 		{						
 			sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGSHOW,"系统初始化：加载数据...");
@@ -48,6 +51,8 @@ package app.controller
 			load.addEventListener(IOErrorEvent.IO_ERROR,onIOError);
 			
 			buildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
+			
+			layerSettingStereoScopicProxy = facade.retrieveProxy(LayerSettingStereoScopicProxy.NAME) as LayerSettingStereoScopicProxy;
 		}
 				
 		private function onIOError(event:IOErrorEvent):void
@@ -60,6 +65,8 @@ package app.controller
 			if(++init == INITCOUNT)
 			{														
 				sendNotification(ApplicationFacade.NOTIFY_APP_INIT);
+				
+				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGHIDE,"程序初始化完成！");	
 			}
 		}
 		
@@ -100,6 +107,8 @@ package app.controller
 			buildProxy.build.buildID = result[0].TMB_ID;		
 			
 			buildProxy.build.buildBitmapName = result[0].TMB_PicPath;
+			
+			buildProxy.build.contingencyPlans = result[0].TMB_ContingencyPlans;
 			
 			//调试，固定为jpg格式
 			//buildProxy.build.buildBitmapName = buildProxy.build.buildBitmapName.substr(0,buildProxy.build.buildBitmapName.lastIndexOf(".")) + ".jpg";
@@ -162,7 +171,10 @@ package app.controller
 				{
 					for each(var item:Object in resultComponents)
 					{
-						floor.components.addItem(new ComponentVO(item));
+						component = new ComponentVO(item);
+						component.layer = layerSettingStereoScopicProxy.getLayer(item.T_FloorDetailType);
+						
+						floor.components.addItem(component);
 					}
 					
 					component = floor.components[indexComponent] as ComponentVO;	

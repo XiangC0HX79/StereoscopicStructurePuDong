@@ -29,10 +29,12 @@ public class Service : System.Web.Services.WebService
         DataTable table = new DataTable("Table");
         table.Columns.Add(new DataColumn("TMB_ID", Type.GetType("System.String")));
         table.Columns.Add(new DataColumn("TMB_PicPath", Type.GetType("System.String")));
+        table.Columns.Add(new DataColumn("TMB_ContingencyPlans", Type.GetType("System.String")));
 
         DataRow row = table.NewRow();
         row["TMB_ID"] = "1";
-        row["TMB_PicPath"] = "assets/image/plant4.jpg";
+        row["TMB_PicPath"] = "../assets/image/plant4.jpg";
+        row["TMB_ContingencyPlans"] = "../assets/doc/东方明珠应急预案.doc";
         table.Rows.Add(row);
 
         return table;
@@ -49,7 +51,8 @@ public class Service : System.Web.Services.WebService
         DataRow row = table.NewRow();
         row["T_FloorID"] = "1";
         row["T_FloorName"] = "测试";
-        row["T_FloorPicPath"] = "assets/image/gogopher.jpg";
+        row["T_FloorPicPath"] = "../assets/image/gogopher.jpg";
+
         table.Rows.Add(row);
 
         return table;

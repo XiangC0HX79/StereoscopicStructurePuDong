@@ -54,8 +54,18 @@ package app.controller
 			{					
 				var text:TextField = new TextField;
 				text.text = "未找到图片";
-				//text.autoSize = TextFieldAutoSize.CENTER;
+				
+				var url2:String = imageName;
+				while(url2.length > 30)
+				{
+					var trim:String = url.substr(0,30);
+					text.appendText("\n" + trim);
+					url2 = url2.substring(30);
+				}
+				text.appendText("\n" + url2);
+				
 				text.width = 500;
+				text.multiline = true;
 				text.height = 400;
 				
 				var textFmt:TextFormat = new TextFormat;

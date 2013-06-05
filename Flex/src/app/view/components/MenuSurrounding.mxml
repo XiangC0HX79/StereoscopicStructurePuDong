@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:ToggleButton skinClass="app.skin.skinSubMenuButton" width="175" height="36"
+					label="制高点" buttonMode="true"/>
+	<s:ToggleButton skinClass="app.skin.skinSubMenuButton" width="175" height="36"
+					label="分控范围" buttonMode="true"/>
+	<s:ToggleButton skinClass="app.skin.skinSubMenuButton" width="175" height="36"
+					label="重要交通信息" buttonMode="true"/>
+	<s:ToggleButton skinClass="app.skin.skinSubMenuButton" width="175" height="36"
+					label="危险源" buttonMode="true"/>
+	<s:ToggleButton skinClass="app.skin.skinSubMenuButton" width="175" height="36"
+					label="救援信息" buttonMode="true"/>
+	<s:ToggleButton skinClass="app.skin.skinSubMenuButton" width="175" height="36"
+					label="消防栓" buttonMode="true"/>
+	<s:ToggleButton skinClass="app.skin.skinSubMenuButton" width="175" height="36"
+					label="重点单位" buttonMode="true"/>
+	<s:ToggleButton skinClass="app.skin.skinSubMenuButton" width="175" height="36"
+					label="窨井通道" buttonMode="true"/>
+</s:VGroup>

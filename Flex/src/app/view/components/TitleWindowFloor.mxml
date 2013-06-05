@@ -2,7 +2,7 @@
 <s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
 			   xmlns:mx="library://ns.adobe.com/flex/mx" 
-			   x="15" y="117" skinClass="skin.skinTitleWindowFloor"
+			   x="15" y="117" skinClass="app.skin.skinTitleWindowFloor"
 			   width="766" height="640">
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
