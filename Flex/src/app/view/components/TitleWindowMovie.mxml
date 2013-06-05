@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:s="library://ns.adobe.com/flex/spark" 
+				   xmlns:mx="library://ns.adobe.com/flex/mx"				   
+				   width="500" height="400" updateComplete="group1_updateCompleteHandler(event)">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			public static const WIN_CLOSE:String = "win_close";
+			
+			[Bindable]public var source:String;
+			
+			protected function image1_clickHandler(event:MouseEvent):void
+			{			
+				videoPlayer.stop();
+				
+				dispatchEvent(new Event(WIN_CLOSE));
+			}
+			
+			protected function group1_updateCompleteHandler(event:FlexEvent):void
+			{
+				videoPlayer.play()
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:VideoPlayer id="videoPlayer" width="100%" height="100%" source="{source}" autoPlay="false"/>
+	
+	<s:Image top="20" right="20" buttonMode="true" source="@Embed('assets/image/x.png')" click="image1_clickHandler(event)"/>
+	
+</s:Group>

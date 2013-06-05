@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   x="15" y="117" skinClass="skin.skinTitleWindowFloor"
+			   width="766" height="640">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import app.model.vo.FloorVO;
+			
+			public static const WIN_CLOSE:String = "win_close";
+			
+			[Bindable]public var floor:FloorVO;
+			
+			[Bindable]public var scales:Array = new Array(11);
+			
+			[Bindable]public var contentScaleIndex:Number = 0;
+			
+			[Bindable]public var trueScaleIndex:Number = 0;
+			
+			[Bindable]private var currentScaleIndex:Number = 0;
+						
+			[Bindable]public var srcPoint:Point;
+			
+			public function initScales():void
+			{											
+				var contentScale:Number = Math.min((group.height)/source.height
+					,group.width/source.width);
+				var maxScale:Number = Math.max(2,contentScale);
+				var minScale:Number = Math.min(1,contentScale);
+				
+				for(var i:Number = 0;i < scales.length;i++)
+				{
+					scales[i] = minScale + i * (maxScale - minScale) / (scales.length - 1);
+				}
+				
+				var minContent:Number = 2;
+				var minTrue:Number = 2;
+				for(i = 0;i < scales.length;i++)
+				{
+					var tempContent:Number = Math.abs(scales[i] - contentScale);
+					var tempTrue:Number = Math.abs(scales[i] - 1);
+					if(tempContent < minContent)
+					{
+						minContent = tempContent;
+						contentScaleIndex = i;
+					}
+					if(tempTrue < minTrue)
+					{
+						minTrue = tempTrue;
+						trueScaleIndex = i;
+					}
+				}
+				scales[trueScaleIndex] = 1;
+				
+				scales[contentScaleIndex] = contentScale;
+				
+				setScale(contentScaleIndex);
+			}		
+			
+			private function setScale(scaleIndex:Number):void
+			{				
+				var zoomPoint:Point = new Point(group.width / 2,group.height / 2);
+				
+				var oldScale:Number = groupFloor.scaleX;
+				var newScale:Number = scales[scaleIndex];
+				
+				this.currentScaleIndex = scaleIndex;
+				
+				groupFloor.scaleX = newScale;
+				groupFloor.scaleY = newScale;
+				
+				var scaleW:Number = groupFloor.width * groupFloor.scaleX;
+				var scaleH:Number = groupFloor.height * groupFloor.scaleY;
+				
+				if(this.group.width >= scaleW)
+				{
+					this.groupFloor.x = int((this.group.width - scaleW) / 2);
+				}
+				else if((this.groupFloor.x - zoomPoint.x)/oldScale*newScale + zoomPoint.x > 0)
+				{
+					this.groupFloor.x = 0;
+				}
+				else
+				{
+					
+					this.groupFloor.x = (this.groupFloor.x - zoomPoint.x)/oldScale*newScale + zoomPoint.x ;
+				}
+				
+				if(this.group.height >= scaleH)
+				{
+					this.groupFloor.y = int((this.group.height - scaleH) / 2);
+				}
+				else if((this.groupFloor.y - zoomPoint.y)/oldScale*newScale + zoomPoint.y > 0)
+				{
+					this.groupFloor.y= 0;
+				}
+				else
+				{					
+					this.groupFloor.y = (this.groupFloor.y - zoomPoint.y)/oldScale*newScale + zoomPoint.y;
+				} 
+			}
+						
+			private function zoomin(zoomPoint:Point = null):void
+			{
+				var scaleIndex:Number = Math.min(currentScaleIndex + 1,scales.length - 1);
+				
+				this.setScale(scaleIndex);
+			}
+			
+			private function zoomout(zoomPoint:Point = null):void
+			{
+				var scaleIndex:Number = Math.max(currentScaleIndex - 1,0);
+				
+				this.setScale(scaleIndex);
+			}
+			
+			protected function image_mouseDownHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				srcPoint = new Point(event.stageX,event.stageY);
+			}
+			
+			protected function image_mouseMoveHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				if(event.buttonDown)
+				{					
+					var desPoint:Point = new Point(event.stageX,event.stageY);
+					
+					var tempPoint:Point = new Point(groupFloor.x + (desPoint.x - srcPoint.x)*groupFloor.scaleX
+						,groupFloor.y + (desPoint.y - srcPoint.y)*groupFloor.scaleY);
+					
+					var imageW:Number = groupFloor.width * groupFloor.scaleX;
+					var imageH:Number = groupFloor.height * groupFloor.scaleY;
+					
+					if(this.group.width < imageW)
+					{
+						if(tempPoint.x > 0)
+						{
+							groupFloor.x = 0;
+						}
+						else if(tempPoint.x < this.group.width - imageW)
+						{
+							groupFloor.x = this.group.width - imageW;
+						}
+						else
+						{
+							groupFloor.x = tempPoint.x;
+						}		
+					}
+					
+					if(this.group.height < imageH)
+					{
+						if(tempPoint.y > 0)
+						{
+							groupFloor.y = 0;
+						}
+						else if(tempPoint.y < this.group.height - imageH)
+						{
+							groupFloor.y = this.group.height - imageH;
+						}
+						else
+						{
+							groupFloor.y = tempPoint.y;
+						}	
+					}
+					
+					srcPoint.x = desPoint.x;
+					srcPoint.y = desPoint.y; 
+				}
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Group width="100%" height="80">		
+		<s:Label verticalCenter="0" horizontalCenter="0" text="{floor.floorName}" color="0xFFFFFF" fontSize="30"/>
+		<s:Image verticalCenter="0" right="5" buttonMode="true" source="@Embed('assets/image/x.png')" click="dispatchEvent(new Event(WIN_CLOSE));"/>
+	</s:Group>
+	
+	<s:Group id="group" width="100%" height="100%"
+			 clipAndEnableScrolling="true">		
+		<s:Group id="groupFloor">
+			<s:Image id="source" source="{floor.floorBitmap}" 
+					 mouseMove="image_mouseMoveHandler(event)"
+					 mouseDown="image_mouseDownHandler(event)"/>
+			<s:Group id="groupComponent"/>				
+		</s:Group>
+		<s:Image top="30" right="30" buttonMode="true" source="@Embed('assets/image/1比1.png')" click="setScale(trueScaleIndex);"/>
+		<s:Image top="80" right="30" buttonMode="true" source="@Embed('assets/image/放大.png')" click="zoomin();"/>
+		<s:Image top="130" right="30" buttonMode="true" source="@Embed('assets/image/缩小.png')" click="zoomout();"/>
+	</s:Group>
+</s:SkinnableContainer>

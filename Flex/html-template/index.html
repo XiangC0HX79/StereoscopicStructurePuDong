@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>正在进入系统,请等待...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Author" content="PR" />
+</head>
+<body>
+<script type="text/javascript">
+function winopen(build)
+{
+   	window.open("StereoscopicStructure.html?build=" + build,"","Scrollbars=no,Toolbar=no,Location=no,Direction=no,Resizeable=no,Width=1024,Height=768");
+}
+function winopenEdit(build)
+{
+   	window.open("StereoscopicStructure.html?edit=1&build=" + build,"","Scrollbars=no,Toolbar=no,Location=no,Direction=no,Resizeable=no,Width=1024,Height=768");
+}
+</script>
+<button type="button" onclick="winopenEdit('东方明珠')">东方明珠(编辑)</button>
+<button type="button" onclick="winopenEdit('上海国际会议中心')">上海国际会议中心(编辑)</button>
+<button type="button" onclick="winopen('东方明珠')">东方明珠</button>
+<button type="button" onclick="winopen('上海国际会议中心')">上海国际会议中心</button>
+</body>
+</html> 
