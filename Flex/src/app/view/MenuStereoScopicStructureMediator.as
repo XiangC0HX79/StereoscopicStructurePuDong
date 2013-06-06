@@ -2,7 +2,7 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.LayerSettingStereoScopicProxy;
-	import app.view.components.MenuStereoScopicStructure;
+	import app.view.components.MenuSub;
 	
 	import flash.events.Event;
 	
@@ -15,7 +15,7 @@ package app.view
 		
 		public function MenuStereoScopicStructureMediator()
 		{
-			super(NAME, new MenuStereoScopicStructure);			
+			super(NAME, new MenuSub);			
 			
 			menuStereoScopicStructure.addEventListener(Event.CHANGE,onChange);
 			
@@ -23,9 +23,9 @@ package app.view
 			menuStereoScopicStructure.dataProvider = layerSettingStereoScopicProxy.Layers;
 		}
 		
-		protected function get menuStereoScopicStructure():MenuStereoScopicStructure
+		protected function get menuStereoScopicStructure():MenuSub
 		{
-			return viewComponent as MenuStereoScopicStructure;
+			return viewComponent as MenuSub;
 		}
 		
 		private function onChange(event:Event):void

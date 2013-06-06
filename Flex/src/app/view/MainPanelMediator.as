@@ -29,25 +29,34 @@ package app.view
 			return viewComponent as MainPanel;
 		}
 		
+		private function contentGroupAddElement(mediatorName:String):void
+		{			
+			mainPanel.ContentGroup.removeAllElements();
+			
+			var element:IVisualElement = facade.retrieveMediator(mediatorName).getViewComponent() as IVisualElement;
+			mainPanel.ContentGroup.addElement(element);
+			
+			mainPanel.ContentGroup.validateNow();
+			
+			if(element.width > mainPanel.ContentGroup.width)
+				mainPanel.ContentGroup.horizontalScrollPosition = (element.width - mainPanel.ContentGroup.width) / 2;
+			
+			if(element.height > mainPanel.ContentGroup.height)
+				mainPanel.ContentGroup.verticalScrollPosition = (element.height - mainPanel.ContentGroup.height) / 2;
+		}
+		
 		private function onSurrounding(event:Event):void
 		{
 			mainPanel.Menu.addElementAt(facade.retrieveMediator(MenuSurroundingMediator.NAME).getViewComponent() as IVisualElement,mainPanel.ButtonIndex + 1);
+			
+			contentGroupAddElement(PanelSurroundingMediator.NAME);
 		}
 		
 		private function onStereoScopic(event:Event):void
 		{
 			mainPanel.Menu.addElementAt(facade.retrieveMediator(MenuStereoScopicStructureMediator.NAME).getViewComponent() as IVisualElement,mainPanel.ButtonIndex + 1);
 			
-			mainPanel.ContentGroup.addElement(facade.retrieveMediator(PanelStereoScopicStructureMediator.NAME).getViewComponent() as IVisualElement);
-			
-			mainPanel.ContentGroup.validateNow();
-			
-			var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
-			if(buildProxy.build.buildBitmap.width > mainPanel.ContentGroup.width)
-				mainPanel.ContentGroup.horizontalScrollPosition = (buildProxy.build.buildBitmap.width - mainPanel.ContentGroup.width) / 2;
-			
-			if(buildProxy.build.buildBitmap.height > mainPanel.ContentGroup.height)
-				mainPanel.ContentGroup.verticalScrollPosition = (buildProxy.build.buildBitmap.height - mainPanel.ContentGroup.height) / 2;
+			contentGroupAddElement(PanelStereoScopicStructureMediator.NAME);
 		}
 		
 		override public function listNotificationInterests():Array
@@ -64,6 +73,8 @@ package app.view
 				case ApplicationFacade.NOTIFY_APP_INIT:
 					var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
 					mainPanel.Build = buildProxy.build;
+					
+					contentGroupAddElement(PanelSurroundingMediator.NAME);
 					break;
 			}
 		}

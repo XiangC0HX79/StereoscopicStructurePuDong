@@ -24,17 +24,83 @@ public class Service : System.Web.Services.WebService
     }
 
     [WebMethod]
-    public DataTable InitBuild() 
+    public DataTable InitIcon()
+    {
+        DataTable table = new DataTable("Table");
+        table.Columns.Add(new DataColumn("IconID", Type.GetType("System.String")));
+        table.Columns.Add(new DataColumn("IconPath", Type.GetType("System.String")));
+
+        DataRow row = table.NewRow();
+        row["IconID"] = "1";
+        row["IconPath"] = "../assets/image/icon_info.png";
+        table.Rows.Add(row);
+
+        return table;
+    }
+
+    [WebMethod]
+    public DataTable InitSurrounding() 
     {
         DataTable table = new DataTable("Table");
         table.Columns.Add(new DataColumn("TMB_ID", Type.GetType("System.String")));
-        table.Columns.Add(new DataColumn("TMB_PicPath", Type.GetType("System.String")));
-        table.Columns.Add(new DataColumn("TMB_ContingencyPlans", Type.GetType("System.String")));
+        table.Columns.Add(new DataColumn("TMB_SurroundingBitmap", Type.GetType("System.String")));
 
         DataRow row = table.NewRow();
         row["TMB_ID"] = "1";
+        row["TMB_SurroundingBitmap"] = "../assets/image/surrounding.png";
+        table.Rows.Add(row);
+
+        return table;
+    }
+
+    [WebMethod]
+    public DataTable InitKeyPoint(String buildID)
+    {
+        DataTable table = new DataTable("Table");
+        table.Columns.Add(new DataColumn("ID", Type.GetType("System.String")));
+        table.Columns.Add(new DataColumn("X", Type.GetType("System.String")));
+        table.Columns.Add(new DataColumn("Y", Type.GetType("System.String")));
+
+        DataRow row = table.NewRow();
+        row["ID"] = "1";
+        row["X"] = "50";
+        row["Y"] = "50";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
+        row["ID"] = "1";
+        row["X"] = "100";
+        row["Y"] = "100";
+        table.Rows.Add(row);
+
+        return table;
+    }
+
+    [WebMethod]
+    public DataTable InitControlRange()
+    {
+        DataTable table = new DataTable("Table");
+        table.Columns.Add(new DataColumn("TMB_ControlRangeBitmap", Type.GetType("System.String")));
+        table.Columns.Add(new DataColumn("X", Type.GetType("System.String")));
+        table.Columns.Add(new DataColumn("Y", Type.GetType("System.String")));
+
+        DataRow row = table.NewRow();
+        row["TMB_ControlRangeBitmap"] = "../assets/image/gogopher.jpg";
+        row["X"] = "50";
+        row["Y"] = "50";
+        table.Rows.Add(row);
+
+        return table;
+    }
+
+    [WebMethod]
+    public DataTable InitBuild()
+    {
+        DataTable table = new DataTable("Table");
+        table.Columns.Add(new DataColumn("TMB_PicPath", Type.GetType("System.String")));
+
+        DataRow row = table.NewRow();
         row["TMB_PicPath"] = "../assets/image/plant4.jpg";
-        row["TMB_ContingencyPlans"] = "../assets/doc/东方明珠应急预案.doc";
         table.Rows.Add(row);
 
         return table;
@@ -65,6 +131,19 @@ public class Service : System.Web.Services.WebService
         table.Columns.Add(new DataColumn("T_FloorDetailID", Type.GetType("System.String")));
         table.Columns.Add(new DataColumn("T_FloorDetailName", Type.GetType("System.String")));
         table.Columns.Add(new DataColumn("T_FloorPicimgPath", Type.GetType("System.String")));
+
+        return table;
+    }
+
+    [WebMethod]
+    public DataTable InitContingencyPlans()
+    {
+        DataTable table = new DataTable("Table");
+        table.Columns.Add(new DataColumn("TMB_ContingencyPlans", Type.GetType("System.String")));
+
+        DataRow row = table.NewRow();
+        row["TMB_ContingencyPlans"] = "../assets/doc/东方明珠应急预案.doc";
+        table.Rows.Add(row);
 
         return table;
     }

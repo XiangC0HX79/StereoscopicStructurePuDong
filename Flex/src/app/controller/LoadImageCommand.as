@@ -55,7 +55,7 @@ package app.controller
 				var text:TextField = new TextField;
 				text.text = "未找到图片";
 				
-				var url2:String = imageName;
+				var url2:String = url;
 				while(url2.length > 30)
 				{
 					var trim:String = url.substr(0,30);

@@ -24,6 +24,10 @@ package app.controller
 			facade.registerMediator(new MenuSurroundingMediator);	
 			facade.registerMediator(new MenuStereoScopicStructureMediator);
 			
+			facade.registerMediator(new LayerKeyPointMediator);
+			facade.registerMediator(new LayerControlRangeMediator);
+			facade.registerMediator(new PanelSurroundingMediator);
+			
 			facade.registerMediator(new PanelStereoScopicStructureMediator);
 		}
 	}

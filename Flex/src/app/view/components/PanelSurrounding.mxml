@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[		
+			public static const GROUPMOVE:String = "GroupMove";	
+			public static const GROUPOUT:String = "GroupOut";	
+			
+			[Bindable]private var surroudingBitmap:Bitmap;
+			public function set SurroudingBitmap(value:Bitmap):void
+			{
+				surroudingBitmap = value;
+			}
+				
+			private var mousePoint:Point = new Point;
+			public function get MousePoint():Point
+			{
+				return mousePoint;
+			}			
+		]]>
+	</fx:Script>
+	
+	<!--周边环境底图-->
+	<s:Image source="{surroudingBitmap}" mouseEnabled="false"/>	
+</s:Group>

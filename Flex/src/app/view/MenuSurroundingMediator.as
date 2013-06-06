@@ -1,6 +1,7 @@
 package app.view
 {
-	import app.view.components.MenuSurrounding;
+	import app.model.LayerSettingSurroundingProxy;
+	import app.view.components.MenuSub;
 	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.patterns.mediator.Mediator;
@@ -11,12 +12,15 @@ package app.view
 		
 		public function MenuSurroundingMediator()
 		{
-			super(NAME, new MenuSurrounding);
+			super(NAME, new MenuSub);
+			
+			var layerSettingSurroundingProxy:LayerSettingSurroundingProxy = facade.retrieveProxy(LayerSettingSurroundingProxy.NAME) as LayerSettingSurroundingProxy;
+			menuSurrounding.dataProvider = layerSettingSurroundingProxy.Layers;
 		}
 		
-		protected function get menuSurrounding():MenuSurrounding
+		protected function get menuSurrounding():MenuSub
 		{
-			return viewComponent as MenuSurrounding;
+			return viewComponent as MenuSub;
 		}
 	}
 }

@@ -4,7 +4,9 @@ package app.controller
 	import app.model.BuildProxy;
 	import app.model.LayerSettingStereoScopicProxy;
 	import app.model.vo.ComponentVO;
+	import app.model.vo.ControlRangeVO;
 	import app.model.vo.FloorVO;
+	import app.model.vo.KeyPointVO;
 	import app.view.TitleWindowFloorMediator;
 	import app.view.components.TitleWindowFloor;
 	
@@ -60,16 +62,6 @@ package app.controller
 			sendNotification(ApplicationFacade.NOTIFY_APP_ALERTERROR,event.text);
 		}
 		
-		private function appInit():void
-		{
-			if(++init == INITCOUNT)
-			{														
-				sendNotification(ApplicationFacade.NOTIFY_APP_INIT);
-				
-				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGHIDE,"程序初始化完成！");	
-			}
-		}
-		
 		private function onLocaleConfigResult(event:Event):void
 		{				
 			try
@@ -91,11 +83,96 @@ package app.controller
 			{				
 				WebServiceCommand.WSDL = xml.WebServiceUrl;
 				
-				//加载建筑背景图
+				//加载图标				
+				sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
+					["InitIcon",onInitIcon
+						,[buildProxy.build.buildName]
+						,false]);
+			}
+		}
+		
+		private function onInitIcon(result:ArrayCollection):void
+		{							
+			for each(var item:Object in result)
+			{
+				switch(item.IconID)
+				{
+					case "1":
+						sendNotification(ApplicationFacade.NOTIFY_COMMAND_LOADIMAGE
+							,[
+								item.IconPath,
+								function(bitmap:Bitmap):void{KeyPointVO.Icon = bitmap;}
+							]);						
+						break;
+				}
+			}
+						
+			sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
+				["InitSurrounding",onInitSurrounding
+					,[buildProxy.build.buildName]
+					,false]);	
+		}
+		
+		private function onInitSurrounding(result:ArrayCollection):void
+		{								
+			if(result.length == 0)
+				return;
+			
+			buildProxy.build.buildID = result[0].TMB_ID;	
+			
+			sendNotification(ApplicationFacade.NOTIFY_COMMAND_LOADIMAGE,[result[0].TMB_SurroundingBitmap,loaderImageHandle]);
+			
+			function loaderImageHandle(bitmap:Bitmap):void   
+			{   						
+				buildProxy.build.surroundingBitmap = bitmap;
+				
+				//加载制高点
+				sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
+					["InitKeyPoint",onInitKeyPoint
+						,[buildProxy.build.buildID]
+						,false]);
+			}
+		}
+				
+		private function onInitKeyPoint(result:ArrayCollection):void
+		{						
+			for each(var item:Object in result)
+			{
+				buildProxy.build.keyPoints.addItem(new KeyPointVO(item));
+			}
+						
+			sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
+				["InitControlRange",onInitControlRange
+					,[buildProxy.build.buildID]
+					,false]);
+		}
+		
+		private function onInitControlRange(result:ArrayCollection):void
+		{								
+			if(result.length > 0)
+			{
+				buildProxy.build.controlRange = new ControlRangeVO(result[0]);
+				
+				sendNotification(ApplicationFacade.NOTIFY_COMMAND_LOADIMAGE,[result[0].TMB_ControlRangeBitmap,loaderImageHandle]);
+			}
+			else
+			{
+				//加载建筑信息
 				sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
 					["InitBuild",onInitBuild
 						,[buildProxy.build.buildName]
-						,false]);
+						,false]);	
+			}
+			
+			function loaderImageHandle(bitmap:Bitmap):void   
+			{   						
+				buildProxy.build.controlRange.bitmap = bitmap;
+				
+				//加载建筑信息
+				sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
+					["InitBuild",onInitBuild
+						,[buildProxy.build.buildName]
+						,false]);	
 			}
 		}
 		
@@ -103,23 +180,13 @@ package app.controller
 		{					
 			if(result.length == 0)
 				return;
-			
-			buildProxy.build.buildID = result[0].TMB_ID;		
-			
-			buildProxy.build.buildBitmapName = result[0].TMB_PicPath;
-			
-			buildProxy.build.contingencyPlans = result[0].TMB_ContingencyPlans;
-			
-			//调试，固定为jpg格式
-			//buildProxy.build.buildBitmapName = buildProxy.build.buildBitmapName.substr(0,buildProxy.build.buildBitmapName.lastIndexOf(".")) + ".jpg";
-			
-			//loadImage(buildProxy.build.buildBitmapName,loaderImageHandle);
-			sendNotification(ApplicationFacade.NOTIFY_COMMAND_LOADIMAGE,[buildProxy.build.buildBitmapName,loaderImageHandle]);
+							
+			sendNotification(ApplicationFacade.NOTIFY_COMMAND_LOADIMAGE,[result[0].TMB_PicPath,loaderImageHandle]);
 			
 			function loaderImageHandle(bitmap:Bitmap):void   
 			{   								
 				buildProxy.build.buildBitmap = bitmap;
-								
+				
 				//加载楼层
 				sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
 					["InitFloor",onInitFloor
@@ -131,9 +198,7 @@ package app.controller
 		private function onInitFloor(resultFloors:ArrayCollection):void
 		{							
 			if(resultFloors.length == 0)
-			{
-				return;
-			}
+				return;		
 						
 			var indexFloor:Number = 0;
 			var indexComponent:Number = 0;
@@ -147,7 +212,6 @@ package app.controller
 						
 			floor = buildProxy.build.floors[indexFloor];	
 			
-			//loadImage(floor.floorBitmapName,loaderFloorImageHandle);
 			sendNotification(ApplicationFacade.NOTIFY_COMMAND_LOADIMAGE,[floor.floorBitmapName,loaderFloorImageHandle]);
 			
 			function loaderFloorImageHandle(bitmap:Bitmap):void   
@@ -179,7 +243,6 @@ package app.controller
 					
 					component = floor.components[indexComponent] as ComponentVO;	
 					
-					//loadImage(component.componentBitmapName,loaderComponentImageHandle);
 					sendNotification(ApplicationFacade.NOTIFY_COMMAND_LOADIMAGE,[component.componentBitmapName,loaderComponentImageHandle]);
 				}
 			}
@@ -193,8 +256,7 @@ package app.controller
 				if(indexComponent < floor.components.length)
 				{
 					component = floor.components[indexComponent];
-					
-					//loadImage(component.componentBitmapName,loaderComponentImageHandle);	
+						
 					sendNotification(ApplicationFacade.NOTIFY_COMMAND_LOADIMAGE,[component.componentBitmapName,loaderComponentImageHandle]);
 				}
 				else
@@ -213,14 +275,29 @@ package app.controller
 				{
 					floor = buildProxy.build.floors[indexFloor];	
 					
-					//loadImage(floor.floorBitmapName,loaderFloorImageHandle);	
 					sendNotification(ApplicationFacade.NOTIFY_COMMAND_LOADIMAGE,[floor.floorBitmapName,loaderFloorImageHandle]);
 				}
 				else
 				{
-					appInit();
+					//加载组件
+					sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
+						["InitContingencyPlans",onInitContingencyPlans
+							,[buildProxy.build.buildID]
+							,false]);
 				}
 			}
 		}
+		
+		private function onInitContingencyPlans(result:ArrayCollection):void
+		{							
+			if(result.length > 0)
+			{
+				buildProxy.build.contingencyPlans = result[0].TMB_ContingencyPlans;
+			}
+						
+			sendNotification(ApplicationFacade.NOTIFY_APP_INIT);
+			
+			sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGHIDE,"程序初始化完成！");	
+		}		
 	}
 }
