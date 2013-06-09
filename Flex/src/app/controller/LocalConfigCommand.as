@@ -127,7 +127,6 @@ package app.controller
 				return;
 
 			buildProxy.setData(new BuildVO(result[0]));
-			//buildProxy.build.buildID = result[0].TMB_ID;	
 			
 			if(result[0].TMB_StereoPicPath)
 				sendNotification(ApplicationFacade.NOTIFY_COMMAND_LOADIMAGE,[result[0].TMB_StereoPicPath,loaderImageHandle]);
