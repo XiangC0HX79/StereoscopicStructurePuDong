@@ -33,9 +33,9 @@ package app.view
 	{
 		public static const NAME:String = "TitleWindowImageMediator";
 		
-		public function TitleWindowImageMediator(viewComponent:Object=null)
+		public function TitleWindowImageMediator()
 		{
-			super(NAME, viewComponent);
+			super(NAME, new TitleWindowImage);
 			
 			titleWindowImage.addEventListener(TitleWindowImage.WIN_CLOSE,onClose);
 			

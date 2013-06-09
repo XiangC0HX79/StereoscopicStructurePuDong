@@ -35,9 +35,9 @@ package app.view
 	{
 		public static const NAME:String = "TitleWindowFloorMediator";
 		
-		public function TitleWindowFloorMediator(viewComponent:Object=null)
+		public function TitleWindowFloorMediator()
 		{
-			super(NAME, viewComponent);
+			super(NAME, new TitleWindowFloor);
 			
 			titleWindowFloor.addEventListener(FlexEvent.CREATION_COMPLETE,onCreation);
 			titleWindowFloor.addEventListener(TitleWindowFloor.WIN_CLOSE,onClose);

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   x="15" y="117" skinClass="app.skin.skinTitleWindowFloor"
+			   width="320" height="600" color="0xFFFFFF" fontSize="15" fontWeight="bold">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[			
+			import app.model.vo.CommandHeightVO;
+			
+			public static const IMAGELIST:String = "ImageList";
+			
+			[Bindable]public var commandingHeight:CommandHeightVO;
+		]]>
+	</fx:Script>
+	
+	<s:layout>
+		<s:VerticalLayout gap="5" paddingBottom="35" paddingLeft="35" paddingRight="35" paddingTop="10"/>
+	</s:layout>
+	
+	<s:Group width="100%" height="40">		
+		<s:Label verticalCenter="0" left="5" text="{commandingHeight.TCH_Name}" fontSize="20"/>
+		<s:Image verticalCenter="0" right="5" buttonMode="true" source="@Embed('assets/image/x.png')" click="dispatchEvent(new Event(Event.CLOSE));"/>
+	</s:Group>
+	
+	<s:Image width="100%" height="200" source="{commandingHeight.T_ComPicPath}"/>
+	
+	<s:HGroup width="100%">
+		<s:Label text="距目标建筑物直线距离："/>	
+		<s:Label text="{commandingHeight.TCH_LineLength}米" width="100%"/>		
+	</s:HGroup>
+	
+	<s:HGroup width="100%">
+		<s:Label text="地址："/>
+		<s:Label text="{commandingHeight.TCH_Address}" width="100%"/>		
+	</s:HGroup>
+	
+	<s:HGroup width="100%">
+		<s:Label text="制高点（建筑）层数："/>
+		<s:Label text="{commandingHeight.TCH_Layers}" width="100%"/>	
+	</s:HGroup>
+	
+	<s:HGroup width="100%">
+		<s:Label text="制高点功能："/>
+		<s:Label text="{commandingHeight.TCH_ComHeightFunc}" width="100%"/>	
+	</s:HGroup>
+	
+	<s:HGroup width="100%">
+		<s:Label text="最佳观察位置："/>
+		<s:Label text="{commandingHeight.TCH_bestobservation}" width="100%"/>	
+	</s:HGroup>
+	
+	<s:HGroup width="100%">
+		<s:Label text="入口途径："/>
+		<s:Label text="{commandingHeight.TCH_Entranceway}" width="100%"/>	
+	</s:HGroup>
+	
+	<s:HGroup width="100%">
+		<s:Label text="物业情况："/>
+		<s:Label text="{commandingHeight.TCH_Property}" width="100%"/>	
+	</s:HGroup>
+		
+	<s:HGroup width="100%" height="100%" horizontalAlign="right" verticalAlign="bottom">
+		<s:Image source="@Embed('assets/image/Imglst.png')" click="dispatchEvent(new Event(IMAGELIST));" buttonMode="true"/>
+	</s:HGroup>	
+</s:SkinnableContainer>

@@ -13,6 +13,7 @@
 			import mx.events.FlexEvent;
 			
 			public static const SURROUNDING:String = "Surrounding";
+			public static const INFO:String = "Info";
 			public static const STEREOSCOPIC:String = "StereoScopic";
 			
 			[Bindable]private var build:BuildVO;
@@ -56,6 +57,15 @@
 				dispatchEvent(new Event(STEREOSCOPIC));
 			}			
 			
+			protected function buttonInfo_buttonDownHandler(event:FlexEvent):void
+			{
+				var button:Button = event.currentTarget as Button;
+				
+				initMenu(button);
+				
+				dispatchEvent(new Event(INFO));
+			}
+			
 			protected function buttonSurrounding_buttonDownHandler(event:FlexEvent):void
 			{
 				var button:Button = event.currentTarget as Button;
@@ -92,7 +102,7 @@
 				  skinClass="app.skin.skinMenuButton" buttonDown="buttonSurrounding_buttonDownHandler(event)"/>
 		<s:Button label="目标信息" buttonMode="true"
 				  width="175" height="47" 
-				  skinClass="app.skin.skinMenuButton"/>
+				  skinClass="app.skin.skinMenuButton" buttonDown="buttonInfo_buttonDownHandler(event)"/>
 		<s:Button label="通道信息" buttonMode="true"
 				  width="175" height="47" 
 				  skinClass="app.skin.skinMenuButton"/>
@@ -104,5 +114,5 @@
 				  skinClass="app.skin.skinMenuButton" buttonDown="buttonContingencyPlans_buttonDownHandler(event)"/>
 	</s:VGroup>
 	
-	<s:Label y="15" color="#F6FF00" fontFamily="隶书" fontSize="40" horizontalCenter="0" text="{build.buildName}"/>
+	<s:Label y="15" color="#F6FF00" fontFamily="隶书" fontSize="40" horizontalCenter="0" text="{build.TMB_Name}"/>
 </s:Group>

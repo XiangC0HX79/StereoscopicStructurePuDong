@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  skinClass="app.skin.skinTitleWindowImage"
+					  width="500" minHeight="400">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[			
+			import app.model.vo.TaticalVO;
+			
+			import mx.collections.ArrayCollection;
+			
+			public static const VIDEO:String = "video";
+			
+			[Bindable]private var taticals:ArrayCollection;
+			public function set Taticals(value:ArrayCollection):void
+			{
+				taticals = value;
+				
+				index = 0;
+				
+				tatical = taticals[index];
+			}
+			
+			[Bindable]public var tatical:TaticalVO;
+			
+			[Bindable]private var index:Number;
+			
+			protected function imagePre_clickHandler(event:MouseEvent):void
+			{
+				if(index > 0)
+				{
+					index--;
+					
+					tatical = taticals[index];
+				}
+			}
+			
+			protected function imageNext_clickHandler(event:MouseEvent):void
+			{
+				if(index < taticals.length - 1)
+				{
+					index++;
+					
+					tatical = taticals[index];
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:Label top="25" horizontalCenter="0" text="{tatical.TP_Title}" color="0xFFFFFF" fontSize="25"/>
+	<s:Image top="20" right="25" buttonMode="true" source="@Embed('assets/image/x.png')" click="dispatchEvent(new Event(Event.CLOSE));"/>
+	
+	<s:Image id="imagePre" top="180" left="23" buttonMode="true" source="@Embed('assets/image/图片左按钮.png')" 
+			 click="imagePre_clickHandler(event)" visible="{index > 0}"/>
+	<s:Image id="imageNext" top="180" right="23" buttonMode="true" source="@Embed('assets/image/图片右按钮.png')" 
+			 click="imageNext_clickHandler(event)" visible="{taticals.length - 1 > index}"/>
+	
+	<s:Image width="360" height="280" top="60" horizontalCenter="0" source="{tatical.TP_PicPath}"/>
+	
+	<s:HGroup id="groupBottom" paddingBottom="30" y="340" horizontalCenter="0">
+		<s:Image id="imageVideo" buttonMode="true" source="@Embed('assets/image/视频图标.png')" click="dispatchEvent(new Event(VIDEO));" 
+				 visible="{tatical.TP_VideoPath != ''}"/>
+		<s:Label paddingTop="10" text="{tatical.TP_Remark}" color="0xFFFFFF" fontSize="16" fontWeight="bold"/>
+	</s:HGroup>
+</s:SkinnableContainer>

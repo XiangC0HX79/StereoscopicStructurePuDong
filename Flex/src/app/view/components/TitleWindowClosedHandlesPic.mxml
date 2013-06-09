@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  skinClass="app.skin.skinTitleWindowImage"
+					  width="500" minHeight="400">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[									
+			import app.model.vo.ClosedHandlePicVO;
+			import app.model.vo.ClosedhandleVO;
+			
+			[Bindable]public var closedhandle:ClosedhandleVO;
+			
+			[Bindable]private var closedHandlePic:ClosedHandlePicVO;
+			
+			private var imageIndex:Number = 0;			
+			public function set ImageIndex(value:Number):void
+			{
+				if(value >= closedhandle.pics.length)
+				{
+					imageIndex = closedhandle.pics.length - 1;
+				}				
+				else if(value < 0)
+				{
+					imageIndex = 0;
+				}
+				else
+				{
+					imageIndex = value;
+				}
+				
+				closedHandlePic = closedhandle.pics[imageIndex];
+			}			
+		]]>
+	</fx:Script>
+	
+	<s:Label top="25" horizontalCenter="0" text="{closedHandlePic.T_ClosedhandlesPicTitle}" color="0xFFFFFF" fontSize="25"/>
+	<s:Image top="20" right="25" buttonMode="true" source="@Embed('assets/image/x.png')" click="dispatchEvent(new Event(Event.CLOSE));"/>
+	
+	<s:Image top="180" left="23" buttonMode="true" source="@Embed('assets/image/图片左按钮.png')" 
+			 click="{ImageIndex = imageIndex - 1}" visible="{closedhandle.pics.length > 1}"/>
+	<s:Image top="180" right="23" buttonMode="true" source="@Embed('assets/image/图片右按钮.png')" 
+			 click="{ImageIndex = imageIndex + 1}" visible="{closedhandle.pics.length > 1}"/>
+	
+	<s:Image width="360" height="280" top="60" horizontalCenter="0" source="{closedHandlePic.T_ClosedhandlesPicimgPath}"/>
+	
+	<s:HGroup id="groupBottom" paddingBottom="30" y="340" horizontalCenter="0">
+		<s:Label paddingTop="10" text="{closedHandlePic.T_ClosedhandlesPicRremark}" color="0xFFFFFF" fontSize="16" fontWeight="bold"/>
+	</s:HGroup>
+</s:SkinnableContainer>

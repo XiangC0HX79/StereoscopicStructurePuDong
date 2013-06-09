@@ -4,6 +4,8 @@ package app.view
 	import app.model.BuildProxy;
 	import app.view.components.PanelSurrounding;
 	
+	import flash.events.Event;
+	
 	import mx.core.IVisualElement;
 	
 	import org.puremvc.as3.interfaces.IMediator;
@@ -17,17 +19,36 @@ package app.view
 		public function PanelSurroundingMediator()
 		{
 			super(NAME, new PanelSurrounding);
+						
+			panelSurrounding.addElement(facade.retrieveMediator(LayerDrawMediator.NAME).getViewComponent() as IVisualElement);
 			
-			var layerKeyPointMediator:LayerKeyPointMediator = facade.retrieveMediator(LayerKeyPointMediator.NAME) as LayerKeyPointMediator;
-			panelSurrounding.addElement(layerKeyPointMediator.getViewComponent() as IVisualElement);
+			panelSurrounding.addElement(facade.retrieveMediator(LayerClosedPicMediator.NAME).getViewComponent() as IVisualElement);
+
+			panelSurrounding.addElement(facade.retrieveMediator(LayerCommandingHeightMediator.NAME).getViewComponent() as IVisualElement);
 			
-			var layerControlRangeMediator:LayerControlRangeMediator = facade.retrieveMediator(LayerControlRangeMediator.NAME) as LayerControlRangeMediator;
-			panelSurrounding.addElement(layerControlRangeMediator.getViewComponent() as IVisualElement);
+			panelSurrounding.addElement(facade.retrieveMediator(LayerCloseHandlesMediator.NAME).getViewComponent() as IVisualElement);
+			
+			panelSurrounding.addElement(facade.retrieveMediator(LayerTrafficMediator.NAME).getViewComponent() as IVisualElement);
+			
+			panelSurrounding.addElement(facade.retrieveMediator(LayerHazardMediator.NAME).getViewComponent() as IVisualElement);
+						
+			panelSurrounding.addElement(facade.retrieveMediator(LayerFireHydrantMediator.NAME).getViewComponent() as IVisualElement);
+			
+			panelSurrounding.addElement(facade.retrieveMediator(LayerKeyUnitsMediator.NAME).getViewComponent() as IVisualElement);
+			
+			panelSurrounding.addElement(facade.retrieveMediator(LayerScentingMediator.NAME).getViewComponent() as IVisualElement);
+			
+			panelSurrounding.addEventListener(PanelSurrounding.BUILDCLICK,onBuildClick);
 		}
 		
 		protected function get panelSurrounding():PanelSurrounding
 		{
 			return viewComponent as PanelSurrounding;
+		}
+		
+		private function onBuildClick(event:Event):void
+		{			
+			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_MOVIE,panelSurrounding.Build.TMB_videoPath);
 		}
 		
 		override public function listNotificationInterests():Array
@@ -43,7 +64,7 @@ package app.view
 			{
 				case ApplicationFacade.NOTIFY_APP_INIT:				
 					var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
-					panelSurrounding.SurroudingBitmap = buildProxy.build.surroundingBitmap;
+					panelSurrounding.Build = buildProxy.build;
 					break;
 			}
 		}

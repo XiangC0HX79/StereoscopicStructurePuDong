@@ -3,10 +3,15 @@ package app.controller
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
 	import app.model.LayerSettingStereoScopicProxy;
+	import app.model.vo.BuildVO;
+	import app.model.vo.CommandHeightVO;
 	import app.model.vo.ComponentVO;
-	import app.model.vo.ControlRangeVO;
 	import app.model.vo.FloorVO;
-	import app.model.vo.KeyPointVO;
+	import app.model.vo.HazardVO;
+	import app.model.vo.KeyUnitVO;
+	import app.model.vo.ScentingVO;
+	import app.model.vo.TaticalVO;
+	import app.model.vo.TrafficInfoVO;
 	import app.view.TitleWindowFloorMediator;
 	import app.view.components.TitleWindowFloor;
 	
@@ -30,14 +35,13 @@ package app.controller
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.command.SimpleCommand;
 	
+	import spark.components.Application;
 	import spark.components.Image;
 	import spark.components.TitleWindow;
 	
 	public class LocalConfigCommand extends SimpleCommand implements ICommand
 	{
-		private static const INITCOUNT:Number = 1;
-		
-		private static var init:Number = 0;
+		private var paramName:String;
 		
 		private var buildProxy:BuildProxy;
 		
@@ -46,7 +50,11 @@ package app.controller
 		override public function execute(note:INotification):void
 		{						
 			sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGSHOW,"系统初始化：加载数据...");
-				
+						
+			var application:Application = note.getBody() as Application;	
+			paramName = application.parameters.build;	
+			//buildProxy.build.edit = (application.parameters.edit == "1");
+			
 			var request:URLRequest = new URLRequest("config.xml");
 			var load:URLLoader = new URLLoader(request);
 			load.addEventListener(Event.COMPLETE,onLocaleConfigResult);
@@ -86,7 +94,7 @@ package app.controller
 				//加载图标				
 				sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
 					["InitIcon",onInitIcon
-						,[buildProxy.build.buildName]
+						,[]
 						,false]);
 			}
 		}
@@ -97,86 +105,169 @@ package app.controller
 			{
 				switch(item.IconID)
 				{
-					case "1":
+					/*case "1":
 						sendNotification(ApplicationFacade.NOTIFY_COMMAND_LOADIMAGE
 							,[
 								item.IconPath,
-								function(bitmap:Bitmap):void{KeyPointVO.Icon = bitmap;}
+								function(bitmap:Bitmap):void{CommandingHeightVO.Icon = bitmap;}
 							]);						
-						break;
+						break;*/
 				}
 			}
 						
 			sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
-				["InitSurrounding",onInitSurrounding
-					,[buildProxy.build.buildName]
+				["InitBuild",onInitBuild
+					,[paramName]
 					,false]);	
 		}
 		
-		private function onInitSurrounding(result:ArrayCollection):void
+		private function onInitBuild(result:ArrayCollection):void
 		{								
 			if(result.length == 0)
 				return;
+
+			buildProxy.setData(new BuildVO(result[0]));
+			//buildProxy.build.buildID = result[0].TMB_ID;	
 			
-			buildProxy.build.buildID = result[0].TMB_ID;	
-			
-			sendNotification(ApplicationFacade.NOTIFY_COMMAND_LOADIMAGE,[result[0].TMB_SurroundingBitmap,loaderImageHandle]);
+			if(result[0].TMB_StereoPicPath)
+				sendNotification(ApplicationFacade.NOTIFY_COMMAND_LOADIMAGE,[result[0].TMB_StereoPicPath,loaderImageHandle]);
+			else
+				sendNotification(ApplicationFacade.NOTIFY_COMMAND_LOADIMAGE,[result[0].TMB_PicPath,loaderImageHandle]);
 			
 			function loaderImageHandle(bitmap:Bitmap):void   
 			{   						
-				buildProxy.build.surroundingBitmap = bitmap;
+				buildProxy.build.TMB_StereoPic = bitmap;
 				
 				//加载制高点
 				sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
-					["InitKeyPoint",onInitKeyPoint
-						,[buildProxy.build.buildID]
+					["InitCommandingHeights",onInitCommandingHeights
+						,[buildProxy.build.TMB_ID]
 						,false]);
 			}
 		}
 				
-		private function onInitKeyPoint(result:ArrayCollection):void
+		private function onInitCommandingHeights(result:ArrayCollection):void
 		{						
 			for each(var item:Object in result)
 			{
-				buildProxy.build.keyPoints.addItem(new KeyPointVO(item));
+				buildProxy.build.CommandingHeights.addItem(new CommandHeightVO(item));
+			}
+					
+			sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
+				["InitKeyUnits",onInitKeyUnits
+					,[buildProxy.build.TMB_ID]
+					,false]);
+		}
+		
+		private function onInitKeyUnits(result:ArrayCollection):void
+		{
+			for each(var i:Object in result)
+			{
+				buildProxy.build.keyUnits.addItem(new KeyUnitVO(i));
+			}
+			
+			sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
+				["InitScenting",onInitScenting
+					,[buildProxy.build.TMB_ID]
+					,false]);		
+		}
+		
+		private function onInitScenting(result:ArrayCollection):void
+		{			
+			for each(var i:Object in result)
+			{
+				buildProxy.build.Scenting.addItem(new ScentingVO(i));
 			}
 						
 			sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
-				["InitControlRange",onInitControlRange
-					,[buildProxy.build.buildID]
-					,false]);
+				["InitTraffic",onInitTraffic
+					,[buildProxy.build.TMB_ID]
+					,false]);			
+		}
+		
+		private function onInitTraffic(result:ArrayCollection):void
+		{			
+			for each(var i:Object in result)
+			{
+				buildProxy.build.Traffic.addItem(new TrafficInfoVO(i));
+			}
+			
+			sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
+				["InitHazard",onInitHazard
+					,[buildProxy.build.TMB_ID]
+					,false]);	
+		}
+		
+		private function onInitHazard(result:ArrayCollection):void
+		{			
+			for each(var i:Object in result)
+			{
+				buildProxy.build.Hazzard.addItem(new HazardVO(i));
+			}
+			
+			sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
+				["InitTatics",onInitTatics
+					,[buildProxy.build.TMB_ID]
+					,false]);	
+		}
+		
+		private function onInitTatics(result:ArrayCollection):void
+		{			
+			for each(var i:Object in result)
+			{
+				var tatical:TaticalVO = new TaticalVO(i);
+				switch(tatical.TP_Type)
+				{
+					case 1:
+						buildProxy.build.Communicate.addItem(tatical);
+						break;
+					case 2:
+						buildProxy.build.Cabledrop.addItem(tatical);
+						break;
+					case 3:
+						buildProxy.build.Landing.addItem(tatical);
+						break;
+					case 4:
+						buildProxy.build.Windows.addItem(tatical);
+						break;
+					case 5:
+						buildProxy.build.Internalhigh.addItem(tatical);
+						break;
+				}
+				
+			}
+			
+			sendNotification(ApplicationFacade.NOTIFY_APP_INIT);
+			
+			sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGHIDE,"程序初始化完成！");	
 		}
 		
 		private function onInitControlRange(result:ArrayCollection):void
 		{								
 			if(result.length > 0)
-			{
-				buildProxy.build.controlRange = new ControlRangeVO(result[0]);
-				
+			{				
 				sendNotification(ApplicationFacade.NOTIFY_COMMAND_LOADIMAGE,[result[0].TMB_ControlRangeBitmap,loaderImageHandle]);
 			}
 			else
 			{
 				//加载建筑信息
-				sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
-					["InitBuild",onInitBuild
-						,[buildProxy.build.buildName]
-						,false]);	
+				//sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
+				//	["InitBuild",onInitBuild
+				//		,[buildProxy.build.buildName]
+				//		,false]);	
 			}
 			
 			function loaderImageHandle(bitmap:Bitmap):void   
-			{   						
-				buildProxy.build.controlRange.bitmap = bitmap;
-				
+			{   										
 				//加载建筑信息
-				sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
-					["InitBuild",onInitBuild
-						,[buildProxy.build.buildName]
-						,false]);	
+				//sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
+				//	["InitBuild",onInitBuild
+				//		,[buildProxy.build.buildName]
+				//		,false]);	
 			}
 		}
 		
-		private function onInitBuild(result:ArrayCollection):void
+		/*private function onInitBuild(result:ArrayCollection):void
 		{					
 			if(result.length == 0)
 				return;
@@ -193,7 +284,7 @@ package app.controller
 						,[buildProxy.build.buildID]
 						,false]);
 			}   
-		}
+		}*/
 		
 		private function onInitFloor(resultFloors:ArrayCollection):void
 		{							
@@ -221,7 +312,7 @@ package app.controller
 				//加载组件
 				sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
 					["InitComponent",onInitComponent
-						,[buildProxy.build.buildID,floor.floorID]
+						,[buildProxy.build.TMB_ID,floor.floorID]
 						,false]);
 			}   
 			
@@ -282,7 +373,7 @@ package app.controller
 					//加载组件
 					sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
 						["InitContingencyPlans",onInitContingencyPlans
-							,[buildProxy.build.buildID]
+							,[buildProxy.build.TMB_ID]
 							,false]);
 				}
 			}

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   x="15" y="117" skinClass="app.skin.skinTitleWindowFloor"
+			   color="0xFFFFFF" fontSize="15" fontWeight="bold">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[							
+			import app.model.vo.HazardVO;
+			
+			[Bindable]public var Hazard:HazardVO;
+		]]>
+	</fx:Script>
+	
+	<s:layout>
+		<s:VerticalLayout gap="5" paddingBottom="35" paddingLeft="35" paddingRight="35" paddingTop="10"/>
+	</s:layout>
+	
+	<s:Group width="100%" height="40">		
+		<s:Label verticalCenter="0" left="5" text="{Hazard.T_HazardName}" fontSize="20"/>
+		<s:Image verticalCenter="0" right="5" buttonMode="true" source="@Embed('assets/image/x.png')" click="dispatchEvent(new Event(Event.CLOSE,true));"/>
+	</s:Group>
+	
+	<s:Image width="320" source="{Hazard.T_HazardPicimgPath}"/>
+	
+	<s:HGroup width="100%">
+		<s:Label text="地址："/>	
+		<s:Label text="{Hazard.T_HazardAddress}" width="100%"/>		
+	</s:HGroup>
+	
+	<s:HGroup width="100%">
+		<s:Label text="距目标建筑距离："/>
+		<s:Label text="{Hazard.T_HazardLineLength}米" width="100%"/>		
+	</s:HGroup>
+</s:SkinnableContainer>

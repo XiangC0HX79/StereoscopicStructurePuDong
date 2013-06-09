@@ -12,14 +12,8 @@ package app.controller
 	public class ModelPreCommand extends SimpleCommand
 	{
 		override public function execute(note:INotification):void
-		{			
-			var buildProxy:BuildProxy = new BuildProxy;
-			
-			var application:Application = note.getBody() as Application;	
-			buildProxy.build.buildName = application.parameters.build;	
-			buildProxy.build.edit = (application.parameters.edit == "1");
-			
-			facade.registerProxy(buildProxy);	
+		{						
+			facade.registerProxy(new BuildProxy);	
 			
 			facade.registerProxy(new LayerSettingSurroundingProxy);
 			facade.registerProxy(new LayerSettingStereoScopicProxy);

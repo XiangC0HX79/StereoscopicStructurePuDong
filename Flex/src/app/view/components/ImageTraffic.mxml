@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 buttonMode="true"
+		 x="{trafficInfo.T_TrafficX - 7}" y="{trafficInfo.T_TrafficY - 7}">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import app.model.vo.TrafficInfoVO;
+			
+			[Bindable]public var trafficInfo:TrafficInfoVO;			
+		]]>
+	</fx:Script>
+	
+	<s:Ellipse width="15" height="15">
+		<s:fill>			
+			<s:SolidColor color="red"/>
+		</s:fill>		
+	</s:Ellipse>
+</s:Group>

@@ -8,23 +8,38 @@
 	
 	<fx:Script>
 		<![CDATA[		
-			public static const GROUPMOVE:String = "GroupMove";	
-			public static const GROUPOUT:String = "GroupOut";	
+			import app.model.vo.BuildVO;
+						
+			public static const BUILDCLICK:String = "BuildClick";
 			
-			[Bindable]private var surroudingBitmap:Bitmap;
-			public function set SurroudingBitmap(value:Bitmap):void
+			[Bindable]private var build:BuildVO;
+			public function set Build(value:BuildVO):void
 			{
-				surroudingBitmap = value;
+				build = value;
 			}
-				
-			private var mousePoint:Point = new Point;
-			public function get MousePoint():Point
+			public function get Build():BuildVO
 			{
-				return mousePoint;
-			}			
+				return build;
+			}
+			
+			protected function groupBuild_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent(new Event(BUILDCLICK));
+			}
+			
 		]]>
 	</fx:Script>
 	
 	<!--周边环境底图-->
-	<s:Image source="{surroudingBitmap}" mouseEnabled="false"/>	
+	<s:Image source="{build.TMB_StereoPic}" mouseEnabled="false"/>	
+			
+	<!--建筑物-->
+	<s:Group buttonMode="true" width="50" height="50" x="{build.TMB_X - 25}" y="{build.TMB_Y - 25}"
+			 click="groupBuild_clickHandler(event)">
+		<s:Rect left="0" right="0" bottom="0" top="0">
+			<s:fill>
+				<s:SolidColor color="0" alpha="0.01"/>
+			</s:fill>
+		</s:Rect>
+	</s:Group>
 </s:Group>

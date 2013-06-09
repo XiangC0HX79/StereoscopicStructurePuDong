@@ -29,14 +29,31 @@ package app
 		public static const NOTIFY_TITLEWINDOW_FLOOR:String	= "titlewindow_floor";
 		public static const NOTIFY_TITLEWINDOW_IMAGE:String	= "titlewindow_image";
 		public static const NOTIFY_TITLEWINDOW_MOVIE:String	= "titlewindow_movie";
+		public static const NOTIFY_TITLEWINDOW_COMMAND:String	= "titlewindow_command";
+		public static const NOTIFY_TITLEWINDOW_COMMAND_IMGLST:String	= "titlewindow_command_imglst";
+		public static const NOTIFY_TITLEWINDOW_CLOSED_IMGLST:String	= "titlewindow_closed_imglst";
+		public static const NOTIFY_TITLEWINDOW_TRAFFIC:String	= "TitleWindowTraffic";
+		public static const NOTIFY_TITLEWINDOW_HAZARD:String	= "TitleWindowHazard";
+		public static const NOTIFY_TITLEWINDOW_RESCUE:String	= "TitlewindowRescue";
+		public static const NOTIFY_TITLEWINDOW_KEYUNIT:String	= "TitleWindowKeyUnit";
+		public static const NOTIFY_TITLEWINDOW_SCENTING:String	= "TitleWindowScenting";
+		public static const NOTIFY_TITLEWINDOW_TATICS:String	= "TitleWindowTatics";
+		public static const NOTIFY_TITLEWINDOW_TATICALPOINT:String	= "TitleWindowTaticalPoint";
 		
 		public static const NOTIFY_MOVIE_POPUP:String		= "movie_popup";
-		
-		public static const NOTIFY_STEREO_LAYER:String		= "StereoLayer";
-		
+				
 		public static const NOTIFY_FLOOR_ROTATION:String	= "floor_rotation";
 		
 		public static const NOTIFY_FLOOR_FOCUS:String		= "floor_focus";
+		
+		public static const NOTIFY_COMMAND_OVER:String		= "CommandOver";
+		public static const NOTIFY_COMMAND_OUT:String		= "CommandOut";
+		
+		public static const NOTIFY_SURROUNDING_CLOSEDHANDDLES:String		= "SurroundingClosedHanddles";
+		public static const NOTIFY_SURROUNDING_RESCUE:String		= "SurroundingRescue";
+		public static const NOTIFY_SURROUNDING_KEYUNIT:String		= "SurroundingKeyUnit";
+		
+		public static const NOTIFY_STEREO_LAYER:String		= "StereoLayer";
 		
 		/**
 		 * Singleton ApplicationFacade Factory Method

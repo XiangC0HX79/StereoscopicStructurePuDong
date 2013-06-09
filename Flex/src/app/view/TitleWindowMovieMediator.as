@@ -20,9 +20,9 @@ package app.view
 	{
 		public static const NAME:String = "TitleWindowMovieMediator";
 		
-		public function TitleWindowMovieMediator(viewComponent:Object=null)
+		public function TitleWindowMovieMediator()
 		{
-			super(NAME, viewComponent);
+			super(NAME, new TitleWindowMovie);
 			
 			titleWindowMovie.addEventListener(TitleWindowMovie.WIN_CLOSE,onClose);
 		}
@@ -48,10 +48,8 @@ package app.view
 		{
 			switch(notification.getName())
 			{
-				case ApplicationFacade.NOTIFY_TITLEWINDOW_MOVIE:
-					var videoName:String = notification.getBody() as String;
-					
-					titleWindowMovie.source =  videoName.replace("../",WebServiceCommand.WSDL);	
+				case ApplicationFacade.NOTIFY_TITLEWINDOW_MOVIE:					
+					titleWindowMovie.source = notification.getBody() as String;	
 					break;
 			}
 		}

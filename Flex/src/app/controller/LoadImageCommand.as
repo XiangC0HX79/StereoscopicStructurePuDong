@@ -23,9 +23,7 @@ package app.controller
 	public class LoadImageCommand extends SimpleCommand implements ICommand
 	{
 		override public function execute(note:INotification):void
-		{			 		
-			//sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGSHOW,"正在加载图片...");
-			
+		{			 					
 			var imageName:String = note.getBody()[0];
 			
 			var loaderImageHandler:Function = note.getBody()[1];
@@ -46,8 +44,6 @@ package app.controller
 				var bitmap:Bitmap = Bitmap(loaderInfo.content);
 				
 				loaderImageHandler(bitmap);
-				
-				//sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGHIDE);
 			}
 			
 			function onError(event:IOErrorEvent):void
@@ -80,8 +76,6 @@ package app.controller
 				
 				var bitmap:Bitmap = new Bitmap(bitmapData);
 				loaderImageHandler(bitmap);
-				
-				//sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGHIDE);
 			}
 		}
 	}

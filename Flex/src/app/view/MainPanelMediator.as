@@ -21,6 +21,7 @@ package app.view
 			super(NAME, viewComponent);
 			
 			mainPanel.addEventListener(MainPanel.SURROUNDING,onSurrounding);
+			mainPanel.addEventListener(MainPanel.INFO,onInfo);
 			mainPanel.addEventListener(MainPanel.STEREOSCOPIC,onStereoScopic);
 		}
 		
@@ -50,6 +51,11 @@ package app.view
 			mainPanel.Menu.addElementAt(facade.retrieveMediator(MenuSurroundingMediator.NAME).getViewComponent() as IVisualElement,mainPanel.ButtonIndex + 1);
 			
 			contentGroupAddElement(PanelSurroundingMediator.NAME);
+		}
+		
+		private function onInfo(event:Event):void
+		{
+			mainPanel.Menu.addElementAt(facade.retrieveMediator(MenuInfoMediator.NAME).getViewComponent() as IVisualElement,mainPanel.ButtonIndex + 1);
 		}
 		
 		private function onStereoScopic(event:Event):void

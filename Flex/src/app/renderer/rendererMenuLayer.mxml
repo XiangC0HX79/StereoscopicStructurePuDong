@@ -19,7 +19,7 @@
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
-	<s:ToggleButton skinClass="app.skin.skinSubMenuButton" width="175" height="36"
+	<s:ToggleButton skinClass="app.skin.skinSubMenuToggleButton" width="175" height="36"
 					label="{data.LayerName}" buttonMode="true" 
 					change="togglebutton_changeHandler(event)"/>
 </s:ItemRenderer>
