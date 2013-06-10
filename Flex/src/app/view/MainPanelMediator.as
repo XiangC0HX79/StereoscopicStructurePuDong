@@ -1,11 +1,12 @@
 package app.view
 {
 	import app.ApplicationFacade;
-	import app.model.BuildProxy;
+	import app.model.vo.BuildVO;
 	import app.view.components.MainPanel;
 	
 	import flash.events.Event;
 	
+	import mx.controls.Button;
 	import mx.core.IVisualElement;
 	
 	import org.puremvc.as3.interfaces.IMediator;
@@ -30,20 +31,13 @@ package app.view
 			return viewComponent as MainPanel;
 		}
 		
-		private function contentGroupAddElement(mediatorName:String):void
+		private function contentGroupAddElement(mediator:String):void
 		{			
 			mainPanel.ContentGroup.removeAllElements();
 			
-			var element:IVisualElement = facade.retrieveMediator(mediatorName).getViewComponent() as IVisualElement;
+			var element:IVisualElement = facade.retrieveMediator(mediator).getViewComponent() as IVisualElement;
+			
 			mainPanel.ContentGroup.addElement(element);
-			
-			mainPanel.ContentGroup.validateNow();
-			
-			if(element.width > mainPanel.ContentGroup.width)
-				mainPanel.ContentGroup.horizontalScrollPosition = (element.width - mainPanel.ContentGroup.width) / 2;
-			
-			if(element.height > mainPanel.ContentGroup.height)
-				mainPanel.ContentGroup.verticalScrollPosition = (element.height - mainPanel.ContentGroup.height) / 2;
 		}
 		
 		private function onSurrounding(event:Event):void
@@ -77,9 +71,8 @@ package app.view
 			switch(notification.getName())
 			{
 				case ApplicationFacade.NOTIFY_APP_INIT:
-					var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
-					mainPanel.Build = buildProxy.build;
-					
+					mainPanel.Build = notification.getBody() as BuildVO;
+										
 					contentGroupAddElement(PanelSurroundingMediator.NAME);
 					break;
 			}

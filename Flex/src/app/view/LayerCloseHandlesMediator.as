@@ -49,25 +49,24 @@ package app.view
 			{
 				case ApplicationFacade.NOTIFY_APP_INIT:						
 					var layerSettingSurroundingProxy:LayerSettingSurroundingProxy = facade.retrieveProxy(LayerSettingSurroundingProxy.NAME) as LayerSettingSurroundingProxy;
-					var layer:LayerVO = layerSettingSurroundingProxy.Layers[1];
-					BindingUtils.bindProperty(layerClosedhandles,"visible",layer,"LayerVisible");
+					BindingUtils.bindProperty(layerClosedhandles,"visible",LayerVO.CLOSEHANDLE,"LayerVisible");
 					break;
 					
 				case ApplicationFacade.NOTIFY_SURROUNDING_CLOSEDHANDDLES:	
-					if(!buildProxy.build.closeHandles)
+					/*if(!buildProxy.build.closeHandles)
 					{						
 						sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
 							["InitClosedhandles",onInitClosedhandles
 								,[buildProxy.build.TMB_ID]
 								,false]);
-					}			
+					}			*/
 					break;
 			}
 		}
 		
 		private function onInitClosedhandles(result:ArrayCollection):void
 		{
-			buildProxy.build.closeHandles = new ArrayCollection;
+			/*buildProxy.build.closeHandles = new ArrayCollection;
 			for each(var i:Object in result)
 			{
 				var closedHandle:ClosedhandleVO = new ClosedhandleVO(i);
@@ -79,7 +78,7 @@ package app.view
 				facade.registerMediator(new ImageClosedHandleMediator("ImageClosedHandleMediator" + closedHandle.T_ClosedhandlesID,imageClosedHandle));
 				
 				layerClosedhandles.addElement(imageClosedHandle);
-			}
+			}*/
 			
 		}
 	}

@@ -1,7 +1,7 @@
 package app.view
 {
 	import app.ApplicationFacade;
-	import app.model.BuildProxy;
+	import app.model.vo.BuildVO;
 	import app.view.components.PanelSurrounding;
 	
 	import flash.events.Event;
@@ -38,7 +38,7 @@ package app.view
 			
 			panelSurrounding.addElement(facade.retrieveMediator(LayerScentingMediator.NAME).getViewComponent() as IVisualElement);
 			
-			panelSurrounding.addEventListener(PanelSurrounding.BUILDCLICK,onBuildClick);
+			panelSurrounding.addEventListener(PanelSurrounding.BUILDCLICK,onBuildClick);			
 		}
 		
 		protected function get panelSurrounding():PanelSurrounding
@@ -63,8 +63,7 @@ package app.view
 			switch(notification.getName())
 			{
 				case ApplicationFacade.NOTIFY_APP_INIT:				
-					var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
-					panelSurrounding.Build = buildProxy.build;
+					panelSurrounding.Build = notification.getBody() as BuildVO;
 					break;
 			}
 		}

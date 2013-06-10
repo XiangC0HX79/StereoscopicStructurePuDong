@@ -9,8 +9,10 @@
 			
 			import flash.net.navigateToURL;
 			
+			import mx.binding.utils.ChangeWatcher;
 			import mx.core.IVisualElement;
 			import mx.events.FlexEvent;
+			import mx.events.ResizeEvent;
 			
 			public static const SURROUNDING:String = "Surrounding";
 			public static const INFO:String = "Info";
@@ -74,14 +76,18 @@
 				
 				dispatchEvent(new Event(SURROUNDING));
 			}
-			
-			protected function buttonContingencyPlans_buttonDownHandler(event:FlexEvent):void
+						
+			protected function ContentGroup_creationCompleteHandler(event:FlexEvent):void
 			{
-				var url:String =  build.contingencyPlans.replace("../",WebServiceCommand.WSDL);
-				
-				flash.net.navigateToURL(new URLRequest(url));
+				ChangeWatcher.watch(ContentGroup,"contentWidth",contentResize);
+				ChangeWatcher.watch(ContentGroup,"contentHeight",contentResize);
 			}
 			
+			private function contentResize(event:Event):void
+			{
+				ContentGroup.horizontalScrollPosition = (ContentGroup.contentWidth - ContentGroup.width) / 2;
+				ContentGroup.verticalScrollPosition = (ContentGroup.contentHeight - ContentGroup.height) / 2;
+			}
 		]]>
 	</fx:Script>
 	
@@ -92,7 +98,7 @@
 	<s:Image source="@Embed('assets/image/背景.jpg')" mouseEnabled="false"/>
 	
 	<s:Scroller x="25" y="95" width="777" height="649">
-		<s:Group id="ContentGroup">
+		<s:Group id="ContentGroup" creationComplete="ContentGroup_creationCompleteHandler(event)">
 		</s:Group>
 	</s:Scroller>
 		
@@ -110,8 +116,8 @@
 				  width="175" height="47" 
 				  skinClass="app.skin.skinMenuButton" buttonDown="buttonStereoscopic_buttonDownHandler(event)"/>
 		<s:Button label="应急预案" buttonMode="true"
-				  width="175" height="47" 
-				  skinClass="app.skin.skinMenuButton" buttonDown="buttonContingencyPlans_buttonDownHandler(event)"/>
+				  width="175" height="47" visible="{Boolean(build.TMB_EmergPath)}"
+				  skinClass="app.skin.skinMenuButton"/>
 	</s:VGroup>
 	
 	<s:Label y="15" color="#F6FF00" fontFamily="隶书" fontSize="40" horizontalCenter="0" text="{build.TMB_Name}"/>

@@ -43,8 +43,7 @@ package app.view
 					layerClosedPic.source = buildProxy.build.T_ClosedPicPath;
 										
 					var layerSettingSurroundingProxy:LayerSettingSurroundingProxy = facade.retrieveProxy(LayerSettingSurroundingProxy.NAME) as LayerSettingSurroundingProxy;
-					var layer:LayerVO = layerSettingSurroundingProxy.Layers[1];
-					BindingUtils.bindProperty(layerClosedPic,"visible",layer,"LayerVisible");
+					BindingUtils.bindProperty(layerClosedPic,"visible",LayerVO.CLOSEHANDLE,"LayerVisible");
 					break;
 			}
 		}

@@ -39,7 +39,7 @@ public class Service : WebService
 
         var row = table.NewRow();
         row["IconID"] = "1";
-        row["IconPath"] = "../assets/image/icon_info.png";
+        row["IconPath"] = "../Icon/CommandingHeight.png";
         table.Rows.Add(row);
 
         return table;
@@ -49,7 +49,7 @@ public class Service : WebService
     public DataTable InitBuild(String buildName)
     {
         var sql = "Select * FROM T_MainBulid "
-                     + "LEFT JOIN T_MainBulid_Append ON T_MainBulid.TMB_ID = T_MainBulid_Append.TMB_ID "
+                     + "LEFT JOIN T_MainBulidAppend ON T_MainBulid.TMB_ID = T_MainBulidAppend.TMB_ID "
                      + "LEFT JOIN T_FireInformation ON T_MainBulid.TMB_ID = T_FireInformation.TMB_ID "
                      + "WHERE TMB_Name = '" + buildName + "'";
 
@@ -57,10 +57,13 @@ public class Service : WebService
     }
 
     [WebMethod]
-    public DataTable InitCommandingHeights(String buildId)
+    public DataTable InitCommandingHeights(String tmbId)
     {
-        var sql = "Select * FROM T_CommandingHeights LEFT JOIN T_CommandingHeightsPIC ON T_CommandingHeights.TCH_ID = T_CommandingHeightsPIC.TCH_ID "
-                    + "WHERE T_CommandingHeightsPIC.TMB_ID = " + buildId + " AND T_CommandingHeightsPIC.T_ComType = 1";
+        var sql = "Select * FROM T_CommandingHeights "
+                     + "LEFT JOIN T_CommandingHeightsPIC "
+                     + "ON T_CommandingHeights.TCH_ID = T_CommandingHeightsPIC.TCH_ID "
+                     + "AND T_CommandingHeightsPIC.T_ComType = 1 "
+                     + "WHERE T_CommandingHeights.TMB_ID = " + tmbId;
 
         return _clsGetData.GetTable(sql);
     }

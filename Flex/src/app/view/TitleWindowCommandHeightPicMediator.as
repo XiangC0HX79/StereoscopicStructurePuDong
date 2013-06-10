@@ -19,18 +19,11 @@ package app.view
 		public function TitleWindowCommandHeightPicMediator()
 		{
 			super(NAME, new TitleWindowCommandHeightPic);
-			
-			titleWindowCommandingHeightPic.addEventListener(Event.CLOSE,onClose);
 		}
 				
 		protected function get titleWindowCommandingHeightPic():TitleWindowCommandHeightPic
 		{
 			return viewComponent as TitleWindowCommandHeightPic;
-		}
-		
-		private function onClose(event:Event):void
-		{
-			PopUpManager.removePopUp(titleWindowCommandingHeightPic);
 		}
 				
 		override public function listNotificationInterests():Array

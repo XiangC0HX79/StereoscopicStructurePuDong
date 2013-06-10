@@ -14,15 +14,6 @@ package app.model
 		public function LayerSettingSurroundingProxy()
 		{
 			super(NAME, new ArrayCollection);
-			
-			Layers.addItem(new LayerVO(1,"制高点"));			
-			Layers.addItem(new LayerVO(2,"分控范围"));			
-			Layers.addItem(LayerVO.TRAFFIC);			
-			Layers.addItem(LayerVO.HAZARD);		
-			Layers.addItem(new LayerVO(5,"救援信息"));
-			Layers.addItem(new LayerVO(6,"消防栓"));
-			Layers.addItem(LayerVO.KEYUNITS);
-			Layers.addItem(LayerVO.SCENTING);
 		}
 		
 		public function get Layers():ArrayCollection

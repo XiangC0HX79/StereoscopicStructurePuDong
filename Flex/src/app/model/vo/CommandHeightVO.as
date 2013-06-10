@@ -10,6 +10,8 @@ package app.model.vo
 	[Bindable]
 	public class CommandHeightVO
 	{
+		public static var Icon:Bitmap;
+		
 		private var source:Object;
 		
 		public function get TCH_ID():Number
@@ -29,7 +31,7 @@ package app.model.vo
 		
 		public function get TCH_Name():String
 		{
-			return source.TCH_Name;
+			return source.TCH_Name?source.TCH_Name:"";
 		}
 		
 		public function get T_ComPicPath():String
@@ -71,8 +73,8 @@ package app.model.vo
 		{
 			return source.TCH_Property;
 		}
-		
-		public var pics:ArrayCollection;
+				
+		public var pics:ArrayCollection = new ArrayCollection;
 		
 		public function CommandHeightVO(value:Object)
 		{

@@ -3,6 +3,7 @@ package app.view
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
 	import app.model.LayerSettingSurroundingProxy;
+	import app.model.vo.BuildVO;
 	import app.model.vo.CommandHeightVO;
 	import app.model.vo.LayerVO;
 	import app.view.components.ImageCommandingHeight;
@@ -39,24 +40,20 @@ package app.view
 		{
 			switch(notification.getName())
 			{
-				case ApplicationFacade.NOTIFY_APP_INIT:				
-					var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
-					
-					for(var i:Number = 0;i<buildProxy.build.CommandingHeights.length;i++)
-					{
-						var commandingHeight:CommandHeightVO = buildProxy.build.CommandingHeights[i];
+				case ApplicationFacade.NOTIFY_APP_INIT:									
+					for each(var commandingHeight:CommandHeightVO in (notification.getBody() as BuildVO).CommandingHeights)
+					{						
+						var imageCommandingHeight:ImageCommandingHeight = new ImageCommandingHeight;
 						
-						var imageKeyPoint:ImageCommandingHeight = new ImageCommandingHeight;
-						imageKeyPoint.commandingHeight = commandingHeight;
+						imageCommandingHeight.commandingHeight = commandingHeight;
 						
-						facade.registerMediator(new ImageCommandHeightMediator("ImageKeyPointMediator" + commandingHeight.TCH_ID,imageKeyPoint));
+						facade.registerMediator(new ImageCommandHeightMediator("ImageCommandHeightMediator" + commandingHeight.TCH_ID,imageCommandingHeight));
 						
-						layerKeyPoint.addElement(imageKeyPoint);
+						layerKeyPoint.addElement(imageCommandingHeight);
 					}
 					
 					var layerSettingSurroundingProxy:LayerSettingSurroundingProxy = facade.retrieveProxy(LayerSettingSurroundingProxy.NAME) as LayerSettingSurroundingProxy;
-					var layerSurrounding:LayerVO = layerSettingSurroundingProxy.Layers[0];
-					BindingUtils.bindProperty(layerKeyPoint,"visible",layerSurrounding,"LayerVisible");
+					BindingUtils.bindProperty(layerKeyPoint,"visible",LayerVO.COMMANDHEIGHT,"LayerVisible");
 					break;
 			}
 		}

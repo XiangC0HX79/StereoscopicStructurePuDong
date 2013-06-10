@@ -46,7 +46,7 @@ package app.view
 				case ApplicationFacade.NOTIFY_APP_INIT:	
 					BindingUtils.bindProperty(layerKeyUnits,"visible",LayerVO.KEYUNITS,"LayerVisible");
 					
-					for each(var i:KeyUnitVO in buildProxy.build.keyUnits)
+					for each(var i:KeyUnitVO in buildProxy.build.KeyUnits)
 					{
 						var imageKeyUnit:ImageKeyUnit = new ImageKeyUnit;
 						imageKeyUnit.keyUnit = i;

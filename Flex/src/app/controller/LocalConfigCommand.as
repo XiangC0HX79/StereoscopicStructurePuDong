@@ -4,6 +4,7 @@ package app.controller
 	import app.model.BuildProxy;
 	import app.model.LayerSettingStereoScopicProxy;
 	import app.model.vo.BuildVO;
+	import app.model.vo.CommandHeightPicVO;
 	import app.model.vo.CommandHeightVO;
 	import app.model.vo.ComponentVO;
 	import app.model.vo.FloorVO;
@@ -46,6 +47,8 @@ package app.controller
 		private var buildProxy:BuildProxy;
 		
 		private var layerSettingStereoScopicProxy:LayerSettingStereoScopicProxy;
+		
+		private var initCount:Number = 0;
 		
 		override public function execute(note:INotification):void
 		{						
@@ -100,69 +103,103 @@ package app.controller
 		}
 		
 		private function onInitIcon(result:ArrayCollection):void
-		{							
+		{						
+			initCount = 0;
+			
 			for each(var item:Object in result)
 			{
 				switch(item.IconID)
 				{
-					/*case "1":
+					case "1":
 						sendNotification(ApplicationFacade.NOTIFY_COMMAND_LOADIMAGE
 							,[
 								item.IconPath,
-								function(bitmap:Bitmap):void{CommandingHeightVO.Icon = bitmap;}
+								function(bitmap:Bitmap):void{CommandHeightVO.Icon = bitmap;initBuild();}
 							]);						
-						break;*/
+						break;
 				}
 			}
-						
+		}
+		
+		private function initBuild():void
+		{
+			if(++initCount < 1) return;
+			
 			sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
 				["InitBuild",onInitBuild
 					,[paramName]
-					,false]);	
+					,false]);				
 		}
 		
 		private function onInitBuild(result:ArrayCollection):void
 		{								
 			if(result.length == 0)
+			{
+				sendNotification(ApplicationFacade.NOTIFY_APP_ALERTALARM,"找不到'" + paramName + "'信息！");
 				return;
+			}
 
 			buildProxy.setData(new BuildVO(result[0]));
 			
-			if(result[0].TMB_StereoPicPath)
-				sendNotification(ApplicationFacade.NOTIFY_COMMAND_LOADIMAGE,[result[0].TMB_StereoPicPath,loaderImageHandle]);
-			else
-				sendNotification(ApplicationFacade.NOTIFY_COMMAND_LOADIMAGE,[result[0].TMB_PicPath,loaderImageHandle]);
-			
-			function loaderImageHandle(bitmap:Bitmap):void   
-			{   						
-				buildProxy.build.TMB_StereoPic = bitmap;
-				
-				//加载制高点
-				sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
-					["InitCommandingHeights",onInitCommandingHeights
-						,[buildProxy.build.TMB_ID]
-						,false]);
-			}
+			//加载制高点
+			sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
+				["InitCommandingHeights",onInitCommandingHeights
+					,[buildProxy.build.TMB_ID]
+					,false]);
 		}
 				
 		private function onInitCommandingHeights(result:ArrayCollection):void
-		{						
-			for each(var item:Object in result)
-			{
-				buildProxy.build.CommandingHeights.addItem(new CommandHeightVO(item));
+		{							
+			initCount = 0;
+			
+			if(result.length == 0)
+			{				
+				initKeyUnits();
 			}
+			else
+			{
+				for each(var item:Object in result)
+				{
+					var command:CommandHeightVO = new CommandHeightVO(item)
 					
+					buildProxy.build.CommandingHeights.addItem(command);
+					
+					sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
+						[
+							"InitCommandingHeightsPic"
+							,function(pics:ArrayCollection):void{initNext(command,pics);}
+							,[command.TCH_ID]
+							,false]);
+				}
+			}
+							
+			function initNext(c:CommandHeightVO,pics:ArrayCollection):void
+			{
+				for each(var i:Object in pics)
+				{
+					c.pics.addItem(new CommandHeightPicVO(i));
+				}
+				
+				initKeyUnits();
+			}
+		}
+					
+		private function initKeyUnits():void
+		{			
+			if(++initCount < buildProxy.build.CommandingHeights.length)
+				return;
+			
 			sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
 				["InitKeyUnits",onInitKeyUnits
 					,[buildProxy.build.TMB_ID]
-					,false]);
+					,false]);				
 		}
 		
 		private function onInitKeyUnits(result:ArrayCollection):void
 		{
 			for each(var i:Object in result)
 			{
-				buildProxy.build.keyUnits.addItem(new KeyUnitVO(i));
+				buildProxy.build.KeyUnits.addItem(new KeyUnitVO(i));
 			}
 			
 			sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
@@ -236,7 +273,7 @@ package app.controller
 				
 			}
 			
-			sendNotification(ApplicationFacade.NOTIFY_APP_INIT);
+			sendNotification(ApplicationFacade.NOTIFY_APP_INIT,buildProxy.build);
 			
 			sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGHIDE,"程序初始化完成！");	
 		}
@@ -379,15 +416,7 @@ package app.controller
 		}
 		
 		private function onInitContingencyPlans(result:ArrayCollection):void
-		{							
-			if(result.length > 0)
-			{
-				buildProxy.build.contingencyPlans = result[0].TMB_ContingencyPlans;
-			}
-						
-			sendNotification(ApplicationFacade.NOTIFY_APP_INIT);
-			
-			sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGHIDE,"程序初始化完成！");	
+		{		
 		}		
 	}
 }

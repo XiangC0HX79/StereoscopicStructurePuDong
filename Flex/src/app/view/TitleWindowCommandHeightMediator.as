@@ -22,7 +22,6 @@ package app.view
 		{
 			super(NAME, new TitleWindowCommandHeight);
 			
-			titleWindowCommandHeight.addEventListener(Event.CLOSE,onClose);
 			titleWindowCommandHeight.addEventListener(TitleWindowCommandHeight.IMAGELIST,onImageList);
 		}
 		
@@ -31,44 +30,9 @@ package app.view
 			return viewComponent as TitleWindowCommandHeight;
 		}
 		
-		private function onClose(event:Event):void
-		{
-			PopUpManager.removePopUp(titleWindowCommandHeight);
-		}
-		
 		private function onImageList(event:Event):void
 		{
-			if(titleWindowCommandHeight.commandingHeight.pics)
-			{
-				naviToImageList();
-			}
-			else
-			{				
-				sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
-					["InitCommandingHeightsPIC",onInitCommandingHeightsPIC
-						,[titleWindowCommandHeight.commandingHeight.TCH_ID]
-						,false]);
-			}
-			
-			function onInitCommandingHeightsPIC(result:ArrayCollection):void
-			{
-				titleWindowCommandHeight.commandingHeight.pics = new ArrayCollection;
-				
-				for each(var i:Object in result)
-				{
-					titleWindowCommandHeight.commandingHeight.pics.addItem(new CommandHeightPicVO(i));
-				}
-				
-				naviToImageList();
-			}
-		}
-		
-		private function naviToImageList():void
-		{
-			if(titleWindowCommandHeight.commandingHeight.pics.length > 0)
-			{
-				sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_COMMAND_IMGLST,titleWindowCommandHeight.commandingHeight);
-			}
+			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_COMMAND_IMGLST,titleWindowCommandHeight.CommandingHeight);
 		}
 		
 		override public function listNotificationInterests():Array
@@ -83,7 +47,7 @@ package app.view
 			switch(notification.getName())
 			{
 				case ApplicationFacade.NOTIFY_TITLEWINDOW_COMMAND:
-					titleWindowCommandHeight.commandingHeight = notification.getBody() as CommandHeightVO;
+					titleWindowCommandHeight.CommandingHeight = notification.getBody() as CommandHeightVO;
 					break;
 			}
 		}

@@ -42,8 +42,7 @@ package app.view
 					layerFireHydrant.pic = buildProxy.build.T_FirePath;
 										
 					var layerSettingSurroundingProxy:LayerSettingSurroundingProxy = facade.retrieveProxy(LayerSettingSurroundingProxy.NAME) as LayerSettingSurroundingProxy;
-					var layer:LayerVO = layerSettingSurroundingProxy.GetLayerByName("消防栓");
-					BindingUtils.bindProperty(layerFireHydrant,"visible",layer,"LayerVisible");
+					BindingUtils.bindProperty(layerFireHydrant,"visible",LayerVO.FIRE,"LayerVisible");
 					break;
 			}
 		}

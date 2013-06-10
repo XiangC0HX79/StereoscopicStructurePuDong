@@ -61,43 +61,45 @@ package app.view
 					
 					var path:BitmapData = new BitmapData(len,40,true,0x0);
 					
-					for(var i:Number = 0;i<Math.floor(len / part.width);i++)
+					for(var i:Number = 0;i<Math.ceil(len / part.width);i++)
 					{
 						var matrix:Matrix = new Matrix(1,0,0,1,i * part.width,0);
 						path.draw(part,matrix);
 					}
-										
-					var text:TextField = new TextField;
-					text.text = "20米";
-					
-					var textFmt:TextFormat = new TextFormat;
+																			
+					var textFmt:TextFormat = new TextFormat;					
 					textFmt.size = 20;
 					textFmt.bold = true;
 					textFmt.color = 0xFF0000;	
+					
+					var text:TextField = new TextField;
+					text.text = command.TCH_LineLength + "米";
 					text.setTextFormat(textFmt);
+					text.width = text.getLineMetrics(0).width;
 					
 					path.draw(text,new Matrix(1,0,0,1,len / 2 - text.width / 2,15));
-										
-					matrix = new Matrix(1,0,0,1,0,-5);
-										
-					matrix.rotate(Math.asin(dy / len) + Math.PI);
-					
-					matrix.concat(new Matrix(1,0,0,1,command.TCH_X,command.TCH_Y));
 					
 					var back:BitmapData = new BitmapData(layerDraw.width,layerDraw.height,true,0x0);
-					back.draw(path,matrix);
+					var angel:Number = Math.atan(dy / dx);					
+					if(command.TCH_X < buildProxy.build.TMB_X)
+					{
+						matrix = new Matrix(1,0,0,1,0,-5);
+					}
+					else
+					{
+						matrix = new Matrix(1,0,0,1,-len,-5);	
+					}					
+					matrix.rotate(angel);					
+					matrix.concat(new Matrix(1,0,0,1,command.TCH_X,command.TCH_Y));					
+					back.draw(path,matrix);					
 					
-					layerDraw.graphics.beginBitmapFill(back,null,false);
-					
-					layerDraw.graphics.drawRect(0,0,layerDraw.width,layerDraw.height); 
-					//var num:Number = Math. ;
-					//path.
-					
+					layerDraw.graphics.beginBitmapFill(back,null,false);					
+					layerDraw.graphics.drawRect(0,0,layerDraw.width,layerDraw.height); 					
+					layerDraw.graphics.endFill();					
 					break;
 				
 				case ApplicationFacade.NOTIFY_COMMAND_OUT:
 					layerDraw.graphics.clear();
-					break;
 					break;
 			}
 		}

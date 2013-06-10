@@ -21,14 +21,19 @@ package app.model.vo
 			return source.TMB_Name;
 		}
 		
+		public function get TMB_StereoPicPath():String
+		{
+			return  source.TMB_StereoPicPath?source.TMB_StereoPicPath.replace("../",WebServiceCommand.WSDL):source.TMB_StereoPicPath;	
+		}
+			
 		public function get TMB_X():Number
 		{
-			return source.TMB_X;
+			return source.TMB_X?source.TMB_X:0;
 		}
 		
 		public function get TMB_Y():Number
 		{
-			return source.TMB_Y;
+			return source.TMB_Y?source.TMB_Y:0;
 		}
 		
 		public function get TMB_videoPath():String
@@ -70,6 +75,11 @@ package app.model.vo
 		{
 			return  source.TMB_FuncDivisionPath?source.TMB_FuncDivisionPath.replace("../",WebServiceCommand.WSDL):source.TMB_FuncDivisionPath;	
 		}	
+		
+		public function get TMB_EmergPath():String
+		{
+			return  source.TMB_EmergPath?source.TMB_EmergPath.replace("../",WebServiceCommand.WSDL):source.TMB_EmergPath;	
+		}	
 			
 		public function get TMB_Communicate():String
 		{
@@ -95,23 +105,16 @@ package app.model.vo
 		{
 			return source.TMB_Internalhigh;
 		}
-		
-		
-		//周边环境
-		public var TMB_StereoPic:Bitmap;
-		
-		public var CommandingHeights:ArrayCollection = new ArrayCollection;
-		
-		public var closeHandles:ArrayCollection;
-		
-		public var keyUnits:ArrayCollection = new ArrayCollection;
-		
-		public var Scenting:ArrayCollection = new ArrayCollection;
-		
-		public var Traffic:ArrayCollection = new ArrayCollection;
-		
+				
+		//周边环境		
+		public var CommandingHeights:ArrayCollection = new ArrayCollection;		
+		public var CloseHandles:ArrayCollection = new ArrayCollection;		
+		public var KeyUnits:ArrayCollection = new ArrayCollection;		
+		public var Scenting:ArrayCollection = new ArrayCollection;		
+		public var Traffic:ArrayCollection = new ArrayCollection;		
 		public var Hazzard:ArrayCollection = new ArrayCollection;
 		
+		//信息
 		public var Communicate:ArrayCollection = new ArrayCollection;
 		public var Cabledrop:ArrayCollection = new ArrayCollection;
 		public var Landing:ArrayCollection = new ArrayCollection;
@@ -128,7 +131,7 @@ package app.model.vo
 		public var floors:ArrayCollection = new ArrayCollection;
 		
 		//应急预案
-		public var contingencyPlans:String;
+		//public var contingencyPlans:String;
 		
 		
 		public function BuildVO(value:Object = null)
