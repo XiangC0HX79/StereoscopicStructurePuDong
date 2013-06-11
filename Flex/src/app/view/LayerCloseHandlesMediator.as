@@ -2,7 +2,7 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
-	import app.model.LayerSettingSurroundingProxy;
+	import app.model.vo.BuildVO;
 	import app.model.vo.ClosedhandleVO;
 	import app.model.vo.CommandHeightVO;
 	import app.model.vo.LayerVO;
@@ -37,9 +37,7 @@ package app.view
 		override public function listNotificationInterests():Array
 		{
 			return [
-				ApplicationFacade.NOTIFY_APP_INIT,
-				
-				ApplicationFacade.NOTIFY_SURROUNDING_CLOSEDHANDDLES
+				ApplicationFacade.NOTIFY_APP_INIT
 			];
 		}
 		
@@ -47,39 +45,21 @@ package app.view
 		{
 			switch(notification.getName())
 			{
-				case ApplicationFacade.NOTIFY_APP_INIT:						
-					var layerSettingSurroundingProxy:LayerSettingSurroundingProxy = facade.retrieveProxy(LayerSettingSurroundingProxy.NAME) as LayerSettingSurroundingProxy;
+				case ApplicationFacade.NOTIFY_APP_INIT:		
+					for each(var closedHandle:ClosedhandleVO in (notification.getBody() as BuildVO).CloseHandles)
+					{						
+						var imageClosedHandle:ImageClosedHandle = new ImageClosedHandle;
+						
+						imageClosedHandle.closedhandle = closedHandle;
+						
+						facade.registerMediator(new ImageClosedHandleMediator("ImageClosedHandleMediator" + closedHandle.T_ClosedhandlesID,imageClosedHandle));
+						
+						layerClosedhandles.addElement(imageClosedHandle);
+					}
+					
 					BindingUtils.bindProperty(layerClosedhandles,"visible",LayerVO.CLOSEHANDLE,"LayerVisible");
 					break;
-					
-				case ApplicationFacade.NOTIFY_SURROUNDING_CLOSEDHANDDLES:	
-					/*if(!buildProxy.build.closeHandles)
-					{						
-						sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
-							["InitClosedhandles",onInitClosedhandles
-								,[buildProxy.build.TMB_ID]
-								,false]);
-					}			*/
-					break;
 			}
-		}
-		
-		private function onInitClosedhandles(result:ArrayCollection):void
-		{
-			/*buildProxy.build.closeHandles = new ArrayCollection;
-			for each(var i:Object in result)
-			{
-				var closedHandle:ClosedhandleVO = new ClosedhandleVO(i);
-				buildProxy.build.closeHandles.addItem(closedHandle);
-				
-				var imageClosedHandle:ImageClosedHandle = new ImageClosedHandle;
-				imageClosedHandle.closedhandle = closedHandle;
-				
-				facade.registerMediator(new ImageClosedHandleMediator("ImageClosedHandleMediator" + closedHandle.T_ClosedhandlesID,imageClosedHandle));
-				
-				layerClosedhandles.addElement(imageClosedHandle);
-			}*/
-			
 		}
 	}
 }

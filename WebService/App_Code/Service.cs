@@ -42,7 +42,35 @@ public class Service : WebService
         row["IconPath"] = "../Icon/CommandingHeight.png";
         table.Rows.Add(row);
 
+        row = table.NewRow();
+        row["IconID"] = "2";
+        row["IconPath"] = "../Icon/CloseHandle.png";
+        table.Rows.Add(row);
+
         return table;
+    }
+    
+    [WebMethod]
+    public DataTable SaveSurrouding(String data)
+    {
+        var sql = "";
+
+        var s1 = data.Split(';');
+
+        foreach (var s2 in s1.Select(i => i.Split(' ')))
+        {
+            switch (s2[0])
+            {
+                case "1":
+                    sql += "UPDATE T_CommandingHeights SET TCH_X = " + s2[2] + ",TCH_Y = " + s2[3] + " WHERE TCH_ID = " + s2[1] + ";";
+                    break;
+                case "2":
+                    sql += "UPDATE T_Closedhandles SET T_ClosedX = " + s2[2] + ",T_ClosedY = " + s2[3] + " WHERE T_ClosedhandlesID = " + s2[1] + ";";
+                    break;
+            }
+        }
+
+        return _clsGetData.ExcuteNoQuery(sql);
     }
 
     [WebMethod]

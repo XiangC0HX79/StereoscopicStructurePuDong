@@ -27,9 +27,7 @@ package app.controller
 			var imageName:String = note.getBody()[0];
 			
 			var loaderImageHandler:Function = note.getBody()[1];
-			
-			var params:Array = note.getBody()[2];
-			
+						
 			var url:String =  imageName.replace("../",WebServiceCommand.WSDL);
 			
 			var urlRequest:URLRequest = new URLRequest(encodeURI(url))
@@ -45,7 +43,7 @@ package app.controller
 				
 				var bitmap:Bitmap = Bitmap(loaderInfo.content);
 				
-				loaderImageHandler(bitmap,params);
+				loaderImageHandler(bitmap);
 			}
 			
 			function onError(event:IOErrorEvent):void

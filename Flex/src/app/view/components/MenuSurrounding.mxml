@@ -2,23 +2,31 @@
 <s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx">
+	<s:states>
+		<s:State name="Normal"/>
+		<s:State name="Edit"/>
+	</s:states>
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
-	<s:ToggleButton skinClass="app.skin.skinSubMenuButton" width="175" height="36"
-					label="制高点" buttonMode="true"/>
-	<s:ToggleButton skinClass="app.skin.skinSubMenuButton" width="175" height="36"
-					label="分控范围" buttonMode="true"/>
-	<s:ToggleButton skinClass="app.skin.skinSubMenuButton" width="175" height="36"
-					label="重要交通信息" buttonMode="true"/>
-	<s:ToggleButton skinClass="app.skin.skinSubMenuButton" width="175" height="36"
-					label="危险源" buttonMode="true"/>
-	<s:ToggleButton skinClass="app.skin.skinSubMenuButton" width="175" height="36"
-					label="救援信息" buttonMode="true"/>
-	<s:ToggleButton skinClass="app.skin.skinSubMenuButton" width="175" height="36"
-					label="消防栓" buttonMode="true"/>
-	<s:ToggleButton skinClass="app.skin.skinSubMenuButton" width="175" height="36"
-					label="重点单位" buttonMode="true"/>
-	<s:ToggleButton skinClass="app.skin.skinSubMenuButton" width="175" height="36"
-					label="窨井通道" buttonMode="true"/>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			public static const SAVE:String = "save";
+			
+			[Bindable]public var dp:ArrayCollection = new ArrayCollection;
+		]]>
+	</fx:Script>
+	
+	<s:DataGroup itemRenderer="app.renderer.rendererMenuLayer" dataProvider="{dp}">		
+		<s:layout>
+			<s:VerticalLayout/>
+		</s:layout>
+	</s:DataGroup>
+	
+	<s:HGroup horizontalAlign="center" includeIn="Edit" width="100%">
+		<s:Image source="@Embed('assets/image/btnSave.png')" toolTip="保存数据" buttonMode="true" click="dispatchEvent(new Event(SAVE))"/>
+	</s:HGroup>
 </s:VGroup>

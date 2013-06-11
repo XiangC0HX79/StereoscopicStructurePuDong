@@ -7,11 +7,11 @@ package app.model
 	import org.puremvc.as3.interfaces.IProxy;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 	
-	public class LayerSettingSurroundingProxy extends Proxy implements IProxy
+	public class LayerSettingSurroundingProxy_Old extends Proxy implements IProxy
 	{
 		public static const NAME:String = "LayerSettingSurroundingProxy";
 		
-		public function LayerSettingSurroundingProxy()
+		public function LayerSettingSurroundingProxy_Old()
 		{
 			super(NAME, new ArrayCollection);
 		}

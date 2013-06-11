@@ -2,6 +2,7 @@ package app.controller
 {	
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
+	import app.model.IconsProxy;
 	import app.model.LayerSettingStereoScopicProxy;
 	import app.model.vo.BuildVO;
 	import app.model.vo.CommandHeightPicVO;
@@ -9,10 +10,12 @@ package app.controller
 	import app.model.vo.ComponentVO;
 	import app.model.vo.FloorVO;
 	import app.model.vo.HazardVO;
+	import app.model.vo.IconVO;
 	import app.model.vo.KeyUnitVO;
 	import app.model.vo.ScentingVO;
 	import app.model.vo.TaticalVO;
 	import app.model.vo.TrafficInfoVO;
+	import app.model.vo.WebServiceVO;
 	import app.view.TitleWindowFloorMediator;
 	import app.view.components.TitleWindowFloor;
 	
@@ -43,12 +46,10 @@ package app.controller
 	public class LocalConfigCommand extends SimpleCommand implements ICommand
 	{
 		private var paramName:String;
-		
-		private var buildProxy:BuildProxy;
-		
+				
 		private var layerSettingStereoScopicProxy:LayerSettingStereoScopicProxy;
-		
-		private var initCount:Number = 0;
+						
+		private var buildProxy:BuildProxy;
 		
 		override public function execute(note:INotification):void
 		{						
@@ -56,15 +57,13 @@ package app.controller
 						
 			var application:Application = note.getBody() as Application;	
 			paramName = application.parameters.build;	
-			//buildProxy.build.edit = (application.parameters.edit == "1");
+			BuildVO.Edit = (application.parameters.edit == "1");
 			
-			var request:URLRequest = new URLRequest("config.xml");
-			var load:URLLoader = new URLLoader(request);
+			var load:URLLoader = new URLLoader(new URLRequest("config.xml"));
+			
 			load.addEventListener(Event.COMPLETE,onLocaleConfigResult);
 			load.addEventListener(IOErrorEvent.IO_ERROR,onIOError);
-			
-			buildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
-			
+						
 			layerSettingStereoScopicProxy = facade.retrieveProxy(LayerSettingStereoScopicProxy.NAME) as LayerSettingStereoScopicProxy;
 		}
 				
@@ -88,89 +87,66 @@ package app.controller
 			{
 				sendNotification(ApplicationFacade.NOTIFY_APP_ALERTERROR,"配置文件损坏，请检查config.xml文件正确性！");
 				
-				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGSHOW,"程序初始化：本地配置加载失败！");	
-			}
-			else
-			{				
-				WebServiceCommand.WSDL = xml.WebServiceUrl;
+				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"程序初始化：配置文件损坏，请检查config.xml文件正确性！");	
 				
-				//加载图标				
-				sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
-					["InitIcon",onInitIcon
-						,[]
-						,false]);
-			}
-		}
-		
-		private function onInitIcon(result:ArrayCollection):void
-		{						
-			initCount = 0;
-			
-			for each(var item:Object in result)
-			{
-				switch(item.IconID)
-				{
-					case "1":
-						sendNotification(ApplicationFacade.NOTIFY_COMMAND_LOADIMAGE
-							,[
-								item.IconPath,
-								function(bitmap:Bitmap):void{CommandHeightVO.Icon = bitmap;initBuild();}
-							]);						
-						break;
-				}
-			}
-		}
-		
-		private function initBuild():void
-		{
-			if(++initCount < 1) return;
-			
-			sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
-				["InitBuild",onInitBuild
-					,[paramName]
-					,false]);				
-		}
-		
-		private function onInitBuild(result:ArrayCollection):void
-		{								
-			if(result.length == 0)
-			{
-				sendNotification(ApplicationFacade.NOTIFY_APP_ALERTALARM,"找不到'" + paramName + "'信息！");
 				return;
 			}
-
-			buildProxy.setData(new BuildVO(result[0]));
 			
-			//加载制高点
-			sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
-				["InitCommandingHeights",onInitCommandingHeights
-					,[buildProxy.build.TMB_ID]
-					,false]);
-		}
+			WebServiceVO.BASE_WSDL = xml.WebServiceUrl;
+			IconVO.BASE_URL = xml.WebServiceUrl;
+			
+			var iconsProxy:IconsProxy = facade.retrieveProxy(IconsProxy.NAME) as IconsProxy;
+			
+			iconsProxy.icons.addEventListener(Event.COMPLETE,onInitIcon);
 				
-		private function onInitCommandingHeights(result:ArrayCollection):void
-		{							
-			initCount = 0;
+			iconsProxy.icons.Init();
+		}
+		
+		private function onInitIcon(event:Event):void
+		{					
+			sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：图标加载完成...");
+						
+			var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
 			
+			buildProxy.build.addEventListener(BuildVO.INIT_BASEINFO,onInitBaseInfo);
+			buildProxy.build.addEventListener(BuildVO.INIT_COMMANDHEIGHTS,onInitCommandHeights);
+			buildProxy.build.addEventListener(BuildVO.INIT_CLOSEHANDLES,onInitCloseHandles);
+			
+			buildProxy.build.addEventListener(Event.COMPLETE,onComplete);
+			
+			buildProxy.build.Init(paramName);		
+						
+			function onInitBaseInfo(event:Event):void
+			{
+				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：基础信息加载完成...");
+			}
+			
+			function onInitCommandHeights(event:Event):void
+			{
+				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：制高点加载完成...");
+			}
+			
+			function onInitCloseHandles(event:Event):void
+			{
+				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：封控范围加载完成...");
+			}
+			
+			function onComplete(event:Event):void
+			{			
+				sendNotification(ApplicationFacade.NOTIFY_APP_INIT,buildProxy.build);
+				
+				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGHIDE);	
+			}	
+		}
+		
+		private function onInitCommandingHeights(result:ArrayCollection):void
+		{										
 			if(result.length == 0)
 			{				
 				initKeyUnits();
 			}
 			else
 			{
-				for each(var item:Object in result)
-				{
-					var command:CommandHeightVO = new CommandHeightVO(item)
-					
-					buildProxy.build.CommandingHeights.addItem(command);
-					
-					sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
-						[
-							"InitCommandingHeightsPic"
-							,function(pics:ArrayCollection):void{initNext(command,pics);}
-							,[command.TCH_ID]
-							,false]);
-				}
 			}
 							
 			function initNext(c:CommandHeightVO,pics:ArrayCollection):void
@@ -185,10 +161,7 @@ package app.controller
 		}
 					
 		private function initKeyUnits():void
-		{			
-			if(++initCount < buildProxy.build.CommandingHeights.length)
-				return;
-			
+		{						
 			sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
 				["InitKeyUnits",onInitKeyUnits
 					,[buildProxy.build.TMB_ID]

@@ -2,7 +2,6 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
-	import app.model.LayerSettingSurroundingProxy;
 	import app.model.vo.CommandHeightVO;
 	import app.model.vo.LayerVO;
 	import app.view.components.LayerClosedPic;
@@ -42,7 +41,6 @@ package app.view
 					var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
 					layerClosedPic.source = buildProxy.build.T_ClosedPicPath;
 										
-					var layerSettingSurroundingProxy:LayerSettingSurroundingProxy = facade.retrieveProxy(LayerSettingSurroundingProxy.NAME) as LayerSettingSurroundingProxy;
 					BindingUtils.bindProperty(layerClosedPic,"visible",LayerVO.CLOSEHANDLE,"LayerVisible");
 					break;
 			}

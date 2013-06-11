@@ -2,11 +2,10 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
-	import app.model.LayerSettingSurroundingProxy;
 	import app.model.vo.BuildVO;
 	import app.model.vo.KeyUnitVO;
 	import app.model.vo.LayerVO;
-	import app.view.components.MenuSub;
+	import app.view.components.MenuSurrounding;
 	
 	import flash.events.Event;
 	
@@ -22,34 +21,38 @@ package app.view
 				
 		public function MenuSurroundingMediator()
 		{
-			super(NAME, new MenuSub);
+			super(NAME, new MenuSurrounding);
 			
 			menuSurrounding.addEventListener(Event.CHANGE,onChange);	
+			
+			menuSurrounding.addEventListener(MenuSurrounding.SAVE,onSave);
 		}
 		
-		protected function get menuSurrounding():MenuSub
+		protected function get menuSurrounding():MenuSurrounding
 		{
-			return viewComponent as MenuSub;
+			return viewComponent as MenuSurrounding;
 		}
 		
 		private function onChange(event:Event):void
 		{
-			var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
+			//var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
 			
 			event.stopImmediatePropagation();
 			
 			var layer:LayerVO = event.target.data as LayerVO;
-			if(layer.LayerName == "分控范围")
-			{
-				sendNotification(ApplicationFacade.NOTIFY_SURROUNDING_CLOSEDHANDDLES);
-			}
-			else if(layer.LayerName == "救援信息")
+			if(layer.LayerName == "救援信息")
 			{
 				sendNotification(ApplicationFacade.NOTIFY_SURROUNDING_RESCUE,layer.LayerVisible);
 			}
 			else if(layer == LayerVO.KEYUNITS)
 			{
 			}			
+		}
+		
+		private function onSave(event:Event):void
+		{
+			var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
+			buildProxy.SaveSurrouding();
 		}
 		
 		override public function listNotificationInterests():Array
@@ -64,34 +67,35 @@ package app.view
 			switch(notification.getName())
 			{
 				case ApplicationFacade.NOTIFY_APP_INIT:
-					var build:BuildVO = notification.getBody() as BuildVO;					
+					if(BuildVO.Edit)
+					{
+						menuSurrounding.currentState = "Edit";
+					}
 					
-					var layerSettingSurroundingProxy:LayerSettingSurroundingProxy = facade.retrieveProxy(LayerSettingSurroundingProxy.NAME) as LayerSettingSurroundingProxy;
-								
+					var build:BuildVO = notification.getBody() as BuildVO;					
+													
 					if(build.CommandingHeights.length > 0)
-						layerSettingSurroundingProxy.Layers.addItem(LayerVO.COMMANDHEIGHT);	
+						menuSurrounding.dp.addItem(LayerVO.COMMANDHEIGHT);	
 										
 					if(build.CloseHandles.length > 0)
-						layerSettingSurroundingProxy.Layers.addItem(LayerVO.CLOSEHANDLE);		
+						menuSurrounding.dp.addItem(LayerVO.CLOSEHANDLE);		
 					
 					if(build.Traffic.length > 0)
-						layerSettingSurroundingProxy.Layers.addItem(LayerVO.TRAFFIC);		
+						menuSurrounding.dp.addItem(LayerVO.TRAFFIC);		
 					
 					if(build.Hazzard.length > 0)
-						layerSettingSurroundingProxy.Layers.addItem(LayerVO.HAZARD);		
+						menuSurrounding.dp.addItem(LayerVO.HAZARD);		
 					
 					if(build.T_RescueimgPath)
-						layerSettingSurroundingProxy.Layers.addItem(LayerVO.RESCUE);
+						menuSurrounding.dp.addItem(LayerVO.RESCUE);
 					
-					layerSettingSurroundingProxy.Layers.addItem(LayerVO.FIRE);
+					menuSurrounding.dp.addItem(LayerVO.FIRE);
 					
 					if(build.KeyUnits.length > 0)
-						layerSettingSurroundingProxy.Layers.addItem(LayerVO.KEYUNITS);
+						menuSurrounding.dp.addItem(LayerVO.KEYUNITS);
 					
 					if(build.Scenting.length > 0)
-						layerSettingSurroundingProxy.Layers.addItem(LayerVO.SCENTING);
-					
-					menuSurrounding.dataProvider = layerSettingSurroundingProxy.Layers;	
+						menuSurrounding.dp.addItem(LayerVO.SCENTING);
 					break;
 			}
 		}

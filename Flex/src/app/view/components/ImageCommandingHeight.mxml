@@ -2,7 +2,7 @@
 <s:Image xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" 
-		 buttonMode="true" source="{CommandHeightVO.Icon}" toolTip="{commandingHeight.TCH_Name}"
+		 buttonMode="true" toolTip="{commandingHeight.TCH_Name}"
 		 x="{commandingHeight.TCH_X - this.width / 2}" y="{commandingHeight.TCH_Y - this.height / 2}">
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:Image xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" 
-		 buttonMode="true"
-		 x="{closedhandle.T_ClosedX - 7}" y="{closedhandle.T_ClosedY - 7}">
+		 toolTip="{closedhandle.T_ClosedhandlesName}"
+		 x="{closedhandle.T_ClosedX - this.width / 2}" y="{closedhandle.T_ClosedY - this.height / 2}">
+	
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
@@ -15,10 +16,4 @@
 			[Bindable]public var closedhandle:ClosedhandleVO;			
 		]]>
 	</fx:Script>
-	
-	<s:Ellipse width="15" height="15">
-		<s:fill>			
-			<s:SolidColor color="red"/>
-		</s:fill>		
-	</s:Ellipse>
-</s:Group>
+</s:Image>

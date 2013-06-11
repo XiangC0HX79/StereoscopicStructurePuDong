@@ -2,11 +2,15 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.vo.BuildVO;
+	import app.model.vo.ClosedhandleVO;
+	import app.model.vo.CommandHeightVO;
 	import app.view.components.PanelSurrounding;
 	
 	import flash.events.Event;
 	
 	import mx.core.IVisualElement;
+	import mx.events.DragEvent;
+	import mx.managers.DragManager;
 	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
@@ -19,10 +23,10 @@ package app.view
 		public function PanelSurroundingMediator()
 		{
 			super(NAME, new PanelSurrounding);
-						
-			panelSurrounding.addElement(facade.retrieveMediator(LayerDrawMediator.NAME).getViewComponent() as IVisualElement);
 			
 			panelSurrounding.addElement(facade.retrieveMediator(LayerClosedPicMediator.NAME).getViewComponent() as IVisualElement);
+			
+			panelSurrounding.addElement(facade.retrieveMediator(LayerDrawMediator.NAME).getViewComponent() as IVisualElement);			
 
 			panelSurrounding.addElement(facade.retrieveMediator(LayerCommandingHeightMediator.NAME).getViewComponent() as IVisualElement);
 			
@@ -39,6 +43,9 @@ package app.view
 			panelSurrounding.addElement(facade.retrieveMediator(LayerScentingMediator.NAME).getViewComponent() as IVisualElement);
 			
 			panelSurrounding.addEventListener(PanelSurrounding.BUILDCLICK,onBuildClick);			
+			
+			panelSurrounding.addEventListener(DragEvent.DRAG_ENTER,onDragEnter);
+			panelSurrounding.addEventListener(DragEvent.DRAG_DROP,onDragDrop);		
 		}
 		
 		protected function get panelSurrounding():PanelSurrounding
@@ -50,7 +57,34 @@ package app.view
 		{			
 			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_MOVIE,panelSurrounding.Build.TMB_videoPath);
 		}
+				
+		private function onDragEnter(e:DragEvent):void
+		{			
+			if(
+				e.dragSource.hasFormat("CommandHeightVO")
+				|| e.dragSource.hasFormat("ClosedhandleVO")
+			)
+			{  
+				DragManager.acceptDragDrop(panelSurrounding);	
+			}  
+		}
 		
+		private function onDragDrop(e:DragEvent):void
+		{			
+			if(e.dragSource.hasFormat("CommandHeightVO"))
+			{  
+				var commandHeight:CommandHeightVO = e.dragSource.dataForFormat("CommandHeightVO") as CommandHeightVO;
+				commandHeight.TCH_X = panelSurrounding.mouseX;
+				commandHeight.TCH_Y = panelSurrounding.mouseY;
+			}
+			else if(e.dragSource.hasFormat("ClosedhandleVO"))
+			{
+				var closeHandle:ClosedhandleVO = e.dragSource.dataForFormat("ClosedhandleVO") as ClosedhandleVO;
+				closeHandle.T_ClosedX = panelSurrounding.mouseX;
+				closeHandle.T_ClosedY = panelSurrounding.mouseY;				
+			}				
+		}
+				
 		override public function listNotificationInterests():Array
 		{
 			return [

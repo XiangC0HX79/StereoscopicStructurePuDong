@@ -41,7 +41,7 @@
 	</fx:Script>
 	
 	<s:Label top="25" horizontalCenter="0" text="{commandingHeightPic.T_ComTitle}" color="0xFFFFFF" fontSize="25"/>
-	<s:Image top="20" right="25" buttonMode="true" source="@Embed('assets/image/x.png')" click="{PopUpManager.removePopUp(this);}"/>
+	<s:Image top="20" right="25" buttonMode="true" source="@Embed('assets/image/x.png')" click="PopUpManager.removePopUp(this);"/>
 	
 	<s:Image top="180" left="23" buttonMode="true" source="@Embed('assets/image/图片左按钮.png')" 
 			 click="{ImageIndex = imageIndex - 1}" visible="{imageIndex > 0}"/>

@@ -2,7 +2,6 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
-	import app.model.LayerSettingSurroundingProxy;
 	import app.model.vo.BuildVO;
 	import app.model.vo.CommandHeightVO;
 	import app.model.vo.LayerVO;
@@ -10,21 +9,26 @@ package app.view
 	import app.view.components.LayerCommandingHeightPoint;
 	
 	import mx.binding.utils.BindingUtils;
+	import mx.core.IUIComponent;
+	import mx.events.DragEvent;
+	import mx.managers.DragManager;
 	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
 	
+	import spark.components.Group;
+	
 	public class LayerCommandingHeightMediator extends Mediator implements IMediator
 	{
-		public static const NAME:String = "LayerKeyPointMediator";
+		public static const NAME:String = "LayerCommandingHeightMediator";
 		
 		public function LayerCommandingHeightMediator()
 		{
 			super(NAME, new LayerCommandingHeightPoint);
 		}
 		
-		protected function get layerKeyPoint():LayerCommandingHeightPoint
+		protected function get layerCommandingHeight():LayerCommandingHeightPoint
 		{
 			return viewComponent as LayerCommandingHeightPoint;
 		}
@@ -49,11 +53,10 @@ package app.view
 						
 						facade.registerMediator(new ImageCommandHeightMediator("ImageCommandHeightMediator" + commandingHeight.TCH_ID,imageCommandingHeight));
 						
-						layerKeyPoint.addElement(imageCommandingHeight);
+						layerCommandingHeight.addElement(imageCommandingHeight);
 					}
 					
-					var layerSettingSurroundingProxy:LayerSettingSurroundingProxy = facade.retrieveProxy(LayerSettingSurroundingProxy.NAME) as LayerSettingSurroundingProxy;
-					BindingUtils.bindProperty(layerKeyPoint,"visible",LayerVO.COMMANDHEIGHT,"LayerVisible");
+					BindingUtils.bindProperty(layerCommandingHeight,"visible",LayerVO.COMMANDHEIGHT,"LayerVisible");
 					break;
 			}
 		}

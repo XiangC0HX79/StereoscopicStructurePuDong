@@ -101,7 +101,7 @@
 		<s:Group id="ContentGroup" creationComplete="ContentGroup_creationCompleteHandler(event)">
 		</s:Group>
 	</s:Scroller>
-		
+			
 	<s:VGroup x="830" y="100" id="Menu">
 		<s:Button label="周边环境" buttonMode="true"
 				  width="175" height="47" 

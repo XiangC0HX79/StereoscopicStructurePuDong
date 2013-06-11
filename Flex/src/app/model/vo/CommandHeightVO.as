@@ -3,82 +3,105 @@ package app.model.vo
 	import app.controller.WebServiceCommand;
 	
 	import flash.display.Bitmap;
-	import flash.geom.Point;
+	import flash.events.Event;
 	
 	import mx.collections.ArrayCollection;
 
 	[Bindable]
-	public class CommandHeightVO
-	{
-		public static var Icon:Bitmap;
-		
-		private var source:Object;
-		
+	public class CommandHeightVO extends WebServiceVO
+	{		
+		protected var _source:Object;
+				
 		public function get TCH_ID():Number
 		{
-			return source.TCH_ID;
+			return _source.TCH_ID;
 		}
 		
 		public function get TCH_X():Number
 		{
-			return source.TCH_X;
+			return _source.TCH_X;
+		}
+		public function set TCH_X(value:Number):void
+		{
+			_source.TCH_X = value;
 		}
 		
 		public function get TCH_Y():Number
 		{
-			return source.TCH_Y;
+			return _source.TCH_Y;
+		}
+		public function set TCH_Y(value:Number):void
+		{
+			_source.TCH_Y = value;
 		}
 		
 		public function get TCH_Name():String
 		{
-			return source.TCH_Name?source.TCH_Name:"";
+			return _source.TCH_Name?_source.TCH_Name:"";
 		}
 		
 		public function get T_ComPicPath():String
 		{
-			return  source.T_ComPicPath.replace("../",WebServiceCommand.WSDL);	
+			return  _source.T_ComPicPath.replace("../",WebServiceVO.BASE_WSDL);	
 		}
 		
 		public function get TCH_LineLength():Number
 		{
-			return source.TCH_LineLength;
+			return _source.TCH_LineLength;
 		}
 		
 		public function get TCH_Address():String
 		{
-			return source.TCH_Address;
+			return _source.TCH_Address;
 		}
 		
 		public function get TCH_Layers():String
 		{
-			return source.TCH_Layers;
+			return _source.TCH_Layers;
 		}
 		
 		public function get TCH_ComHeightFunc():String
 		{
-			return source.TCH_ComHeightFunc;
+			return _source.TCH_ComHeightFunc;
 		}
 		
 		public function get TCH_bestobservation():String
 		{
-			return source.TCH_bestobservation;
+			return _source.TCH_bestobservation;
 		}
 		
 		public function get TCH_Entranceway():String
 		{
-			return source.TCH_Entranceway;
+			return _source.TCH_Entranceway;
 		}
 		
 		public function get TCH_Property():String
 		{
-			return source.TCH_Property;
+			return _source.TCH_Property;
 		}
 				
-		public var pics:ArrayCollection = new ArrayCollection;
+		public var pics:ArrayCollection;
 		
 		public function CommandHeightVO(value:Object)
 		{
-			source = value;
+			_source = value;
+		}
+		   
+		public function InitPics():void
+		{
+			send("InitCommandingHeightsPic",onInitPics,this.TCH_ID);
+		}		
+		
+		private function onInitPics(result:ArrayCollection):void
+		{				
+			pics = new ArrayCollection;
+			
+			for each(var i:Object in result)
+			{
+				pics.addItem(new CommandHeightPicVO(i));
+			}
+			
+			dispatchEvent(new Event(Event.COMPLETE));			
 		}
 	}
 }

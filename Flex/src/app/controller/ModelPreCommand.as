@@ -1,8 +1,8 @@
 package app.controller
 {	
 	import app.model.BuildProxy;
+	import app.model.IconsProxy;
 	import app.model.LayerSettingStereoScopicProxy;
-	import app.model.LayerSettingSurroundingProxy;
 	
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.command.SimpleCommand;
@@ -13,9 +13,10 @@ package app.controller
 	{
 		override public function execute(note:INotification):void
 		{						
+			facade.registerProxy(new IconsProxy);	
+			
 			facade.registerProxy(new BuildProxy);	
 			
-			facade.registerProxy(new LayerSettingSurroundingProxy);
 			facade.registerProxy(new LayerSettingStereoScopicProxy);
 		}
 	}

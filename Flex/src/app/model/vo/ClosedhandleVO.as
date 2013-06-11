@@ -1,9 +1,11 @@
 package app.model.vo
 {
+	import flash.events.Event;
+	
 	import mx.collections.ArrayCollection;
 
 	[Bindable]
-	public class ClosedhandleVO
+	public class ClosedhandleVO extends WebServiceVO
 	{
 		private var source:Object;
 		
@@ -12,14 +14,27 @@ package app.model.vo
 			return source.T_ClosedhandlesID;
 		}
 		
+		public function get T_ClosedhandlesName():String
+		{
+			return source.T_ClosedhandlesName;
+		}
+		
 		public function get T_ClosedX():Number
 		{
 			return source.T_ClosedX;
+		}
+		public function set T_ClosedX(value:Number):void
+		{
+			source.T_ClosedX = value;
 		}
 		
 		public function get T_ClosedY():Number
 		{
 			return source.T_ClosedY;
+		}
+		public function set T_ClosedY(value:Number):void
+		{
+			source.T_ClosedY = value;
 		}
 		
 		public var pics:ArrayCollection;
@@ -27,6 +42,23 @@ package app.model.vo
 		public function ClosedhandleVO(value:Object)
 		{
 			source = value;
+		}
+		
+		public function InitPics():void
+		{
+			send("InitClosedhandlesPic",onInitPics,this.T_ClosedhandlesID);
+		}		
+		
+		private function onInitPics(result:ArrayCollection):void
+		{				
+			pics = new ArrayCollection;
+			
+			for each(var i:Object in result)
+			{
+				pics.addItem(new ClosedHandlePicVO(i));
+			}
+			
+			dispatchEvent(new Event(Event.COMPLETE));			
 		}
 	}
 }

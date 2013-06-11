@@ -2,7 +2,6 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
-	import app.model.LayerSettingSurroundingProxy;
 	import app.model.vo.LayerVO;
 	import app.view.components.LayerFireHydrant;
 	
@@ -41,7 +40,6 @@ package app.view
 					var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
 					layerFireHydrant.pic = buildProxy.build.T_FirePath;
 										
-					var layerSettingSurroundingProxy:LayerSettingSurroundingProxy = facade.retrieveProxy(LayerSettingSurroundingProxy.NAME) as LayerSettingSurroundingProxy;
 					BindingUtils.bindProperty(layerFireHydrant,"visible",LayerVO.FIRE,"LayerVisible");
 					break;
 			}

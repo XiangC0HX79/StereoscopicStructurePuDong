@@ -39,14 +39,14 @@ package app.controller
 			operation.arguments = args;
 			operation.resultFormat = resultFormat;
 			operation.send();	
-							
+			
 			if(showLoading)
 			{
 				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGSHOW,loadingText);
 			}
 			
 			function onResult(event:ResultEvent):void
-			{								
+			{					
 				if(showLoading)
 				{
 					sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGHIDE);

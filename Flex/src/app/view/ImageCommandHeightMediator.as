@@ -1,14 +1,21 @@
 package app.view
 {
 	import app.ApplicationFacade;
+	import app.model.IconsProxy;
+	import app.model.vo.BuildVO;
+	import app.model.vo.CommandHeightVO;
 	import app.view.components.ImageCommandingHeight;
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	import mx.collections.ArrayCollection;
+	import mx.controls.Image;
+	import mx.core.DragSource;
+	import mx.managers.DragManager;
 	
 	import org.puremvc.as3.interfaces.IMediator;
+	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
 	
 	public class ImageCommandHeightMediator extends Mediator implements IMediator
@@ -17,20 +24,28 @@ package app.view
 		{
 			super(mediatorName, viewComponent);
 			
-			imageKeyPoint.addEventListener(MouseEvent.ROLL_OVER,onOver);
-			imageKeyPoint.addEventListener(MouseEvent.ROLL_OUT,onOut);
+			imageCommandingHeight.addEventListener(MouseEvent.ROLL_OVER,onOver);
+			imageCommandingHeight.addEventListener(MouseEvent.ROLL_OUT,onOut);
 			
-			imageKeyPoint.addEventListener(MouseEvent.CLICK,onClick);
+			imageCommandingHeight.addEventListener(MouseEvent.CLICK,onClick);
+			
+			if(BuildVO.Edit)
+			{
+				imageCommandingHeight.addEventListener(MouseEvent.MOUSE_MOVE,onDragStart);
+			}
+						
+			var iconsProxy:IconsProxy = facade.retrieveProxy(IconsProxy.NAME) as IconsProxy;
+			imageCommandingHeight.source = iconsProxy.icons.IconCommandHeight.icon;
 		}
 		
-		protected function get imageKeyPoint():ImageCommandingHeight
+		protected function get imageCommandingHeight():ImageCommandingHeight
 		{
 			return viewComponent as ImageCommandingHeight;
 		}
 		
 		private function onOver(event:Event):void
 		{
-			sendNotification(ApplicationFacade.NOTIFY_COMMAND_OVER,imageKeyPoint.commandingHeight);
+			sendNotification(ApplicationFacade.NOTIFY_COMMAND_OVER,imageCommandingHeight.commandingHeight);
 		}
 		
 		private function onOut(event:Event):void
@@ -40,7 +55,17 @@ package app.view
 		
 		private function onClick(event:Event):void
 		{				
-			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_COMMAND,imageKeyPoint.commandingHeight);
+			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_COMMAND,imageCommandingHeight.commandingHeight);
+		}
+		
+		private function onDragStart(e:MouseEvent):void
+		{						
+			var imageProxy:Image = new Image;
+			imageProxy.source = imageCommandingHeight.source;
+			
+			var ds:DragSource = new DragSource();  
+			ds.addData(imageCommandingHeight.commandingHeight,"CommandHeightVO");
+			DragManager.doDrag(imageCommandingHeight,ds,e,imageProxy); 
 		}
 	}
 }

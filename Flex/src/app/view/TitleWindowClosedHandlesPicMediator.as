@@ -22,18 +22,11 @@ package app.view
 		public function TitleWindowClosedHandlesPicMediator()
 		{
 			super(NAME, new TitleWindowClosedHandlesPic);
-			
-			titleWindowClosedHandlesPic.addEventListener(Event.CLOSE,onClose);
 		}
 				
 		protected function get titleWindowClosedHandlesPic():TitleWindowClosedHandlesPic
 		{
 			return viewComponent as TitleWindowClosedHandlesPic;
-		}
-		
-		private function onClose(event:Event):void
-		{
-			PopUpManager.removePopUp(titleWindowClosedHandlesPic);
 		}
 				
 		override public function listNotificationInterests():Array
@@ -48,33 +41,9 @@ package app.view
 			switch(notification.getName())
 			{
 				case ApplicationFacade.NOTIFY_TITLEWINDOW_CLOSED_IMGLST:
-					titleWindowClosedHandlesPic.closedhandle = notification.getBody() as ClosedhandleVO; 
-					
-					if(!titleWindowClosedHandlesPic.closedhandle.pics)
-					{						
-						sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
-							["InitClosedhandlesPIC",onInitClosedhandlesPIC
-								,[titleWindowClosedHandlesPic.closedhandle.T_ClosedhandlesID]
-								,false]);
-					}			
-					else
-					{
-						titleWindowClosedHandlesPic.ImageIndex = 0;
-					}
+					titleWindowClosedHandlesPic.CloseHandelPics = notification.getBody() as ArrayCollection; 
 					break;
 			}
-		}
-		
-		private function onInitClosedhandlesPIC(result:ArrayCollection):void
-		{
-			titleWindowClosedHandlesPic.closedhandle.pics = new ArrayCollection;
-			
-			for each(var i:Object in result)
-			{
-				titleWindowClosedHandlesPic.closedhandle.pics.addItem(new ClosedHandlePicVO(i));
-			}
-			
-			titleWindowClosedHandlesPic.ImageIndex = 0;
 		}
 	}
 }

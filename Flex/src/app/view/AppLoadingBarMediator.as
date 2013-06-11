@@ -26,6 +26,7 @@ package app.view
 		override public function listNotificationInterests():Array
 		{
 			return [
+				ApplicationFacade.NOTIFY_APP_LOADINGTEXT,
 				ApplicationFacade.NOTIFY_APP_LOADINGHIDE,
 				ApplicationFacade.NOTIFY_APP_LOADINGSHOW
 			];
@@ -35,6 +36,10 @@ package app.view
 		{
 			switch(notification.getName())
 			{
+				case ApplicationFacade.NOTIFY_APP_LOADINGTEXT:
+					appLoadingBar.loadingInfo = notification.getBody() as String;	
+					break;
+				
 				case ApplicationFacade.NOTIFY_APP_LOADINGHIDE:
 					if(notification.getBody() != null)
 						appLoadingBar.loadingInfo = notification.getBody() as String;	

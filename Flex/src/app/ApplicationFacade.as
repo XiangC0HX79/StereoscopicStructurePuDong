@@ -14,6 +14,7 @@ package app
 		public static const STARTUP:String 					= "startup";
 		
 		public static const NOTIFY_APP_LOADINGSHOW:String	= "apploadingshow";
+		public static const NOTIFY_APP_LOADINGTEXT:String	= "ApploadingText";
 		public static const NOTIFY_APP_LOADINGHIDE:String	= "apploadinghide";
 		
 		public static const NOTIFY_APP_ALERTINFO:String		= "appalertinfo";
@@ -49,7 +50,6 @@ package app
 		public static const NOTIFY_COMMAND_OVER:String		= "CommandOver";
 		public static const NOTIFY_COMMAND_OUT:String		= "CommandOut";
 		
-		public static const NOTIFY_SURROUNDING_CLOSEDHANDDLES:String		= "SurroundingClosedHanddles";
 		public static const NOTIFY_SURROUNDING_RESCUE:String		= "SurroundingRescue";
 		public static const NOTIFY_SURROUNDING_KEYUNIT:String		= "SurroundingKeyUnit";
 		
