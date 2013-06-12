@@ -4,10 +4,12 @@ package app.view
 	import app.model.IconsProxy;
 	import app.model.vo.BuildVO;
 	import app.model.vo.CommandHeightVO;
+	import app.model.vo.ConfigVO;
 	import app.view.components.ImageCommandingHeight;
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	
 	import mx.collections.ArrayCollection;
 	import mx.controls.Image;
@@ -29,13 +31,13 @@ package app.view
 			
 			imageCommandingHeight.addEventListener(MouseEvent.CLICK,onClick);
 			
-			if(BuildVO.Edit)
+			if(ConfigVO.EDIT)
 			{
 				imageCommandingHeight.addEventListener(MouseEvent.MOUSE_MOVE,onDragStart);
 			}
 						
 			var iconsProxy:IconsProxy = facade.retrieveProxy(IconsProxy.NAME) as IconsProxy;
-			imageCommandingHeight.source = iconsProxy.icons.IconCommandHeight.icon;
+			imageCommandingHeight.source = iconsProxy.icons.IconCommandHeight;
 		}
 		
 		protected function get imageCommandingHeight():ImageCommandingHeight
@@ -65,6 +67,7 @@ package app.view
 			
 			var ds:DragSource = new DragSource();  
 			ds.addData(imageCommandingHeight.commandingHeight,"CommandHeightVO");
+			ds.addData(new Point(e.localX,e.localY),"StartPoint");
 			DragManager.doDrag(imageCommandingHeight,ds,e,imageProxy); 
 		}
 	}

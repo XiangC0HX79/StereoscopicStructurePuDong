@@ -17,12 +17,9 @@
 			public static const SURROUNDING:String = "Surrounding";
 			public static const INFO:String = "Info";
 			public static const STEREOSCOPIC:String = "StereoScopic";
+			public static const EMERGENCY:String = "Emergency";
 			
-			[Bindable]private var build:BuildVO;
-			public function set Build(value:BuildVO):void
-			{
-				build = value;
-			}
+			[Bindable]public var Build:BuildVO;
 			
 			private var buttonIndex:Number = -1;
 			public function get ButtonIndex():Number
@@ -115,10 +112,10 @@
 		<s:Button label="内部信息" buttonMode="true"
 				  width="175" height="47" 
 				  skinClass="app.skin.skinMenuButton" buttonDown="buttonStereoscopic_buttonDownHandler(event)"/>
-		<s:Button label="应急预案" buttonMode="true"
-				  width="175" height="47" visible="{Boolean(build.TMB_EmergPath)}"
+		<s:Button label="应急预案" buttonMode="true" buttonDown="dispatchEvent(new Event(EMERGENCY))"
+				  width="175" height="47" visible="{Boolean(Build.TMB_EmergPath)}"
 				  skinClass="app.skin.skinMenuButton"/>
 	</s:VGroup>
 	
-	<s:Label y="15" color="#F6FF00" fontFamily="隶书" fontSize="40" horizontalCenter="0" text="{build.TMB_Name}"/>
+	<s:Label y="15" color="#F6FF00" fontFamily="隶书" fontSize="40" horizontalCenter="0" text="{Build.TMB_Name}"/>
 </s:Group>

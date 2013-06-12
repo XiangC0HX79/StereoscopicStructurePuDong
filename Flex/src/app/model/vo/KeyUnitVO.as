@@ -24,22 +24,30 @@ package app.model.vo
 		
 		public function get T_KeyUnitsLineLength():String
 		{
-			return source.T_KeyUnitsAddress;
+			return source.T_KeyUnitsAddress?source.T_KeyUnitsAddress:"";
 		}
 		
 		public function get T_KeyUnitsX():Number
 		{
 			return source.T_KeyUnitsX;
+		}		
+		public function set T_KeyUnitsX(value:Number):void
+		{
+			source.T_KeyUnitsX = value;
 		}
 		
 		public function get T_KeyUnitsY():Number
 		{
 			return source.T_KeyUnitsY;
+		}	
+		public function set T_KeyUnitsY(value:Number):void
+		{
+			source.T_KeyUnitsY = value;
 		}
 		
 		public function get T_KeyUnitsPicimgPath():String
 		{
-			return  source.T_KeyUnitsPicimgPath.replace("../",WebServiceCommand.WSDL);	
+			return  source.T_KeyUnitsPicimgPath.replace("../",ConfigVO.BASE_URL);	
 		}
 		
 		public function KeyUnitVO(value:Object)

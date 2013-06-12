@@ -25,7 +25,9 @@
 		<s:Image verticalCenter="0" right="5" buttonMode="true" source="@Embed('assets/image/x.png')" click="dispatchEvent(new Event(Event.CLOSE,true));"/>
 	</s:Group>
 	
-	<s:Image width="320" source="{Scenting.T_ScentingimgPath}"/>
+	<s:Image width="320" 
+			 skinClass="app.skin.skinErrorImage" 
+			 source="{Scenting.T_ScentingimgPath}"/>
 	
 	<s:HGroup width="100%">
 		<s:Label text="{Scenting.T_Scentingremark}" width="100%"/>		

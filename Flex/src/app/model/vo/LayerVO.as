@@ -10,7 +10,7 @@ package app.model.vo
 		public static const RESCUE:LayerVO = new LayerVO(5,"救援信息");
 		public static const FIRE:LayerVO = new LayerVO(6,"消防栓");
 		public static const KEYUNITS:LayerVO = new LayerVO(7,"重点单位");
-		public static const SCENTING:LayerVO = new LayerVO(8,"窨井通道");		
+		public static const SCENTING:LayerVO = new LayerVO(8,"窨井通道");	
 		
 		public var LayerID:Number;
 		

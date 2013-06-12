@@ -16,10 +16,18 @@ package app.model.vo
 		{
 			return source.T_TrafficX;
 		}
+		public function set T_TrafficX(value:Number):void
+		{
+			source.T_TrafficX = value;
+		}
 		
 		public function get T_TrafficY():Number
 		{
 			return source.T_TrafficY;
+		}
+		public function set T_TrafficY(value:Number):void
+		{
+			source.T_TrafficY = value;
 		}
 		
 		public function get T_TrafficPicTitle():String
@@ -34,7 +42,7 @@ package app.model.vo
 		
 		public function get T_TrafficPicmgPath():String
 		{
-			return  source.T_TrafficPicmgPath.replace("../",WebServiceCommand.WSDL);	
+			return  source.T_TrafficPicmgPath.replace("../",ConfigVO.BASE_URL);	
 		}
 		
 		public function TrafficInfoVO(value:Object)

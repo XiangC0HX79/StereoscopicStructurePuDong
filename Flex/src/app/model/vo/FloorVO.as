@@ -7,13 +7,18 @@ package app.model.vo
 	[Bindable]
 	public class FloorVO
 	{
+		private var _source:*;
+		
 		public var floorChildIndex:Number;
 		
 		public var floorID:String;
 		
 		public var floorName:String;
 		
-		public var floorBitmapName:String;
+		public function get T_FloorPicPath():String
+		{
+			return  _source.T_FloorPicPath?_source.T_FloorPicPath.replace("../",ConfigVO.BASE_URL):"";	
+		}
 		
 		public var floorBitmap:Bitmap;
 		
@@ -28,26 +33,23 @@ package app.model.vo
 		
 		public var alpha:Number;
 		
-		public var components:ArrayCollection = new ArrayCollection;
+		public var components:ArrayCollection;
 		
 		public var edit:Boolean = false;
 		
-		public function FloorVO(item:Object)
+		public function FloorVO(value:*)
 		{
-			this.floorID = item.T_FloorID;
-			this.floorName = item.T_FloorName;
-			this.floorBitmapName = item.T_FloorPicPath;
+			_source = value;
 			
-			//调试，固定为png格式
-			//this.floorBitmapName = this.floorBitmapName.substr(0,this.floorBitmapName.lastIndexOf(".")) + ".png";
-			
-			this.scale = (item.T_FloorScale == undefined)?0.2:item.T_FloorScale;
-			this.xOffset = (item.T_FloorX == undefined)?0:item.T_FloorX;
-			this.yOffset = (item.T_FloorY == undefined)?0:item.T_FloorY;
-			this.yRotation = (item.T_FloorYRotation == undefined)?0:item.T_FloorYRotation;
-			this.xRotation = (item.T_FloorXRotation == undefined)?0:item.T_FloorXRotation;
-			this.zRotation = (item.T_FloorZRotation == undefined)?0:item.T_FloorZRotation;
-			this.alpha = (item.T_FloorAlpha == undefined)?0.5:item.T_FloorAlpha;
+			this.floorID = value.T_FloorID;
+			this.floorName = value.T_FloorName;						
+			this.scale = (value.T_FloorScale == undefined)?0.2:value.T_FloorScale;
+			this.xOffset = (value.T_FloorX == undefined)?0:value.T_FloorX;
+			this.yOffset = (value.T_FloorY == undefined)?0:value.T_FloorY;
+			this.yRotation = (value.T_FloorYRotation == undefined)?0:value.T_FloorYRotation;
+			this.xRotation = (value.T_FloorXRotation == undefined)?0:value.T_FloorXRotation;
+			this.zRotation = (value.T_FloorZRotation == undefined)?0:value.T_FloorZRotation;
+			this.alpha = (value.T_FloorAlpha == undefined)?0.5:value.T_FloorAlpha;
 		}
 	}
 }

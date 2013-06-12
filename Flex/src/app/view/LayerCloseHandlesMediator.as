@@ -37,7 +37,7 @@ package app.view
 		override public function listNotificationInterests():Array
 		{
 			return [
-				ApplicationFacade.NOTIFY_APP_INIT
+				ApplicationFacade.NOTIFY_INIT_APP
 			];
 		}
 		
@@ -45,7 +45,7 @@ package app.view
 		{
 			switch(notification.getName())
 			{
-				case ApplicationFacade.NOTIFY_APP_INIT:		
+				case ApplicationFacade.NOTIFY_INIT_APP:		
 					for each(var closedHandle:ClosedhandleVO in (notification.getBody() as BuildVO).CloseHandles)
 					{						
 						var imageClosedHandle:ImageClosedHandle = new ImageClosedHandle;

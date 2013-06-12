@@ -5,7 +5,7 @@ package app.model.vo
 	import mx.collections.ArrayCollection;
 
 	[Bindable]
-	public class ClosedhandleVO extends WebServiceVO
+	public class ClosedhandleVO
 	{
 		private var source:Object;
 		
@@ -42,23 +42,6 @@ package app.model.vo
 		public function ClosedhandleVO(value:Object)
 		{
 			source = value;
-		}
-		
-		public function InitPics():void
-		{
-			send("InitClosedhandlesPic",onInitPics,this.T_ClosedhandlesID);
-		}		
-		
-		private function onInitPics(result:ArrayCollection):void
-		{				
-			pics = new ArrayCollection;
-			
-			for each(var i:Object in result)
-			{
-				pics.addItem(new ClosedHandlePicVO(i));
-			}
-			
-			dispatchEvent(new Event(Event.COMPLETE));			
 		}
 	}
 }

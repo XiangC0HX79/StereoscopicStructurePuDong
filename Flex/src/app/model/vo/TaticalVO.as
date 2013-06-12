@@ -29,12 +29,12 @@ package app.model.vo
 		
 		public function get TP_PicPath():String
 		{
-			return  source.TP_PicPath?source.TP_PicPath.replace("../",WebServiceCommand.WSDL):source.TP_PicPath;	
+			return  source.TP_PicPath?source.TP_PicPath.replace("../",ConfigVO.BASE_URL):source.TP_PicPath;	
 		}
 		
 		public function get TP_VideoPath():String
 		{
-			return  source.TP_VideoPath?source.TP_VideoPath.replace("../",WebServiceCommand.WSDL):source.TP_VideoPath;	
+			return  source.TP_VideoPath?source.TP_VideoPath.replace("../",ConfigVO.BASE_URL):source.TP_VideoPath;	
 		}
 		
 		public function TaticalVO(value:Object)

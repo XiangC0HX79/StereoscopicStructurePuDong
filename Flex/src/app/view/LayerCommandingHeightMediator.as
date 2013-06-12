@@ -36,7 +36,7 @@ package app.view
 		override public function listNotificationInterests():Array
 		{
 			return [
-				ApplicationFacade.NOTIFY_APP_INIT
+				ApplicationFacade.NOTIFY_INIT_APP
 			];
 		}
 		
@@ -44,7 +44,7 @@ package app.view
 		{
 			switch(notification.getName())
 			{
-				case ApplicationFacade.NOTIFY_APP_INIT:									
+				case ApplicationFacade.NOTIFY_INIT_APP:									
 					for each(var commandingHeight:CommandHeightVO in (notification.getBody() as BuildVO).CommandingHeights)
 					{						
 						var imageCommandingHeight:ImageCommandingHeight = new ImageCommandingHeight;

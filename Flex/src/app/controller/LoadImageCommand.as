@@ -1,6 +1,7 @@
 package app.controller
 {
 	import app.ApplicationFacade;
+	import app.model.vo.ConfigVO;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -28,7 +29,7 @@ package app.controller
 			
 			var loaderImageHandler:Function = note.getBody()[1];
 						
-			var url:String =  imageName.replace("../",WebServiceCommand.WSDL);
+			var url:String =  imageName.replace("../",ConfigVO.BASE_URL);
 			
 			var urlRequest:URLRequest = new URLRequest(encodeURI(url))
 			

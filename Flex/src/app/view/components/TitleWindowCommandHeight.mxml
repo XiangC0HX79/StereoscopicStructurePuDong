@@ -44,7 +44,7 @@
 		<s:Image verticalCenter="0" right="5" buttonMode="true" source="@Embed('assets/image/x.png')" click="PopUpManager.removePopUp(this);"/>
 	</s:Group>
 	
-	<s:Image id="pic" width="320" 
+	<s:Image width="320" 
 			 skinClass="app.skin.skinErrorImage" 
 			 source="{commandingHeight.T_ComPicPath}"/>
 	

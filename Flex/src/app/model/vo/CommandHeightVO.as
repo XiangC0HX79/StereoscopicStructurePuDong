@@ -1,6 +1,7 @@
 package app.model.vo
 {
 	import app.controller.WebServiceCommand;
+	import app.model.WebServiceProxy;
 	
 	import flash.display.Bitmap;
 	import flash.events.Event;
@@ -8,7 +9,7 @@ package app.model.vo
 	import mx.collections.ArrayCollection;
 
 	[Bindable]
-	public class CommandHeightVO extends WebServiceVO
+	public class CommandHeightVO
 	{		
 		protected var _source:Object;
 				
@@ -42,7 +43,7 @@ package app.model.vo
 		
 		public function get T_ComPicPath():String
 		{
-			return  _source.T_ComPicPath.replace("../",WebServiceVO.BASE_WSDL);	
+			return  _source.T_ComPicPath.replace("../",ConfigVO.BASE_URL);	
 		}
 		
 		public function get TCH_LineLength():Number
@@ -85,23 +86,6 @@ package app.model.vo
 		public function CommandHeightVO(value:Object)
 		{
 			_source = value;
-		}
-		   
-		public function InitPics():void
-		{
-			send("InitCommandingHeightsPic",onInitPics,this.TCH_ID);
-		}		
-		
-		private function onInitPics(result:ArrayCollection):void
-		{				
-			pics = new ArrayCollection;
-			
-			for each(var i:Object in result)
-			{
-				pics.addItem(new CommandHeightPicVO(i));
-			}
-			
-			dispatchEvent(new Event(Event.COMPLETE));			
 		}
 	}
 }

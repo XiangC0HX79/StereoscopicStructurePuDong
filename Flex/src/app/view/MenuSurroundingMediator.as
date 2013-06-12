@@ -3,6 +3,8 @@ package app.view
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
 	import app.model.vo.BuildVO;
+	import app.model.vo.ConfigVO;
+	import app.model.vo.FireHydrantVO;
 	import app.model.vo.KeyUnitVO;
 	import app.model.vo.LayerVO;
 	import app.view.components.MenuSurrounding;
@@ -10,6 +12,7 @@ package app.view
 	import flash.events.Event;
 	
 	import mx.collections.ArrayCollection;
+	import mx.managers.CursorManager;
 	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
@@ -25,7 +28,10 @@ package app.view
 			
 			menuSurrounding.addEventListener(Event.CHANGE,onChange);	
 			
+			menuSurrounding.addEventListener(MenuSurrounding.DEFAULT,onDefault);
 			menuSurrounding.addEventListener(MenuSurrounding.SAVE,onSave);
+			menuSurrounding.addEventListener(MenuSurrounding.FIREADD,onFireAdd);
+			menuSurrounding.addEventListener(MenuSurrounding.FIREDEL,onFireDel);
 		}
 		
 		protected function get menuSurrounding():MenuSurrounding
@@ -34,19 +40,20 @@ package app.view
 		}
 		
 		private function onChange(event:Event):void
-		{
-			//var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
-			
+		{			
 			event.stopImmediatePropagation();
 			
 			var layer:LayerVO = event.target.data as LayerVO;
 			if(layer.LayerName == "救援信息")
 			{
-				sendNotification(ApplicationFacade.NOTIFY_SURROUNDING_RESCUE,layer.LayerVisible);
-			}
-			else if(layer == LayerVO.KEYUNITS)
-			{
-			}			
+				sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_RESCUE);
+			}	
+		}
+				
+		private function onDefault(event:Event):void
+		{
+			FireHydrantVO.Tool = FireHydrantVO.MOVE;
+			CursorManager.removeAllCursors();
 		}
 		
 		private function onSave(event:Event):void
@@ -55,10 +62,24 @@ package app.view
 			buildProxy.SaveSurrouding();
 		}
 		
+		private function onFireAdd(event:Event):void
+		{
+			FireHydrantVO.Tool = FireHydrantVO.ADD;
+			
+			LayerVO.FIRE.LayerVisible = true;
+		}
+		
+		private function onFireDel(event:Event):void
+		{
+			FireHydrantVO.Tool = FireHydrantVO.DEL;
+			
+			LayerVO.FIRE.LayerVisible = true;
+		}
+		
 		override public function listNotificationInterests():Array
 		{
 			return [
-				ApplicationFacade.NOTIFY_APP_INIT
+				ApplicationFacade.NOTIFY_INIT_APP
 			];
 		}
 		
@@ -66,8 +87,8 @@ package app.view
 		{
 			switch(notification.getName())
 			{
-				case ApplicationFacade.NOTIFY_APP_INIT:
-					if(BuildVO.Edit)
+				case ApplicationFacade.NOTIFY_INIT_APP:
+					if(ConfigVO.EDIT)
 					{
 						menuSurrounding.currentState = "Edit";
 					}
@@ -89,7 +110,8 @@ package app.view
 					if(build.T_RescueimgPath)
 						menuSurrounding.dp.addItem(LayerVO.RESCUE);
 					
-					menuSurrounding.dp.addItem(LayerVO.FIRE);
+					if(build.FireHydrant.length > 0)
+						menuSurrounding.dp.addItem(LayerVO.FIRE);
 					
 					if(build.KeyUnits.length > 0)
 						menuSurrounding.dp.addItem(LayerVO.KEYUNITS);

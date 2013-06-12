@@ -20,18 +20,11 @@ package app.view
 		public function TitleWindowTrafficMediator()
 		{
 			super(NAME, new TitleWindowTraffic);
-			
-			titleWindowTraffic.addEventListener(Event.CLOSE,onClose);
 		}
 		
 		protected function get titleWindowTraffic():TitleWindowTraffic
 		{
 			return viewComponent as TitleWindowTraffic;
-		}
-		
-		private function onClose(event:Event):void
-		{
-			PopUpManager.removePopUp(titleWindowTraffic);
 		}
 						
 		override public function listNotificationInterests():Array

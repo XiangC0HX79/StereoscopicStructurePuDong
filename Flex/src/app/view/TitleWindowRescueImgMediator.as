@@ -1,7 +1,8 @@
 package app.view
 {
 	import app.ApplicationFacade;
-	import app.model.BuildProxy;
+	import app.model.vo.BuildVO;
+	import app.model.vo.LayerVO;
 	import app.view.components.TitleWindowRescueImg;
 	
 	import flash.events.Event;
@@ -30,15 +31,15 @@ package app.view
 		
 		private function onClose(event:Event):void
 		{
+			LayerVO.RESCUE.LayerVisible = false;
+			
 			PopUpManager.removePopUp(titleWindowRescueImg);
 		}
 		
 		override public function listNotificationInterests():Array
 		{
 			return [
-				ApplicationFacade.NOTIFY_APP_INIT,
-				
-				ApplicationFacade.NOTIFY_SURROUNDING_RESCUE
+				ApplicationFacade.NOTIFY_INIT_APP
 			];
 		}
 		
@@ -46,20 +47,8 @@ package app.view
 		{
 			switch(notification.getName())
 			{
-				case ApplicationFacade.NOTIFY_APP_INIT:
-					var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
-					titleWindowRescueImg.T_RescueimgPath = buildProxy.build.T_RescueimgPath;
-					break;
-				
-				case ApplicationFacade.NOTIFY_SURROUNDING_RESCUE:
-					if(notification.getBody())
-					{
-						sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_RESCUE);
-					}
-					else
-					{
-						PopUpManager.removePopUp(titleWindowRescueImg);
-					}
+				case ApplicationFacade.NOTIFY_INIT_APP:
+					titleWindowRescueImg.T_RescueimgPath = (notification.getBody() as BuildVO).T_RescueimgPath;
 					break;
 			}
 		}

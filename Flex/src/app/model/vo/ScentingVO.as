@@ -16,10 +16,18 @@ package app.model.vo
 		{
 			return source.T_ScentingX;
 		}
+		public function set T_ScentingX(value:Number):void
+		{
+			source.T_ScentingX = value;
+		}
 		
 		public function get T_ScentingY():Number
 		{
 			return source.T_ScentingY;
+		}
+		public function set T_ScentingY(value:Number):void
+		{
+			source.T_ScentingY = value;
 		}
 		
 		public function get T_Scentingremark():String
@@ -34,7 +42,7 @@ package app.model.vo
 		
 		public function get T_ScentingimgPath():String
 		{
-			return  source.T_ScentingimgPath.replace("../",WebServiceCommand.WSDL);	
+			return  source.T_ScentingimgPath.replace("../",ConfigVO.BASE_URL);	
 		}
 		
 		public function ScentingVO(value:Object)

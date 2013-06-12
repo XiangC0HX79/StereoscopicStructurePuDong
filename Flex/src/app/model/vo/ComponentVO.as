@@ -7,34 +7,36 @@ package app.model.vo
 	[Bindable]
 	public class ComponentVO
 	{		
+		private var _source:*;
+		
 		public var componentID:String;
 		
 		public var componentName:String;
 		
 		public var componentBitmap:Bitmap;
 		
-		public var componentBitmapName:String;
+		public function get T_FloorPicimgPath():String
+		{
+			return  _source.T_FloorPicimgPath?_source.T_FloorPicimgPath.replace("../",ConfigVO.BASE_URL):"";	
+		}
 		
 		public var layer:LayerVO;
 		
 		public var xOffset:Number;
 		public var yOffset:Number;
-		
-		//public var visible:Boolean;
-						
+								
 		public var videoName:String = "";
 		
 		public var listMedia:ArrayCollection = new ArrayCollection;
 		
 		public function ComponentVO(item:Object)
 		{
-			this.componentID = item.T_FloorDetailID;
-			this.componentName = item.T_FloorDetailName;
-			this.componentBitmapName = item.T_FloorPicimgPath;
-			this.xOffset = item.T_FloorDetailX;
-			this.yOffset = item.T_FloorDetailY;
+			_source = item;
 			
-			//this.type = item.T_FloorDetailType;
+			this.componentID = item.T_FloorDetailID;
+			this.componentName = item.T_FloorDetailName;			
+			this.xOffset = item.T_FloorDetailX;
+			this.yOffset = item.T_FloorDetailY;			
 		}
 	}
 }

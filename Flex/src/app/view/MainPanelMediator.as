@@ -5,6 +5,7 @@ package app.view
 	import app.view.components.MainPanel;
 	
 	import flash.events.Event;
+	import flash.net.URLRequest;
 	
 	import mx.controls.Button;
 	import mx.core.IVisualElement;
@@ -24,6 +25,7 @@ package app.view
 			mainPanel.addEventListener(MainPanel.SURROUNDING,onSurrounding);
 			mainPanel.addEventListener(MainPanel.INFO,onInfo);
 			mainPanel.addEventListener(MainPanel.STEREOSCOPIC,onStereoScopic);
+			mainPanel.addEventListener(MainPanel.EMERGENCY,onEmergency);
 		}
 		
 		protected function get mainPanel():MainPanel
@@ -59,10 +61,15 @@ package app.view
 			contentGroupAddElement(PanelStereoScopicStructureMediator.NAME);
 		}
 		
+		private function onEmergency(event:Event):void
+		{			
+			flash.net.navigateToURL(new URLRequest(mainPanel.Build.TMB_EmergPath));	
+		}
+		
 		override public function listNotificationInterests():Array
 		{
 			return [
-				ApplicationFacade.NOTIFY_APP_INIT
+				ApplicationFacade.NOTIFY_INIT_APP
 			];
 		}
 		
@@ -70,7 +77,7 @@ package app.view
 		{
 			switch(notification.getName())
 			{
-				case ApplicationFacade.NOTIFY_APP_INIT:
+				case ApplicationFacade.NOTIFY_INIT_APP:
 					mainPanel.Build = notification.getBody() as BuildVO;
 										
 					contentGroupAddElement(PanelSurroundingMediator.NAME);

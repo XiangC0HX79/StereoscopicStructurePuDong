@@ -1,6 +1,7 @@
 package app.controller
 {	
 	import app.model.BuildProxy;
+	import app.model.ConfigProxy;
 	import app.model.IconsProxy;
 	import app.model.LayerSettingStereoScopicProxy;
 	
@@ -13,6 +14,8 @@ package app.controller
 	{
 		override public function execute(note:INotification):void
 		{						
+			facade.registerProxy(new ConfigProxy);	
+			
 			facade.registerProxy(new IconsProxy);	
 			
 			facade.registerProxy(new BuildProxy);	

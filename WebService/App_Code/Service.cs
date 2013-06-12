@@ -47,6 +47,26 @@ public class Service : WebService
         row["IconPath"] = "../Icon/CloseHandle.png";
         table.Rows.Add(row);
 
+        row = table.NewRow();
+        row["IconID"] = "3";
+        row["IconPath"] = "../Icon/Traffic.png";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
+        row["IconID"] = "6";
+        row["IconPath"] = "../Icon/FireHydrant.png";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
+        row["IconID"] = "7";
+        row["IconPath"] = "../Icon/KeyUnit.png";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
+        row["IconID"] = "8";
+        row["IconPath"] = "../Icon/Scenting.png";
+        table.Rows.Add(row);
+
         return table;
     }
     
@@ -54,6 +74,7 @@ public class Service : WebService
     public DataTable SaveSurrouding(String data)
     {
         var sql = "";
+        var tmbId = "";
 
         var s1 = data.Split(';');
 
@@ -67,8 +88,26 @@ public class Service : WebService
                 case "2":
                     sql += "UPDATE T_Closedhandles SET T_ClosedX = " + s2[2] + ",T_ClosedY = " + s2[3] + " WHERE T_ClosedhandlesID = " + s2[1] + ";";
                     break;
+                case "3":
+                    sql += "UPDATE T_Traffic SET T_TrafficX = " + s2[2] + ",T_TrafficY = " + s2[3] + " WHERE T_TrafficID = " + s2[1] + ";";
+                    break;
+                case "4":
+                    sql += "UPDATE T_Hazard SET T_HazardX = " + s2[2] + ",T_HazardY = " + s2[3] + " WHERE T_HazardID = " + s2[1] + ";";
+                    break;
+                case "6":
+                    tmbId = s2[1];
+                    sql += "INSERT T_FireHydrant (TMB_ID,T_FireHydrantX,T_FireHydrantY) VALUES (" + s2[1] + "," +s2[2] + "," + s2[3] + ");";
+                    break;
+                case "7":
+                    sql += "UPDATE T_KeyUnits SET T_KeyUnitsX = " + s2[2] + ",T_KeyUnitsY = " + s2[3] + " WHERE T_KeyUnitsID = " + s2[1] + ";";
+                    break;
+                case "8":
+                    sql += "UPDATE T_Scenting SET T_ScentingX = " + s2[2] + ",T_ScentingY = " + s2[3] + " WHERE T_ScentingID = " + s2[1] + ";";
+                    break;
             }
         }
+
+        sql = "DELETE FROM T_FireHydrant WHERE TMB_ID = " + tmbId + ";" + sql;
 
         return _clsGetData.ExcuteNoQuery(sql);
     }
@@ -125,7 +164,7 @@ public class Service : WebService
     {
         var sql = "Select * FROM T_Traffic "
                      + "LEFT JOIN T_TrafficPic ON T_Traffic.T_TrafficID = T_TrafficPic.T_TrafficID "
-                     + "WHERE T_TrafficPic.TMB_ID = " + tmbId;
+                     + "WHERE T_Traffic.TMB_ID = " + tmbId;
 
         return _clsGetData.GetTable(sql);
     }
@@ -136,6 +175,15 @@ public class Service : WebService
         var sql = "Select * FROM T_Hazard "
                      + "LEFT JOIN T_HazardPic ON T_Hazard.T_HazardID = T_HazardPic.T_HazardID "
                      + "WHERE T_Hazard.TMB_ID = " + tmbId;
+
+        return _clsGetData.GetTable(sql);
+    }
+
+    [WebMethod]
+    public DataTable InitFireHydrant(String tmbId)
+    {
+        var sql = "Select * FROM T_FireHydrant "
+                     + "WHERE TMB_ID = " + tmbId;
 
         return _clsGetData.GetTable(sql);
     }
@@ -197,58 +245,44 @@ public class Service : WebService
     }
 
     [WebMethod]
-    public DataTable SaveFloor(String buildID, String data)
+    public DataTable SaveFloor(String buildId, String data)
     {
-        String sql = "";
+        var sql = "";
 
-        foreach (String dataFloor in data.Split('@'))
+        foreach (var floorPos in data.Split('@').Select(dataFloor => dataFloor.Split(';')).Where(floorPos => floorPos[0] != ""))
         {
-            String[] floorPos = dataFloor.Split(';');
-            if (floorPos[0] != "")
-            {
-                sql += "DELETE FROM T_FloorPos WHERE TMB_ID = " + buildID + " AND T_FloorID = " + floorPos[0] + ";";
-                sql += "INSERT T_FloorPos (TMB_ID,T_FloorID,T_FloorScale,T_FloorX,T_FloorY,T_FloorXRotation,T_FloorYRotation,T_FloorZRotation,T_FloorAlpha) VALUES (" + buildID + "," + floorPos[0] + "," + floorPos[1] + "," + floorPos[2] + "," + floorPos[3] + "," + floorPos[4] + "," + floorPos[5] + "," + floorPos[6] + "," + floorPos[7] + ");";
-            }
+            sql += "DELETE FROM T_FloorPos WHERE TMB_ID = " + buildId + " AND T_FloorID = " + floorPos[0] + ";";
+            sql += "INSERT T_FloorPos (TMB_ID,T_FloorID,T_FloorScale,T_FloorX,T_FloorY,T_FloorXRotation,T_FloorYRotation,T_FloorZRotation,T_FloorAlpha) VALUES (" + buildId + "," + floorPos[0] + "," + floorPos[1] + "," + floorPos[2] + "," + floorPos[3] + "," + floorPos[4] + "," + floorPos[5] + "," + floorPos[6] + "," + floorPos[7] + ");";
         }
 
         return _clsGetData.ExcuteNoQuery(sql);
     }
 
     [WebMethod]
-    public DataTable InitComponent(String buildID, String floorID)
+    public DataTable InitComponent(String buildId, String floorId)
     {
-        DataTable result = _clsGetData.GetTable("SELECT T_FloorDetail.T_FloorID,T_FloorDetailchildfloor,T_FloorDetailID,T_FloorDetailName,T_FloorPicimgPath,T_FloorDetailX,T_FloorDetailY,T_FloorDetailType FROM T_FloorDetail,T_FloorPic WHERE T_FloorDetail.TMB_ID = " + buildID + " AND T_FloorDetail.T_FloorPicID = T_FloorPic.T_FloorPicID ORDER BY T_FloorDetailID DESC");
+        var result = _clsGetData.GetTable("SELECT T_FloorDetail.T_FloorID,T_FloorDetailchildfloor,T_FloorDetailID,T_FloorDetailName,T_FloorPicimgPath,T_FloorDetailX,T_FloorDetailY,T_FloorDetailType FROM T_FloorDetail,T_FloorPic WHERE T_FloorDetail.TMB_ID = " + buildId + " AND T_FloorDetail.T_FloorPicID = T_FloorPic.T_FloorPicID ORDER BY T_FloorDetailID DESC");
 
-        for (int i = result.Rows.Count - 1; i >= 0; i--)
+        for (var i = result.Rows.Count - 1; i >= 0; i--)
         {
-            DataRow row = result.Rows[i];
-            String T_FloorID = row["T_FloorID"].ToString();
-            if (floorID != T_FloorID)
-            {
-                Boolean b = false;
+            var row = result.Rows[i];
 
-                String[] childfloors = row["T_FloorDetailchildfloor"].ToString().Split(',');
-                foreach (String childfloor in childfloors)
-                {
-                    if (floorID == childfloor)
-                    {
-                        b = true;
-                        break;
-                    }
-                }
+            if (floorId == row["T_FloorID"].ToString()) continue;
 
-                if (!b)
-                    result.Rows.Remove(row);
-            }
+            var childfloors = row["T_FloorDetailchildfloor"].ToString().Split(',');
+            var b = childfloors.Any(childfloor => floorId == childfloor);
+
+            if (!b)
+                result.Rows.Remove(row);
         }
 
         return result;
     }
 
     [WebMethod]
-    public DataTable InitComponentMedia(String componentID)
+    public DataTable InitComponentMedia(String componentId)
     {
-        DataTable result = _clsGetData.GetTable("SELECT * FROM T_FloorMedia WHERE T_FloorDetailID = " + componentID);
+        var result = _clsGetData.GetTable("SELECT * FROM T_FloorMedia WHERE T_FloorDetailID = " + componentId);
 
         return result;
     }

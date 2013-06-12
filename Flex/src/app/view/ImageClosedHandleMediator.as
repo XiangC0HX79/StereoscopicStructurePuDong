@@ -4,10 +4,12 @@ package app.view
 	import app.model.IconsProxy;
 	import app.model.vo.BuildVO;
 	import app.model.vo.ClosedhandleVO;
+	import app.model.vo.ConfigVO;
 	import app.view.components.ImageClosedHandle;
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	
 	import mx.collections.ArrayCollection;
 	import mx.controls.Image;
@@ -29,13 +31,13 @@ package app.view
 				imageClosedHandle.addEventListener(MouseEvent.CLICK,onClick);
 			}
 			
-			if(BuildVO.Edit)
+			if(ConfigVO.EDIT)
 			{
 				imageClosedHandle.addEventListener(MouseEvent.MOUSE_MOVE,onDragStart);
 			}
 			
 			var iconsProxy:IconsProxy = facade.retrieveProxy(IconsProxy.NAME) as IconsProxy;
-			imageClosedHandle.source = iconsProxy.icons.IconCloseHandle.icon;
+			imageClosedHandle.source = iconsProxy.icons.IconCloseHandle;
 		}
 		
 		protected function get imageClosedHandle():ImageClosedHandle
@@ -55,6 +57,7 @@ package app.view
 			
 			var ds:DragSource = new DragSource();  
 			ds.addData(imageClosedHandle.closedhandle,"ClosedhandleVO");
+			ds.addData(new Point(e.localX,e.localY),"StartPoint");
 			DragManager.doDrag(imageClosedHandle,ds,e,imageProxy); 
 		}
 	}

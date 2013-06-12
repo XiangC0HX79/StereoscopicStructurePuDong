@@ -16,10 +16,18 @@ package app.model.vo
 		{
 			return source.T_HazardX;
 		}
+		public function set T_HazardX(value:Number):void
+		{
+			source.T_HazardX = value;
+		}
 		
 		public function get T_HazardY():Number
 		{
 			return source.T_HazardY;
+		}
+		public function set T_HazardY(value:Number):void
+		{
+			source.T_HazardY = value;
 		}
 		
 		public function get T_HazardType():Number
@@ -39,12 +47,12 @@ package app.model.vo
 		
 		public function get T_HazardLineLength():String
 		{
-			return source.T_HazardLineLength;
+			return source.T_HazardLineLength?source.T_HazardLineLength:"";
 		}
 		
 		public function get T_HazardPicimgPath():String
 		{
-			return  source.T_HazardPicimgPath.replace("../",WebServiceCommand.WSDL);	
+			return  source.T_HazardPicimgPath.replace("../",ConfigVO.BASE_URL);	
 		}
 		
 		public function HazardVO(value:Object)

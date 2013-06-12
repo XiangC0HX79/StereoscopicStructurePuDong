@@ -35,7 +35,7 @@ package app.view
 		override public function listNotificationInterests():Array
 		{
 			return [				
-				ApplicationFacade.NOTIFY_APP_INIT
+				ApplicationFacade.NOTIFY_INIT_APP
 			];
 		}
 		
@@ -43,7 +43,7 @@ package app.view
 		{
 			switch(notification.getName())
 			{					
-				case ApplicationFacade.NOTIFY_APP_INIT:	
+				case ApplicationFacade.NOTIFY_INIT_APP:	
 					BindingUtils.bindProperty(layerTraffic,"visible",LayerVO.TRAFFIC,"LayerVisible");
 					
 					for each(var i:TrafficInfoVO in buildProxy.build.Traffic)

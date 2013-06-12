@@ -20,8 +20,12 @@ package app
 		public static const NOTIFY_APP_ALERTINFO:String		= "appalertinfo";
 		public static const NOTIFY_APP_ALERTALARM:String	= "appalertalarm";
 		public static const NOTIFY_APP_ALERTERROR:String	= "appalerterror";
-				
-		public static const NOTIFY_APP_INIT:String			= "appinit";
+		
+		public static const NOTIFY_INIT_CONFIG:String		= "InitConfig";
+		public static const NOTIFY_INIT_ICONS:String		= "InitIcons";
+		public static const NOTIFY_INIT_BUILD:String		= "InitBuild";
+		
+		public static const NOTIFY_INIT_APP:String			= "InitApp";
 		
 		public static const NOTIFY_WEBSERVICE_SEND:String	= "webservice_send";
 		
@@ -50,11 +54,13 @@ package app
 		public static const NOTIFY_COMMAND_OVER:String		= "CommandOver";
 		public static const NOTIFY_COMMAND_OUT:String		= "CommandOut";
 		
-		public static const NOTIFY_SURROUNDING_RESCUE:String		= "SurroundingRescue";
 		public static const NOTIFY_SURROUNDING_KEYUNIT:String		= "SurroundingKeyUnit";
 		
 		public static const NOTIFY_STEREO_LAYER:String		= "StereoLayer";
 		
+		public static const NOTIFY_FIRE_ADD:String			= "FireAdd";
+		public static const NOTIFY_FIRE_DEL:String			= "FireDel";
+				
 		/**
 		 * Singleton ApplicationFacade Factory Method
 		 */

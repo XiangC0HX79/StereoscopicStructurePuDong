@@ -10,13 +10,13 @@
 	<fx:Script>
 		<![CDATA[
 			import app.model.vo.HazardVO;
-			[Embed(source="assets/image/icon_alarm.png")]
+			[Embed(source="assets/image/eletric.png")]
 			private static const CLASS_ELETRIC:Class;
 			
-			[Embed(source="assets/image/icon_error.png")]
+			[Embed(source="assets/image/gas.png")]
 			private static const CLASS_STATION:Class;
 			
-			[Embed(source="assets/image/icon_info.png")]
+			[Embed(source="assets/image/can.png")]
 			private static const CLASS_OIL:Class;
 			
 			[Bindable]private var hazard:HazardVO;

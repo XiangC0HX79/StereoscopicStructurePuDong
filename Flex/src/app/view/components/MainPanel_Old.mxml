@@ -21,10 +21,8 @@
 			import spark.skins.spark.ImageSkin;
 			
 			public static const FLOORCHANGE:String = "floorchange";	
-			public static const FLOOROFFSET:String = "flooroffset";	
-			
-			public static const FLOORROTATION:String = "floorrotation";		
-			
+			public static const FLOOROFFSET:String = "flooroffset";				
+			public static const FLOORROTATION:String = "floorrotation";					
 			public static const FLOORSAVE:String = "floorsave";	
 			
 			public static const GROUPMOVE:String = "GroupMove";	
@@ -90,23 +88,7 @@
 				
 				dispatchEvent(new Event(FLOOROFFSET));
 			}
-			
-			/* protected function hslider3_changeHandler(event:Event):void
-			{
-				var hslider:HSlider = event.currentTarget as HSlider;
-				this.scale = hslider.value;
-				
-				dispatchEvent(new Event(FLOOROFFSET));
-			}
-			
-			protected function sliderScale_changeHandler(event:Event):void
-			{
-				var num:NumericStepper = event.currentTarget as NumericStepper;
-				this.scale = num.value;
-				
-				dispatchEvent(new Event(FLOOROFFSET));
-			} */
-			
+						
 			protected function Scale_changeHandler(event:Event):void
 			{
 				var floor:FloorVO = listFloor.selectedItem as FloorVO;

@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 mouseMove="contentGroup_mouseMoveHandler(event)" mouseOut="contentGroup_MouseOutHandle(event)">
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 width="{Build.BitmapWidth}"
+		 height="{Build.BitmapHeight}"
+		 mouseMove="contentGroup_mouseMoveHandler(event)" 
+		 mouseOut="contentGroup_MouseOutHandle(event)">
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
 	
 	<fx:Script>
 		<![CDATA[		
+			import app.model.vo.BuildVO;
+			
+			import mx.events.FlexEvent;
+			
 			public static const GROUPMOVE:String = "GroupMove";	
 			public static const GROUPOUT:String = "GroupOut";	
 			
-			[Bindable]private var buildBitmap:Bitmap;
-			public function set BuildBitmap(value:Bitmap):void
-			{
-				buildBitmap = value;
-			}
+			[Bindable]public var Build:BuildVO;
 				
 			private var mousePoint:Point = new Point;
 			public function get MousePoint():Point
 			{
 				return mousePoint;
 			}
-			
 			
 			protected function contentGroup_mouseMoveHandler(event:MouseEvent):void
 			{
@@ -47,8 +49,16 @@
 			{				
 				dispatchEvent(new Event(GROUPOUT));
 			}			
+			
+			protected function image_readyHandler(event:FlexEvent):void
+			{
+				var image:Image = event.currentTarget as Image;
+				Build.BitmapWidth = image.sourceWidth;
+				Build.BitmapHeight = image.sourceHeight;
+			}
+			
 		]]>
 	</fx:Script>
 	
-	<s:Image source="{buildBitmap}" mouseEnabled="false"/>
+	<s:Image source="{Build.TMB_PicPath}" mouseEnabled="false" ready="image_readyHandler(event)"/>
 </s:Group>

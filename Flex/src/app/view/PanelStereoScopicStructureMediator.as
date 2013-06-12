@@ -2,6 +2,7 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
+	import app.model.vo.BuildVO;
 	import app.model.vo.FloorVO;
 	import app.view.components.ImageFloor;
 	import app.view.components.PanelStereoScopicStructure;
@@ -18,17 +19,13 @@ package app.view
 	public class PanelStereoScopicStructureMediator extends Mediator implements IMediator
 	{
 		public static const NAME:String = "PanelStereoScopicStructureMediator";
-		
-		private var buildProxy:BuildProxy; 
-		
+				
 		public function PanelStereoScopicStructureMediator()
 		{
 			super(NAME, new PanelStereoScopicStructure);
 			
 			panelStereoScopicStructure.addEventListener(PanelStereoScopicStructure.GROUPMOVE,onGroupMove);
-			panelStereoScopicStructure.addEventListener(PanelStereoScopicStructure.GROUPOUT,onGroupOut);
-			
-			buildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
+			panelStereoScopicStructure.addEventListener(PanelStereoScopicStructure.GROUPOUT,onGroupOut);			
 		}
 		
 		protected function get panelStereoScopicStructure():PanelStereoScopicStructure
@@ -38,6 +35,8 @@ package app.view
 	
 		private function onGroupMove(event:Event):void
 		{
+			var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
+			
 			var floorFocus:ImageFloor;
 						
 			for each(var floor:FloorVO in buildProxy.build.floors)
@@ -86,7 +85,7 @@ package app.view
 		override public function listNotificationInterests():Array
 		{
 			return [
-				ApplicationFacade.NOTIFY_APP_INIT
+				ApplicationFacade.NOTIFY_INIT_APP
 			];
 		}
 		
@@ -94,12 +93,14 @@ package app.view
 		{
 			switch(notification.getName())
 			{
-				case ApplicationFacade.NOTIFY_APP_INIT:										
-					panelStereoScopicStructure.BuildBitmap = buildProxy.build.buildBitmap;
+				case ApplicationFacade.NOTIFY_INIT_APP:							
+					var build:BuildVO = notification.getBody() as BuildVO;
 					
-					for(var i:Number = buildProxy.build.floors.length - 1;i >=0;i--)
+					panelStereoScopicStructure.Build = build;
+					
+					for(var i:Number = build.floors.length - 1;i >=0;i--)
 					{
-						var floor:FloorVO = buildProxy.build.floors[i];
+						var floor:FloorVO = build.floors[i];
 						
 						var imageFloor:ImageFloor = new ImageFloor;
 						imageFloor.floor = floor;

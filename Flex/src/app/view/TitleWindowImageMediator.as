@@ -3,6 +3,7 @@ package app.view
 	import app.ApplicationFacade;
 	import app.controller.WebServiceCommand;
 	import app.model.vo.ComponentVO;
+	import app.model.vo.ConfigVO;
 	import app.model.vo.MediaVO;
 	import app.view.components.TitleWindowImage;
 	
@@ -90,7 +91,7 @@ package app.view
 		{			
 			sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGSHOW,"正在加载图片...");
 			
-			var url:String =  imageName.replace("../",WebServiceCommand.WSDL);
+			var url:String =  imageName.replace("../",ConfigVO.BASE_URL);
 			
 			var urlRequest:URLRequest = new URLRequest(encodeURI(url))
 			

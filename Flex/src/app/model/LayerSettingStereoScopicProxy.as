@@ -1,5 +1,6 @@
 package app.model
 {
+	import app.model.vo.ConfigVO;
 	import app.model.vo.LayerVO;
 	
 	import mx.collections.ArrayCollection;
@@ -29,13 +30,16 @@ package app.model
 				
 		public function get visible():Boolean
 		{
-			var r:Boolean = false;
+			if(ConfigVO.EDIT)
+				return true;
+			
 			for each(var layer:LayerVO in Layers)
 			{
-				r ||= layer.LayerVisible;
+				if(layer.LayerVisible)
+					return true;
 			}
 			
-			return r;
+			return false;
 		}
 		
 		public function getLayer(id:Number):LayerVO

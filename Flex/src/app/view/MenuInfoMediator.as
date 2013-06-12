@@ -35,8 +35,7 @@ package app.view
 		
 		private function onDescription(event:Event):void
 		{
-			flash.net.navigateToURL(new URLRequest(buildProxy.build.TMB_descriptionPath));
-			
+			flash.net.navigateToURL(new URLRequest(buildProxy.build.TMB_descriptionPath));			
 		}
 		
 		private function onFuncDivision(event:Event):void

@@ -1,5 +1,7 @@
 package app.model.vo
 {	
+	import app.model.WebServiceProxy;
+	
 	import flash.display.Bitmap;
 	import flash.geom.Point;
 	
@@ -22,7 +24,7 @@ package app.model.vo
 		
 		public function get T_ComPicPath():String
 		{
-			return  source.T_ComPicPath.replace("../",WebServiceVO.BASE_WSDL);	
+			return  source.T_ComPicPath.replace("../",ConfigVO.BASE_URL);	
 		}
 		
 		public function CommandHeightPicVO(value:Object)

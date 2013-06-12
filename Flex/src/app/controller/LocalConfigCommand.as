@@ -4,18 +4,18 @@ package app.controller
 	import app.model.BuildProxy;
 	import app.model.IconsProxy;
 	import app.model.LayerSettingStereoScopicProxy;
+	import app.model.WebServiceProxy;
+	import app.model.vo.BitmapVO;
 	import app.model.vo.BuildVO;
 	import app.model.vo.CommandHeightPicVO;
 	import app.model.vo.CommandHeightVO;
 	import app.model.vo.ComponentVO;
 	import app.model.vo.FloorVO;
 	import app.model.vo.HazardVO;
-	import app.model.vo.IconVO;
 	import app.model.vo.KeyUnitVO;
 	import app.model.vo.ScentingVO;
 	import app.model.vo.TaticalVO;
 	import app.model.vo.TrafficInfoVO;
-	import app.model.vo.WebServiceVO;
 	import app.view.TitleWindowFloorMediator;
 	import app.view.components.TitleWindowFloor;
 	
@@ -92,48 +92,24 @@ package app.controller
 				return;
 			}
 			
-			WebServiceVO.BASE_WSDL = xml.WebServiceUrl;
-			IconVO.BASE_URL = xml.WebServiceUrl;
+			ConfigVO.BASE_URL = xml.WebServiceUrl;
+			BitmapVO.BASE_URL = xml.WebServiceUrl;
 			
-			var iconsProxy:IconsProxy = facade.retrieveProxy(IconsProxy.NAME) as IconsProxy;
-			
-			iconsProxy.icons.addEventListener(Event.COMPLETE,onInitIcon);
-				
-			iconsProxy.icons.Init();
+			var iconsProxy:IconsProxy = facade.retrieveProxy(IconsProxy.NAME) as IconsProxy;							
+			iconsProxy.Init(onInitIcon);
 		}
 		
-		private function onInitIcon(event:Event):void
+		private function onInitIcon():void
 		{					
 			sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：图标加载完成...");
 						
-			var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
+			var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;						
 			
-			buildProxy.build.addEventListener(BuildVO.INIT_BASEINFO,onInitBaseInfo);
-			buildProxy.build.addEventListener(BuildVO.INIT_COMMANDHEIGHTS,onInitCommandHeights);
-			buildProxy.build.addEventListener(BuildVO.INIT_CLOSEHANDLES,onInitCloseHandles);
-			
-			buildProxy.build.addEventListener(Event.COMPLETE,onComplete);
-			
-			buildProxy.build.Init(paramName);		
-						
-			function onInitBaseInfo(event:Event):void
-			{
-				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：基础信息加载完成...");
-			}
-			
-			function onInitCommandHeights(event:Event):void
-			{
-				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：制高点加载完成...");
-			}
-			
-			function onInitCloseHandles(event:Event):void
-			{
-				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：封控范围加载完成...");
-			}
+			buildProxy.Init(paramName);
 			
 			function onComplete(event:Event):void
 			{			
-				sendNotification(ApplicationFacade.NOTIFY_APP_INIT,buildProxy.build);
+				sendNotification(ApplicationFacade.NOTIFY_INIT_APP,buildProxy.build);
 				
 				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGHIDE);	
 			}	
@@ -246,7 +222,7 @@ package app.controller
 				
 			}
 			
-			sendNotification(ApplicationFacade.NOTIFY_APP_INIT,buildProxy.build);
+			sendNotification(ApplicationFacade.NOTIFY_INIT_APP,buildProxy.build);
 			
 			sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGHIDE,"程序初始化完成！");	
 		}

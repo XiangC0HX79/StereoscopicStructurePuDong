@@ -1,6 +1,9 @@
 package app.view
 {		
 	import app.ApplicationFacade;
+	import app.model.BuildProxy;
+	import app.model.IconsProxy;
+	import app.model.vo.ConfigVO;
 	import app.view.components.TitleWindowFloor;
 	import app.view.components.TitleWindowImage;
 	import app.view.components.TitleWindowMovie;
@@ -40,6 +43,10 @@ package app.view
 		override public function listNotificationInterests():Array
 		{
 			return [
+				ApplicationFacade.NOTIFY_INIT_CONFIG,
+				ApplicationFacade.NOTIFY_INIT_ICONS,
+				ApplicationFacade.NOTIFY_INIT_BUILD,
+				
 				ApplicationFacade.NOTIFY_TITLEWINDOW_FLOOR,
 				ApplicationFacade.NOTIFY_TITLEWINDOW_IMAGE,
 				ApplicationFacade.NOTIFY_TITLEWINDOW_MOVIE,
@@ -60,6 +67,22 @@ package app.view
 		{
 			switch(notification.getName())
 			{
+				case ApplicationFacade.NOTIFY_INIT_CONFIG:
+					ConfigVO.EDIT = false;//(application.parameters.edit == "1");
+					
+					var iconsProxy:IconsProxy = facade.retrieveProxy(IconsProxy.NAME) as IconsProxy;
+					iconsProxy.Init();
+					break;
+				
+				case ApplicationFacade.NOTIFY_INIT_ICONS:
+					var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
+					buildProxy.Init(application.parameters.build);
+					break;
+				
+				case ApplicationFacade.NOTIFY_INIT_BUILD:
+					sendNotification(ApplicationFacade.NOTIFY_INIT_APP,notification.getBody());
+					break;
+				
 				case ApplicationFacade.NOTIFY_TITLEWINDOW_FLOOR:
 					var popup:IFlexDisplayObject = facade.retrieveMediator(TitleWindowFloorMediator.NAME).getViewComponent() as IFlexDisplayObject;
 					PopUpManager.addPopUp(popup,this.application,false);

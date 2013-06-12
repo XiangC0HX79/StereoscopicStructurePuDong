@@ -70,7 +70,7 @@ package app.view
 		override public function listNotificationInterests():Array
 		{
 			return [
-				ApplicationFacade.NOTIFY_APP_INIT
+				ApplicationFacade.NOTIFY_INIT_APP
 			];
 		}
 		
@@ -78,9 +78,8 @@ package app.view
 		{
 			switch(notification.getName())
 			{
-				case ApplicationFacade.NOTIFY_APP_INIT:
-					var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
-					titleWindowTatics.Build = buildProxy.build;
+				case ApplicationFacade.NOTIFY_INIT_APP:
+					titleWindowTatics.Build = notification.getBody() as BuildVO;
 					break;
 			}
 		}
