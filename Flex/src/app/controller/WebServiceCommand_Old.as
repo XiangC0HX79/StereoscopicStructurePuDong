@@ -15,7 +15,7 @@ package app.controller
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.command.SimpleCommand;
 	
-	public class WebServiceCommand extends SimpleCommand implements ICommand
+	public class WebServiceCommand_Old extends SimpleCommand implements ICommand
 	{		
 		public static var WSDL:String = "";
 				

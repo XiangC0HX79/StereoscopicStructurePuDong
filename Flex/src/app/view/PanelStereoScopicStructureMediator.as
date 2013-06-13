@@ -41,7 +41,7 @@ package app.view
 						
 			for each(var floor:FloorVO in buildProxy.build.floors)
 			{
-				var imageFloorMediator:ImageFloorMediator = facade.retrieveMediator("ImageFloorMediator" + floor.floorID) as ImageFloorMediator;
+				var imageFloorMediator:ImageFloorMediator = facade.retrieveMediator("ImageFloorMediator" + floor.T_FloorID) as ImageFloorMediator;
 				var imageFloor:ImageFloor = imageFloorMediator.getViewComponent() as ImageFloor;
 				
 				var rect:Rectangle = new Rectangle(imageFloor.x,imageFloor.y,imageFloor.width * imageFloor.scaleX,imageFloor.height * imageFloor.scaleY);
@@ -105,7 +105,7 @@ package app.view
 						var imageFloor:ImageFloor = new ImageFloor;
 						imageFloor.floor = floor;
 						
-						facade.registerMediator(new ImageFloorMediator("ImageFloorMediator" + floor.floorID,imageFloor));
+						facade.registerMediator(new ImageFloorMediator("ImageFloorMediator" + floor.T_FloorID,imageFloor));
 						
 						panelStereoScopicStructure.addElement(imageFloor);
 					}

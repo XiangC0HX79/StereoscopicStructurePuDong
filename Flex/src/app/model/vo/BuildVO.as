@@ -130,7 +130,8 @@ package app.model.vo
 		public var Internalhigh:ArrayCollection = new ArrayCollection;
 				
 		//内部结构图		
-		public var floors:ArrayCollection = new ArrayCollection;
+		public var floors:ArrayCollection;
+		public var floorPics:ArrayCollection;
 						
 		public var BitmapWidth:Number = 0;
 		public var BitmapHeight:Number = 0;

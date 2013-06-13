@@ -4,7 +4,6 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx">
 	<fx:Script>
 		<![CDATA[
-			import app.controller.WebServiceCommand;
 			import app.model.vo.BuildVO;
 			
 			import flash.net.navigateToURL;

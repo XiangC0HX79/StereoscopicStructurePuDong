@@ -9,7 +9,10 @@ package app.model
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
+	import flash.net.URLLoader;
+	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
+	import flash.net.URLRequestMethod;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	
@@ -83,22 +86,29 @@ package app.model
 				
 		protected function load(url:String,listener:Function):void
 		{			
-			var u:String = url.replace("../",ConfigVO.BASE_URL);
+			var downloadURL:URLRequest = new URLRequest(encodeURI(url));	
+			downloadURL.method = URLRequestMethod.POST;
 			
-			var urlRequest:URLRequest = new URLRequest(encodeURI(u))
+			var urlLoader:URLLoader = new URLLoader;
+			urlLoader.addEventListener(IOErrorEvent.IO_ERROR,onError);
+			urlLoader.addEventListener(Event.COMPLETE,completeHandler);				
+			urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
+			urlLoader.load(downloadURL);
 			
-			var loader:Loader = new Loader();
-			loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,onError);
-			loader.contentLoaderInfo.addEventListener(Event.COMPLETE,loaderCompleteHandler);   
-			loader.load(urlRequest);
+			function completeHandler(event:Event):void   
+			{   								
+				var loader:Loader = new Loader();
+				loader.contentLoaderInfo.addEventListener(Event.COMPLETE,loaderCompleteHandler);  
+				loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,onError);  
+				loader.loadBytes(event.currentTarget.data);
+			}
 			
 			function loaderCompleteHandler(event:Event):void
 			{							
-				var loaderInfo:LoaderInfo = event.currentTarget as LoaderInfo;
-				
-				listener(Bitmap(loaderInfo.content));
+				var bitmap:Bitmap = Bitmap((event.currentTarget as LoaderInfo).content);  
+				listener(bitmap);
 			}
-			
+									
 			function onError(event:IOErrorEvent):void
 			{					
 				var text:TextField = new TextField;

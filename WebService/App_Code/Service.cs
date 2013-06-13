@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Web.Services;
 
 using System.Data;
@@ -234,6 +236,15 @@ public class Service : WebService
     }
 
     [WebMethod]
+    public DataTable InitFloorPic(String tmbId)
+    {
+        var sql = "SELECT * FROM T_FloorPic " +
+                  "WHERE TMB_ID = " + tmbId;
+
+        return _clsGetData.GetTable(sql);
+    }
+
+    [WebMethod]
     public DataTable InitFloor(String buildId)
     {
         var sql = "SELECT * FROM T_Floor " +
@@ -261,7 +272,10 @@ public class Service : WebService
     [WebMethod]
     public DataTable InitComponent(String buildId, String floorId)
     {
-        var result = _clsGetData.GetTable("SELECT T_FloorDetail.T_FloorID,T_FloorDetailchildfloor,T_FloorDetailID,T_FloorDetailName,T_FloorPicimgPath,T_FloorDetailX,T_FloorDetailY,T_FloorDetailType FROM T_FloorDetail,T_FloorPic WHERE T_FloorDetail.TMB_ID = " + buildId + " AND T_FloorDetail.T_FloorPicID = T_FloorPic.T_FloorPicID ORDER BY T_FloorDetailID DESC");
+        var sql = "SELECT * FROM T_FloorDetail " +
+                  "WHERE TMB_ID = " + buildId + 
+                  " ORDER BY T_FloorDetailID DESC";
+        var result = _clsGetData.GetTable(sql);
 
         for (var i = result.Rows.Count - 1; i >= 0; i--)
         {
@@ -285,5 +299,20 @@ public class Service : WebService
         var result = _clsGetData.GetTable("SELECT * FROM T_FloorMedia WHERE T_FloorDetailID = " + componentId);
 
         return result;
+    }
+
+    [WebMethod]
+    public String GetBitmapSize(String url)
+    {
+        var rq = (HttpWebRequest)WebRequest.Create(url);
+        var rp = (HttpWebResponse)rq.GetResponse();
+        var s = rp.GetResponseStream();
+        if (s == null)
+        {
+            return "0 0";
+        }
+
+        var img = Image.FromStream(s);
+        return img.Width + " " + img.Height;
     }
 }

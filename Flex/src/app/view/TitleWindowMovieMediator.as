@@ -1,7 +1,6 @@
 package app.view
 {
 	import app.ApplicationFacade;
-	import app.controller.WebServiceCommand;
 	import app.view.components.TitleWindowMovie;
 	
 	import flash.display.MovieClip;

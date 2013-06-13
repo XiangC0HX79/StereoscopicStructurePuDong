@@ -42,30 +42,32 @@ package app.model
 		{
 			for each(var i:Object in result)
 			{
+				var url:String = i.IconPath.replace("../",ConfigVO.BASE_URL);
+				
 				switch(i.IconID)
 				{
 					case "1":
-						load(i.IconPath,onLoadIconCommandHeight);
+						load(url,onLoadIconCommandHeight);
 						break;
 					
 					case "2":
-						load(i.IconPath,onLoadIconCloseHandle);
+						load(url,onLoadIconCloseHandle);
 						break;
 					
 					case "3":
-						load(i.IconPath,onLoadIconTraffic);
+						load(url,onLoadIconTraffic);
 						break;
 					
 					case "6":
-						load(i.IconPath,onLoadIconFireHydrant);
+						load(url,onLoadIconFireHydrant);
 						break;
 					
 					case "7":
-						load(i.IconPath,onLoadIconKeyUnit);
+						load(url,onLoadIconKeyUnit);
 						break;
 					
 					case "8":
-						load(i.IconPath,onLoadIconScenting);
+						load(url,onLoadIconScenting);
 						break;
 				}
 			}

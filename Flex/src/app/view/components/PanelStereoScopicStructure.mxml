@@ -48,17 +48,9 @@
 			protected function contentGroup_MouseOutHandle(event:MouseEvent):void
 			{				
 				dispatchEvent(new Event(GROUPOUT));
-			}			
-			
-			protected function image_readyHandler(event:FlexEvent):void
-			{
-				var image:Image = event.currentTarget as Image;
-				Build.BitmapWidth = image.sourceWidth;
-				Build.BitmapHeight = image.sourceHeight;
-			}
-			
+			}				
 		]]>
 	</fx:Script>
 	
-	<s:Image source="{Build.TMB_PicPath}" mouseEnabled="false" ready="image_readyHandler(event)"/>
+	<s:Image source="{Build.TMB_PicPath}" mouseEnabled="false" />
 </s:Group>

@@ -5,22 +5,31 @@ package app.model.vo
 	[Bindable]
 	public class MediaVO
 	{
-		public var mediaID:String = "";
+		private var _source:*;
 		
-		public var mediaName:String = "";
-		
-		public var mediaRemark:String = "";
-		
-		public var mediaBimap:Bitmap;
-		
-		public var mediaBimapName:String = "";
-		
-		public function MediaVO(item:Object)
+		public function get T_FloorMediaID():Number
 		{
-			this.mediaID = item.T_FloorMediaID;
-			this.mediaName = item.T_FloorMediaName;
-			this.mediaRemark = item.T_FloorMediaremark;
-			this.mediaBimapName = item.T_FloorMediaPicPath;
+			return  _source.T_FloorMediaID;	
+		}
+		
+		public function get T_FloorMediaName():String
+		{
+			return  _source.T_FloorMediaName;	
+		}
+		
+		public function get T_FloorMediaremark():String
+		{
+			return  _source.T_FloorMediaremark;	
+		}
+		
+		public function get T_FloorMediaPicPath():String
+		{
+			return _source.T_FloorMediaPicPath?_source.T_FloorMediaPicPath.replace("../",ConfigVO.BASE_URL):"";
+		}
+		
+		public function MediaVO(item:*)
+		{
+			_source = item;
 		}
 	}
 }

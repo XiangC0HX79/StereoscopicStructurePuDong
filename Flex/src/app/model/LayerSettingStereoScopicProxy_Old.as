@@ -8,11 +8,11 @@ package app.model
 	import org.puremvc.as3.interfaces.IProxy;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 	
-	public class LayerSettingStereoScopicProxy extends Proxy implements IProxy
+	public class LayerSettingStereoScopicProxy_Old extends Proxy implements IProxy
 	{
 		public static const NAME:String = "LayerSettingStereoScopicProxy";
 		
-		public function LayerSettingStereoScopicProxy()
+		public function LayerSettingStereoScopicProxy_Old()
 		{
 			super(NAME, new ArrayCollection);
 			

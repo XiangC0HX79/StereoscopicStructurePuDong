@@ -7,7 +7,9 @@ package app.model
 	import app.model.vo.CommandHeightPicVO;
 	import app.model.vo.CommandHeightVO;
 	import app.model.vo.ComponentVO;
+	import app.model.vo.ConfigVO;
 	import app.model.vo.FireHydrantVO;
+	import app.model.vo.FloorPicVO;
 	import app.model.vo.FloorVO;
 	import app.model.vo.HazardVO;
 	import app.model.vo.KeyUnitVO;
@@ -16,7 +18,13 @@ package app.model
 	import app.model.vo.TrafficInfoVO;
 	
 	import flash.display.Bitmap;
+	import flash.display.Loader;
+	import flash.display.LoaderInfo;
 	import flash.events.Event;
+	import flash.net.URLLoader;
+	import flash.net.URLLoaderDataFormat;
+	import flash.net.URLRequest;
+	import flash.net.URLRequestMethod;
 	
 	import mx.collections.ArrayCollection;
 	import mx.rpc.events.FaultEvent;
@@ -55,11 +63,20 @@ package app.model
 			
 			setData(new BuildVO(result[0]));
 			
+			send("GetBitmapSize",onGetBuildBitmapSize,build.TMB_PicPath);
+		}
+				
+		private function onGetBuildBitmapSize(result:String):void
+		{
+			var s:Array = result.split(' ');
+			build.BitmapWidth = s[0];
+			build.BitmapHeight = s[1];
+			
 			sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：基础信息加载完成...");
 			
 			send("InitCommandingHeights",onInitCommadHeight,build.TMB_ID);
 		}
-				
+		
 		private function onInitCommadHeight(result:ArrayCollection):void
 		{			
 			build.CommandingHeights = new ArrayCollection;
@@ -244,11 +261,52 @@ package app.model
 			
 			sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：战术信息加载完成...");
 			
+			send("InitFloorPic",onInitFloorPic,build.TMB_ID);
+		}
+		
+		private function onInitFloorPic(result:ArrayCollection):void
+		{				
+			build.floorPics = new ArrayCollection;
+			
+			for each(var i:Object in result)
+			{
+				var floorPic:FloorPicVO = new FloorPicVO(i);
+				build.floorPics.addItem(floorPic);
+				loadFloorPic(floorPic);
+			}			
+			
+			onInitFloorPicComplete();
+		}
+		
+		private function loadFloorPic(floorPic:FloorPicVO):void
+		{
+			load(floorPic.T_FloorPicimgPath,onloadFloorPic);
+			
+			function onloadFloorPic(bitmap:Bitmap):void
+			{
+				floorPic.bitmap = bitmap;
+				
+				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：组件图片" + floorPic.T_FloorPicID + "加载完成...");
+				
+				onInitFloorPicComplete();
+			}
+		}
+		
+		private function onInitFloorPicComplete():void
+		{
+			for each(var floorPic:FloorPicVO in build.floorPics)
+			{
+				if(!floorPic.bitmap)
+					return;
+			}
+			
 			send("InitFloor",onInitFloor,build.TMB_ID);
 		}
 		
 		private function onInitFloor(result:ArrayCollection):void
-		{													
+		{						
+			build.floors = new ArrayCollection;
+			
 			for each(var i:Object in result)
 			{
 				var floor:FloorVO = new FloorVO(i);
@@ -258,25 +316,14 @@ package app.model
 			
 			sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：楼层信息加载完成...");
 			
-			onInitFloorPics();
+			onInitFloorComplete();
 		}
 		
 		private function initFloorInfo(floor:FloorVO):void
-		{
-			var layerSettingStereoScopicProxy:LayerSettingStereoScopicProxy = facade.retrieveProxy(LayerSettingStereoScopicProxy.NAME) as LayerSettingStereoScopicProxy;
+		{			
+			send("InitComponent",onInitComponent,build.TMB_ID,floor.T_FloorID);
 			
-			load(floor.T_FloorPicPath,onInitFloorPic);
-			
-			send("InitComponent",onInitComponent,build.TMB_ID,floor.floorID);
-			
-			function onInitFloorPic(bitmap:Bitmap):void
-			{
-				floor.floorBitmap = bitmap;
-				
-				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：楼层图片" + floor.floorID + "加载完成...");
-				
-				onInitFloorPics();
-			}
+			send("GetBitmapSize",onGetFloorBitmapSize,floor.T_FloorPicPath);
 			
 			function onInitComponent(result:ArrayCollection):void
 			{
@@ -284,49 +331,86 @@ package app.model
 				
 				for each(var i:Object in result)
 				{
-					var component:ComponentVO = new ComponentVO(i);					
-					component.layer = layerSettingStereoScopicProxy.getLayer(i.T_FloorDetailType);					
-					floor.components.addItem(component);
+					var component:ComponentVO = new ComponentVO(i);	
 					
-					initComponentPic(component);
+					for each(var floorPic:FloorPicVO in build.floorPics)
+					{
+						if(component.T_FloorPicID == floorPic.T_FloorPicID)
+							component.floorPic = floorPic;
+					}							
+					
+					floor.components.addItem(component);
 				}
 				
-				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：组件" + floor.floorID + "加载完成...");
+				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：组件信息" + floor.T_FloorID + "加载完成...");
 				
-				onInitFloorPics();
+				onInitFloorComplete();
 			}
-		}
-		
-		private function initComponentPic(component:ComponentVO):void
-		{			
-			load(component.T_FloorPicimgPath,onInitComponentPic);
 			
-			function onInitComponentPic(bitmap:Bitmap):void
+			function onGetFloorBitmapSize(result:String):void
+			{				
+				var s:Array = result.split(' ');
+				floor.BitmapWidth = s[0];
+				floor.BitmapHeight = s[1];
+				
+				var url:String =  ConfigVO.BASE_URL + "Download.aspx";
+				url += "?w=" + build.BitmapWidth;
+				url += "&h=" + build.BitmapHeight;
+				url += "&img=" + floor.T_FloorPicPath;
+				url += "&scale=" + floor.T_FloorScale;
+				
+				load(url,onLoadFloorPic);
+			}
+			
+			function onLoadFloorPic(bitmap:Bitmap):void
 			{
-				component.componentBitmap = bitmap;
+				floor.floorBitmap = bitmap;
 				
-				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：组件图片" + component.componentID + "加载完成...");
+				if(!floor.T_FloorScale)
+					floor.T_FloorScale = Math.min(bitmap.width / floor.BitmapWidth,bitmap.height / floor.BitmapHeight);
 				
-				onInitFloorPics();
+				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：楼层图片" + floor.T_FloorID + "加载完成...");
+				
+				onInitFloorComplete();
 			}
 		}
-		
-		private function onInitFloorPics():void
+				
+		private function onInitFloorComplete():void
 		{
 			for each(var i:FloorVO in build.floors)
 			{
 				if((!i.floorBitmap)
 					|| (!i.components))
 					return;
-				
-				for each(var c:ComponentVO in i.components)
-				{
-					if(!c.componentBitmap)
-						return;
-				}
 			}
 			
 			sendNotification(ApplicationFacade.NOTIFY_INIT_BUILD,build);
+		}
+		
+		public function LoadFloorBitmap(floor:FloorVO,listener:Function):void
+		{			
+			var url:String =  ConfigVO.BASE_URL + "Download.aspx";
+			url += "?w=" + build.BitmapWidth;
+			url += "&h=" + build.BitmapHeight;
+			url += "&img=" + floor.T_FloorPicPath;
+			url += "&scale=" + floor.T_FloorScale;
+			
+			load(url,onInitFloorPic);
+			
+			function onInitFloorPic(bitmap:Bitmap):void
+			{
+				var s:Number = Math.round(bitmap.width / floor.BitmapWidth * 100) / 100;
+				if(s == floor.T_FloorScale)
+				{
+					floor.floorBitmap = bitmap;									
+					listener();
+				}
+			}
+		}
+		
+		public function LoadComponentMedia(component:ComponentVO,listener:Function):void
+		{						
+			send("InitComponentMedia",listener,component.T_FloorDetailID);
 		}
 		
 		public function AddFireHydrant(x:Number,y:Number):void
@@ -407,7 +491,7 @@ package app.model
 			{			
 				if(floor.edit)
 				{
-					data += floor.floorID + ";" + floor.scale + ";" + floor.xOffset + ";" + floor.yOffset + ";" + floor.xRotation + ";" + floor.yRotation + ";" + floor.zRotation + ";" + floor.alpha + "@";
+					data += floor.T_FloorID + ";" + floor.T_FloorScale + ";" + floor.T_FloorX + ";" + floor.T_FloorY + ";" + floor.T_FloorXRotation + ";" + floor.T_FloorYRotation + ";" + floor.T_FloorZRotation + ";" + floor.T_FloorAlpha + "@";
 					floor.edit = false;
 				}
 			}

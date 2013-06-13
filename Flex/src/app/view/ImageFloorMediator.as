@@ -2,9 +2,10 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
-	import app.model.LayerSettingStereoScopicProxy;
 	import app.model.vo.ComponentVO;
+	import app.model.vo.ConfigVO;
 	import app.model.vo.FloorVO;
+	import app.model.vo.LayerVO;
 	import app.view.components.ImageFloor;
 	
 	import flash.display.BitmapData;
@@ -61,16 +62,28 @@ package app.view
 		{
 			if(isNaN(alpha))
 			{
-				var layerSettingStereoScopicProxy:LayerSettingStereoScopicProxy = facade.retrieveProxy(LayerSettingStereoScopicProxy.NAME) as LayerSettingStereoScopicProxy;
-				alpha = layerSettingStereoScopicProxy.visible?imageFloor.floor.alpha:0.01;
+				if(ConfigVO.EDIT
+					|| LayerVO.EMERGENCYROUTE.LayerVisible
+					|| LayerVO.CONTROLROOM.LayerVisible
+					|| LayerVO.MONITOR.LayerVisible
+					|| LayerVO.ELEVATOR.LayerVisible
+					|| LayerVO.OTHERKEY.LayerVisible
+				)
+				{
+					alpha = imageFloor.floor.T_FloorAlpha;
+				}
+				else
+				{
+					alpha = 0.01;
+				}
 			}
 			
 			_alpha = alpha;
 			
-			var imageW:Number = imageFloor.floor.floorBitmap.bitmapData.width;
-			var imageH:Number = imageFloor.floor.floorBitmap.bitmapData.height;
+			var imageW:Number = imageFloor.floor.floorBitmap.width;
+			var imageH:Number = imageFloor.floor.floorBitmap.height;
 			
-			var floorBitmapData:BitmapData = new BitmapData(imageW,imageH);//imageFloor.floor.floorBitmap.bitmapData.clone();	
+			var floorBitmapData:BitmapData = new BitmapData(imageW,imageH);
 			
 			var m:Array = [1,0,0,0,0,
 						   0,1,0,0,0,
@@ -88,29 +101,16 @@ package app.view
 			{
 				if(component.layer.LayerVisible)
 				{
-					var matrix:Matrix = new Matrix(1,0,0,1,component.xOffset,component.yOffset);
-					floorBitmapData.draw(component.componentBitmap,matrix);
+					var matrix:Matrix = new Matrix(1,0,0,1,component.T_FloorDetailX,component.T_FloorDetailY);					
+					matrix.scale(imageFloor.floor.T_FloorScale,imageFloor.floor.T_FloorScale);
+					
+					floorBitmapData.draw(component.floorPic.bitmap,matrix);
 				}
 			}
-			
-			/*var dx:Number = 0.5;
-			var dy:Number = 0.5;
-			
-			var angle:Number = Math.PI * (37 / 180);
-			
-			matrix = new Matrix(1,0,0,1,-floorBitmapData.width/2,-floorBitmapData.height/2);
-			
-			matrix.concat(new Matrix(1,0,-dx,1));
-			
-			matrix.rotate(angle);
-			
-			matrix.concat(new Matrix(1,0,0,1,floorBitmapData.width / 2 + floorBitmapData.height * dx / 2,floorBitmapData.height / 2));
-			
-			matrix.scale(1,dy);*/
-						
-			var zangle:Number = Math.PI * (2 - imageFloor.floor.xRotation / 180);
-			var xangle:Number = Math.PI * (imageFloor.floor.yRotation / 180);
-			var yangle:Number = Math.PI * (imageFloor.floor.zRotation / 180);
+									
+			var zangle:Number = Math.PI * (2 - imageFloor.floor.T_FloorXRotation / 180);
+			var xangle:Number = Math.PI * (imageFloor.floor.T_FloorYRotation / 180);
+			var yangle:Number = Math.PI * (imageFloor.floor.T_FloorZRotation / 180);
 			
 			var sinx:Number = Math.sin(xangle);
 			var siny:Number = Math.sin(yangle);
@@ -118,8 +118,6 @@ package app.view
 			var cosx:Number = Math.cos(xangle);
 			var cosy:Number = Math.cos(yangle);
 			var cosz:Number = Math.cos(zangle);
-			//var dy:Number = Math.cos(yangle);
-			//var dz:Number = Math.cos(zangle);
 			
 			var a:Number = cosy * cosz - sinx * siny * sinz;
 			var b:Number = - cosx * sinz;
@@ -135,30 +133,22 @@ package app.view
 				Math.abs(floorBitmapData.width / 2 * b - floorBitmapData.height / 2 * d)
 			);
 			
-			w = w<2?2:w;
-			h = h<2?2:h;
-			
-			//var w:Number = Math.sqrt(floorBitmapData.width * floorBitmapData.width + floorBitmapData.height * floorBitmapData.height);
-			//var h:Number = w;
-						
+			w = int(w<2?2:w);
+			h = int(h<2?2:h);
+									
 			matrix = new Matrix(1,0,0,1,-floorBitmapData.width/2,-floorBitmapData.height/2);
 			
-			//matrix.rotate(xangle);
-			
-			//matrix.scale(1,dy)
-				
-			//matrix.scale(dz,1)
 			matrix.concat(new Matrix(a,b,c,d,0,0));
 			
 			matrix.concat(new Matrix(1,0,0,1,w / 2,h / 2));
 			
-			matrix.scale(imageFloor.floor.scale,imageFloor.floor.scale);
+			//matrix.scale(imageFloor.floor.T_FloorScale,imageFloor.floor.T_FloorScale);
 												
-			w = w * imageFloor.floor.scale;
-			h = h * imageFloor.floor.scale;
+			//w = w * imageFloor.floor.T_FloorScale;
+			//h = h * imageFloor.floor.T_FloorScale;
 			
-			w = w<1?1:w;
-			h = h<1?1:h;
+			//w = w<1?1:w;
+			//h = h<1?1:h;
 			
 			var cuttingFloor:BitmapData = new BitmapData(w,h,true,0x0);
 			
@@ -172,7 +162,7 @@ package app.view
 		{
 			return [
 				ApplicationFacade.NOTIFY_STEREO_LAYER,
-				ApplicationFacade.NOTIFY_FLOOR_ROTATION,				
+				ApplicationFacade.NOTIFY_FLOOR_UPDATE,				
 				ApplicationFacade.NOTIFY_FLOOR_FOCUS
 			];
 		}
@@ -185,7 +175,7 @@ package app.view
 					updateFloor();
 					break;
 				
-				case ApplicationFacade.NOTIFY_FLOOR_ROTATION:
+				case ApplicationFacade.NOTIFY_FLOOR_UPDATE:
 					var floor:FloorVO = notification.getBody() as FloorVO;
 					if(floor == imageFloor.floor)
 					{
@@ -200,7 +190,7 @@ package app.view
 					{						
 						if(_alpha != 1)
 						{							
-							imageFloor.toolTip = imageFloor.floor.floorName;
+							imageFloor.toolTip = imageFloor.floor.T_FloorName;
 							
 							updateFloor(1);
 						}

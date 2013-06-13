@@ -1,8 +1,6 @@
 package app
 {	
-	import app.controller.LoadImageCommand;
 	import app.controller.StartupCommand;
-	import app.controller.WebServiceCommand;
 	
 	import org.puremvc.as3.interfaces.IFacade;
 	import org.puremvc.as3.patterns.facade.Facade;
@@ -26,11 +24,7 @@ package app
 		public static const NOTIFY_INIT_BUILD:String		= "InitBuild";
 		
 		public static const NOTIFY_INIT_APP:String			= "InitApp";
-		
-		public static const NOTIFY_WEBSERVICE_SEND:String	= "webservice_send";
-		
-		public static const NOTIFY_COMMAND_LOADIMAGE:String	= "command_loadimage";
-		
+						
 		public static const NOTIFY_TITLEWINDOW_FLOOR:String	= "titlewindow_floor";
 		public static const NOTIFY_TITLEWINDOW_IMAGE:String	= "titlewindow_image";
 		public static const NOTIFY_TITLEWINDOW_MOVIE:String	= "titlewindow_movie";
@@ -47,8 +41,7 @@ package app
 		
 		public static const NOTIFY_MOVIE_POPUP:String		= "movie_popup";
 				
-		public static const NOTIFY_FLOOR_ROTATION:String	= "floor_rotation";
-		
+		public static const NOTIFY_FLOOR_UPDATE:String		= "FloorUpdate";		
 		public static const NOTIFY_FLOOR_FOCUS:String		= "floor_focus";
 		
 		public static const NOTIFY_COMMAND_OVER:String		= "CommandOver";
@@ -86,10 +79,6 @@ package app
 			super.initializeController();
 			
 			registerCommand( STARTUP, StartupCommand );	
-			
-			registerCommand( NOTIFY_WEBSERVICE_SEND, WebServiceCommand );	
-			
-			registerCommand( NOTIFY_COMMAND_LOADIMAGE, LoadImageCommand );
 		}
 	}
 }

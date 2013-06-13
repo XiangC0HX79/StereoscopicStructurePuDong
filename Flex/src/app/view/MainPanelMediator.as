@@ -2,6 +2,7 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.vo.BuildVO;
+	import app.model.vo.ConfigVO;
 	import app.view.components.MainPanel;
 	
 	import flash.events.Event;
@@ -56,7 +57,14 @@ package app.view
 		
 		private function onStereoScopic(event:Event):void
 		{
-			mainPanel.Menu.addElementAt(facade.retrieveMediator(MenuStereoScopicStructureMediator.NAME).getViewComponent() as IVisualElement,mainPanel.ButtonIndex + 1);
+			if(ConfigVO.EDIT)
+			{
+				mainPanel.Menu.addElementAt(facade.retrieveMediator(MenuStereoScopicEditMediator.NAME).getViewComponent() as IVisualElement,mainPanel.ButtonIndex + 1);
+			}
+			else
+			{
+				mainPanel.Menu.addElementAt(facade.retrieveMediator(MenuStereoScopicStructureMediator.NAME).getViewComponent() as IVisualElement,mainPanel.ButtonIndex + 1);
+			}
 			
 			contentGroupAddElement(PanelStereoScopicStructureMediator.NAME);
 		}

@@ -21,7 +21,7 @@ package app.controller
 						
 			
 			facade.registerMediator(new AppAlertMediator);
-			
+						
 			facade.registerMediator(new TitleWindowFloorMediator);
 			facade.registerMediator(new TitleWindowImageMediator);			
 			facade.registerMediator(new TitleWindowMovieMediator);			
@@ -39,6 +39,7 @@ package app.controller
 			facade.registerMediator(new MenuSurroundingMediator);	
 			facade.registerMediator(new MenuInfoMediator);	
 			facade.registerMediator(new MenuStereoScopicStructureMediator);
+			facade.registerMediator(new MenuStereoScopicEditMediator);
 			
 			facade.registerMediator(new LayerDrawMediator);
 			facade.registerMediator(new LayerClosedPicMediator);			
@@ -50,8 +51,7 @@ package app.controller
 			facade.registerMediator(new LayerKeyUnitsMediator);
 			facade.registerMediator(new LayerScentingMediator);
 			
-			facade.registerMediator(new PanelSurroundingMediator);
-			
+			facade.registerMediator(new PanelSurroundingMediator);			
 			facade.registerMediator(new PanelStereoScopicStructureMediator);
 			
 			facade.registerMediator(new ApplicationMediator(application));	

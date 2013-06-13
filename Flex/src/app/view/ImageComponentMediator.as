@@ -2,6 +2,7 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
+	import app.model.vo.ConfigVO;
 	import app.model.vo.MediaVO;
 	import app.view.components.ImageComponent;
 	
@@ -31,32 +32,29 @@ package app.view
 				
 		private function onComponentClick(event:MouseEvent):void
 		{
-			sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,
-				["InitComponentMedia",onInitComponentMedia
-					,[imageComponent.component.componentID]
-					,true]);
+			var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
+			buildProxy.LoadComponentMedia(imageComponent.component,onLoadComponentMedia);
+		}
+		
+		private function onLoadComponentMedia(result:ArrayCollection):void
+		{						
+			var video:String;
+			var medias:ArrayCollection = new ArrayCollection;
 			
-			function onInitComponentMedia(result:ArrayCollection):void
-			{						
-				imageComponent.component.listMedia.removeAll();
-				
-				imageComponent.component.videoName = "";
-				
-				for each(var item:Object in result)
+			for each(var item:Object in result)
+			{
+				if(item.T_FloorMediaType == 1)
 				{
-					if(item.T_FloorMediaType == 1)
-					{
-						imageComponent.component.listMedia.addItem(new MediaVO(item));
-					}
-					else if(item.T_FloorMediaType == 2)
-					{
-						imageComponent.component.videoName = item.T_FloorMediaPicPath;
-					}
+					medias.addItem(new MediaVO(item));
 				}
-				
-				if(imageComponent.component.listMedia.length > 0)
-					sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_IMAGE,imageComponent.component);
+				else if(item.T_FloorMediaType == 2)
+				{
+					video = item.T_FloorMediaPicPath.replace("../",ConfigVO.BASE_URL);
+				}
 			}
+			
+			if(medias.length > 0)
+				sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_IMAGE,[video,medias]);
 		}
 	}
 }

@@ -21,7 +21,7 @@ package app.controller
 	
 	import spark.components.Label;
 		
-	public class LoadImageCommand extends SimpleCommand implements ICommand
+	public class LoadImageCommand_Old extends SimpleCommand implements ICommand
 	{
 		override public function execute(note:INotification):void
 		{			 					
