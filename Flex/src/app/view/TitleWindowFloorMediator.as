@@ -1,7 +1,6 @@
 package app.view
 {
 	import app.ApplicationFacade;
-	import app.controller.WebServiceCommand;
 	import app.model.BuildProxy;
 	import app.model.vo.ComponentVO;
 	import app.model.vo.FloorVO;
@@ -20,6 +19,7 @@ package app.view
 	
 	import mx.collections.ArrayCollection;
 	import mx.core.IFlexDisplayObject;
+	import mx.core.IVisualElement;
 	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
@@ -35,43 +35,30 @@ package app.view
 	{
 		public static const NAME:String = "TitleWindowFloorMediator";
 		
-		public function TitleWindowFloorMediator(viewComponent:Object=null)
+		public function TitleWindowFloorMediator()
 		{
-			super(NAME, viewComponent);
+			super(NAME, new TitleWindowFloor);
 			
-			titleWindowFloor.addEventListener(FlexEvent.CREATION_COMPLETE,onCreation);
-			titleWindowFloor.addEventListener(TitleWindowFloor.WIN_CLOSE,onClose);
+			titleWindowFloor.createDeferredContent();
+			
+			titleWindowFloor.addEventListener(Event.CLOSE,onClose);
 		}
 		
 		protected function get titleWindowFloor():TitleWindowFloor
 		{
 			return viewComponent as TitleWindowFloor;
 		}
-		
-		private function onCreation(event:FlexEvent):void
-		{
-			var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
-			for each(var component:ComponentVO in titleWindowFloor.floor.components)
-			{
-				var imageComponent:ImageComponent = new ImageComponent;
-				imageComponent.component = component;
 				
-				facade.registerMediator(new ImageComponentMediator("ImageComponentMediator" + component.componentID,imageComponent));
-								
-				titleWindowFloor.groupComponent.addElement(imageComponent);
-			}
-			
-			titleWindowFloor.initScales();
-		}
-		
 		private function onClose(event:Event):void
 		{
 			for each(var component:ComponentVO in titleWindowFloor.floor.components)
 			{
-				facade.removeMediator("ImageComponentMediator" + component.componentID);
+				var mediator:ImageComponentMediator = facade.retrieveMediator("ImageComponentMediator" + component.Id) as ImageComponentMediator;
+				
+				titleWindowFloor.groupFloor.removeElement(mediator.getViewComponent() as IVisualElement);
+				
+				facade.removeMediator("ImageComponentMediator" + component.Id);
 			}
-			
-			titleWindowFloor.groupComponent.removeAllElements();
 			
 			PopUpManager.removePopUp(titleWindowFloor);
 		}
@@ -89,10 +76,18 @@ package app.view
 			{
 				case ApplicationFacade.NOTIFY_TITLEWINDOW_FLOOR:
 					titleWindowFloor.floor = notification.getBody() as FloorVO;
+										
+					titleWindowFloor.initScales();
 					
-					if(titleWindowFloor.initialized)
+					for each(var component:ComponentVO in titleWindowFloor.floor.components)
 					{
-						onCreation(null);
+						var imageComponent:ImageComponent = new ImageComponent;
+						
+						imageComponent.component = component;
+						
+						facade.registerMediator(new ImageComponentMediator("ImageComponentMediator" + component.Id,imageComponent));
+						
+						titleWindowFloor.groupFloor.addElement(imageComponent);
 					}
 					break;
 			}

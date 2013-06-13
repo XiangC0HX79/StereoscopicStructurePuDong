@@ -3,38 +3,80 @@ package app.model.vo
 	import flash.display.Bitmap;
 	
 	import mx.collections.ArrayCollection;
+	import mx.utils.UIDUtil;
 
 	[Bindable]
 	public class ComponentVO
 	{		
-		public var componentID:String;
+		private var _source:*;
 		
-		public var componentName:String;
+		public var Id:String;
 		
-		public var componentBitmap:Bitmap;
+		public function get layer():LayerVO
+		{
+			switch(T_FloorDetailType)
+			{
+				case 1:
+					return LayerVO.EMERGENCYROUTE;
+					break;
+				
+				case 2:
+					return LayerVO.CONTROLROOM;
+					break;
+				
+				case 3:
+					return LayerVO.MONITOR;
+					break;
+				
+				case 4:
+					return LayerVO.ELEVATOR;
+					break;
+				
+				case 5:
+					return LayerVO.OTHERKEY;
+					break;
+			}
+			
+			return LayerVO.NONE;
+		}
 		
-		public var componentBitmapName:String;
+		public function get T_FloorDetailID():Number
+		{
+			return  _source.T_FloorDetailID;	
+		}
 		
-		public var type:Number;
+		public function get T_FloorPicID():Number
+		{
+			return  _source.T_FloorPicID;	
+		}
 		
-		public var xOffset:Number;
-		public var yOffset:Number;
+		public function get T_FloorDetailName():String
+		{
+			return  _source.T_FloorDetailName;	
+		}
 		
-		public var visible:Boolean;
-						
-		public var videoName:String = "";
+		public function get T_FloorDetailType():Number
+		{
+			return  _source.T_FloorDetailType;	
+		}
 		
-		public var listMedia:ArrayCollection = new ArrayCollection;
+		public function get T_FloorDetailX():Number
+		{
+			return  isNaN(_source.T_FloorDetailX)?0:_source.T_FloorDetailX;	
+		}
 		
+		public function get T_FloorDetailY():Number
+		{
+			return  isNaN(_source.T_FloorDetailY)?0:_source.T_FloorDetailY;	
+		}
+		
+		public var floorPic:FloorPicVO;
+												
 		public function ComponentVO(item:Object)
 		{
-			this.componentID = item.T_FloorDetailID;
-			this.componentName = item.T_FloorDetailName;
-			this.componentBitmapName = item.T_FloorPicimgPath;
-			this.xOffset = item.T_FloorDetailX;
-			this.yOffset = item.T_FloorDetailY;
+			_source = item;
 			
-			this.type = item.T_FloorDetailType;
+			Id = UIDUtil.createUID();	
 		}
 	}
 }

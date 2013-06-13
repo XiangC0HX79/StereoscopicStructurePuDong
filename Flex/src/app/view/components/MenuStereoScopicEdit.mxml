@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:mx="library://ns.adobe.com/flex/mx">
+	
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import app.model.vo.BuildVO;
+			import app.model.vo.FloorVO;
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
+			public static const FLOOR_CHANGE:String = "FloorChange";	
+			
+			public static const FLOOR_SCALE:String = "FloorScale";
+			public static const FLOOR_OFFSET:String = "FloorOffset";	
+			public static const FLOOR_ALPHA:String = "FloorAlpha";		
+			public static const FLOOR_ROTATION:String = "FloorRotation";	
+								
+			public static const FLOOR_SAVE:String = "FloorSave";	
+						
+			[Bindable]public var build:BuildVO;
+			
+			[Bindable]public var floor:FloorVO;
+									
+			protected function XOffset_changeHandler(event:Event):void
+			{
+				if(floor)
+				{
+					floor.edit = true;
+					
+					if(event.currentTarget is NumericStepper)
+					{
+						floor.T_FloorX = (event.currentTarget as NumericStepper).value;
+					}
+					else
+					{
+						floor.T_FloorX = (event.currentTarget as HSlider).value;					
+					}
+					
+					dispatchEvent(new Event(FLOOR_OFFSET));
+				}
+			}
+			
+			protected function YOffset_changeHandler(event:Event):void
+			{
+				if(floor)
+				{
+					floor.edit = true;
+					
+					if(event.currentTarget is NumericStepper)
+					{
+						floor.T_FloorY = (event.currentTarget as NumericStepper).value;
+					}
+					else
+					{
+						floor.T_FloorY = (event.currentTarget as HSlider).value;					
+					}
+					
+					dispatchEvent(new Event(FLOOR_OFFSET));
+				}
+			}
+			
+			protected function Scale_changeHandler(event:Event):void
+			{
+				if(floor)
+				{
+					floor.edit = true;
+					
+					if(event.currentTarget is NumericStepper)
+					{
+						floor.T_FloorScale = (event.currentTarget as NumericStepper).value;
+					}
+					else
+					{
+						floor.T_FloorScale = (event.currentTarget as HSlider).value;					
+					}
+					
+					dispatchEvent(new Event(FLOOR_SCALE));
+				}
+			}
+			
+			protected function YRotation_changeHandler(event:Event):void
+			{
+				if(floor != null)
+				{
+					floor.edit = true;
+					
+					if(event.currentTarget is NumericStepper)
+					{
+						floor.T_FloorYRotation = (event.currentTarget as NumericStepper).value;
+					}
+					else
+					{
+						floor.T_FloorYRotation = (event.currentTarget as HSlider).value;					
+					}
+										
+					dispatchEvent(new Event(FLOOR_ROTATION));
+				}
+			}
+			
+			protected function XRotation_changeHandler(event:Event):void
+			{
+				if(floor != null)
+				{
+					floor.edit = true;
+					
+					if(event.currentTarget is NumericStepper)
+					{
+						floor.T_FloorXRotation = (event.currentTarget as NumericStepper).value;
+					}
+					else
+					{
+						floor.T_FloorXRotation = (event.currentTarget as HSlider).value;					
+					}
+								
+					dispatchEvent(new Event(FLOOR_ROTATION));
+				}
+			}
+			
+			protected function ZRotation_changeHandler(event:Event):void
+			{
+				if(floor != null)
+				{
+					floor.edit = true;
+					
+					if(event.currentTarget is NumericStepper)
+					{
+						floor.T_FloorZRotation = (event.currentTarget as NumericStepper).value;
+					}
+					else
+					{
+						floor.T_FloorZRotation = (event.currentTarget as HSlider).value;					
+					}		
+					
+					dispatchEvent(new Event(FLOOR_ROTATION));
+				}
+			}
+			
+			protected function Alpha_changeHandler(event:Event):void
+			{				
+				if(floor != null)
+				{
+					floor.edit = true;
+					
+					if(event.currentTarget is NumericStepper)
+					{
+						floor.T_FloorAlpha = (event.currentTarget as NumericStepper).value;
+					}
+					else
+					{
+						floor.T_FloorAlpha = (event.currentTarget as HSlider).value;					
+					}
+					
+					dispatchEvent(new Event(FLOOR_ALPHA));
+				}
+			}			
+						
+			protected function listFloor_changingHandler(event:IndexChangeEvent):void
+			{
+				var of:FloorVO = build.floors[event.oldIndex];
+				var nf:FloorVO = build.floors[event.newIndex];
+				
+				if(!nf.T_FloorPosID && !nf.edit)
+				{
+					nf.T_FloorScale = of.T_FloorScale;
+					nf.T_FloorX = of.T_FloorX;
+					nf.T_FloorY = of.T_FloorY;
+					nf.T_FloorAlpha = of.T_FloorAlpha;
+					nf.T_FloorXRotation = of.T_FloorXRotation;
+					nf.T_FloorYRotation = of.T_FloorYRotation;
+					nf.T_FloorZRotation = of.T_FloorZRotation;
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Binding source="listFloor.selectedItem" destination="floor" twoWay="false"/>
+		
+	<s:VGroup width="175"
+			  horizontalAlign="center">
+		<s:HGroup verticalAlign="middle" width="100%">
+			<s:Label text="X偏移：" width="{labelScale.width}" color="0xFFFFFF"/>
+			<s:HSlider width="100%" minimum="{int(-build.BitmapWidth / 2)}" maximum="{int(build.BitmapWidth / 2)}" stepSize="1" dataTipPrecision="0" value="{floor.T_FloorX}"
+					   change="XOffset_changeHandler(event)"/>
+			<s:NumericStepper width="60" id="sliderXOffset" minimum="{int(-build.BitmapWidth / 2)}" maximum="{int(build.BitmapWidth / 2)}" stepSize="1" value="{floor.T_FloorX}"
+							  textInput="XOffset_changeHandler(event)" 
+							  change="XOffset_changeHandler(event)"/>
+		</s:HGroup>
+		<s:HGroup verticalAlign="middle" width="100%">
+			<s:Label text="Y偏移：" width="{labelScale.width}" color="0xFFFFFF"/>
+			<s:HSlider width="100%" minimum="{int(-build.BitmapHeight / 2)}" maximum="{int(build.BitmapHeight / 2)}" stepSize="1" dataTipPrecision="0" value="{floor.T_FloorY}"
+					   change="YOffset_changeHandler(event)"/>
+			<s:NumericStepper width="60" id="sliderYOffset" minimum="{int(-build.BitmapHeight / 2)}" maximum="{int(build.BitmapHeight / 2)}" stepSize="1" value="{floor.T_FloorY}"
+							  textInput="YOffset_changeHandler(event)"
+							  change="YOffset_changeHandler(event)"/>
+		</s:HGroup>
+		<s:HGroup verticalAlign="middle" width="100%">
+			<s:Label text="X轴旋转：" width="{labelScale.width}" color="0xFFFFFF"/>
+			<s:HSlider width="100%" minimum="0" maximum="360" stepSize="1" dataTipPrecision="0" value="{floor.T_FloorYRotation}"
+					   change="YRotation_changeHandler(event)"/>
+			<s:NumericStepper width="60" minimum="0" maximum="360" stepSize="1" value="{floor.T_FloorYRotation}"
+							  textInput="YRotation_changeHandler(event)"
+							  change="YRotation_changeHandler(event)"/>
+		</s:HGroup>
+		<s:HGroup verticalAlign="middle" width="100%">
+			<s:Label text="Y轴旋转：" width="{labelScale.width}" color="0xFFFFFF"/>
+			<s:HSlider width="100%" minimum="0" maximum="360" stepSize="1" dataTipPrecision="0" value="{floor.T_FloorXRotation}"
+					   change="XRotation_changeHandler(event)"/>
+			<s:NumericStepper width="60" minimum="0" maximum="360" stepSize="1" value="{floor.T_FloorXRotation}"
+							  textInput="XRotation_changeHandler(event)"
+							  change="XRotation_changeHandler(event)"/>
+		</s:HGroup>
+		<s:HGroup verticalAlign="middle" width="100%">
+			<s:Label text="Z轴旋转：" width="{labelScale.width}" color="0xFFFFFF"/>
+			<s:HSlider width="100%" minimum="0" maximum="360" stepSize="1" dataTipPrecision="0" value="{floor.T_FloorZRotation}"
+					   change="ZRotation_changeHandler(event)"/>
+			<s:NumericStepper width="60" minimum="0" maximum="360" stepSize="1" value="{floor.T_FloorZRotation}"
+							  textInput="ZRotation_changeHandler(event)"
+							  change="ZRotation_changeHandler(event)"/>
+		</s:HGroup>
+		<s:HGroup verticalAlign="middle" width="100%">
+			<s:Label text="透明度：" width="{labelScale.width}" color="0xFFFFFF"/>
+			<s:HSlider width="100%" minimum="0.0" maximum="1.0" stepSize="0.1" dataTipPrecision="1" value="{floor.T_FloorAlpha}"
+					   change="Alpha_changeHandler(event)"/>
+			<s:NumericStepper width="60" minimum="0.0" maximum="1.0" stepSize="0.1" value="{floor.T_FloorAlpha}"
+							  textInput="Alpha_changeHandler(event)"
+							  change="Alpha_changeHandler(event)"/>
+		</s:HGroup>
+		<s:HGroup verticalAlign="middle" width="100%">
+			<s:Label text="缩放比例：" id="labelScale" color="0xFFFFFF"/>
+			<s:HSlider width="100%" minimum="0.00" maximum="2.00" stepSize="0.01" value="{floor.T_FloorScale}"
+					   change="Scale_changeHandler(event)"/>
+			<s:NumericStepper width="60" id="sliderScale" minimum="0.00" maximum="2.00" stepSize="0.01" value="{floor.T_FloorScale}"
+							  textInput="Scale_changeHandler(event)"
+							  change="Scale_changeHandler(event)"/>
+		</s:HGroup>
+		<s:List id="listFloor" selectedIndex="0"
+				labelField="T_FloorName" 
+				width="100%" height="100%" 
+				dataProvider="{build.floors}" 
+				changing="listFloor_changingHandler(event)" 
+				change="dispatchEvent(new Event(FLOOR_CHANGE));"/>
+		<s:Button label="保存" buttonDown="dispatchEvent(new Event(FLOOR_SAVE));"/>
+	</s:VGroup>
+</s:VGroup>

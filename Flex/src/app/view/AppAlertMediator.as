@@ -61,7 +61,7 @@ package app.view
 						if(arr.length > 2)flags = arr[2];
 					}
 					
-					Alert.show(info,"上海司法鉴定信息管理系统",flags,null,closeHandle,ICON_INFO);
+					Alert.show(info,"反恐",flags,null,closeHandle,ICON_INFO);
 					break;
 				
 				case ApplicationFacade.NOTIFY_APP_ALERTALARM:
@@ -77,7 +77,7 @@ package app.view
 						if(arr.length > 2)flags = arr[2];
 					}
 					
-					Alert.show(info,"上海司法鉴定信息管理系统",flags,null,closeHandle,ICON_ALARM);
+					Alert.show(info,"反恐",flags,null,closeHandle,ICON_ALARM);
 					break;				
 				
 				case ApplicationFacade.NOTIFY_APP_ALERTERROR:
@@ -93,7 +93,7 @@ package app.view
 						if(arr.length > 2)flags = arr[2];
 					}
 					
-					Alert.show(info,"上海司法鉴定信息管理系统",flags,null,closeHandle,ICON_ERROR);
+					Alert.show(info,"反恐",flags,null,closeHandle,ICON_ERROR);
 					break;
 			}
 		}

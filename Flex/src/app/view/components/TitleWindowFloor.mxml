@@ -2,8 +2,7 @@
 <s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
 			   xmlns:mx="library://ns.adobe.com/flex/mx" 
-			   x="15" y="117" skinClass="skin.skinTitleWindowFloor"
-			   width="766" height="640">
+			   x="15" y="117">
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
@@ -12,11 +11,12 @@
 		<![CDATA[
 			import app.model.vo.FloorVO;
 			
-			public static const WIN_CLOSE:String = "win_close";
+			private static const W:Number = 700;
+			private static const H:Number = 500;
 			
 			[Bindable]public var floor:FloorVO;
 			
-			[Bindable]public var scales:Array = new Array(11);
+			[Bindable]private var scales:Array = new Array(11);
 			
 			[Bindable]public var contentScaleIndex:Number = 0;
 			
@@ -28,8 +28,11 @@
 			
 			public function initScales():void
 			{											
-				var contentScale:Number = Math.min((group.height)/source.height
-					,group.width/source.width);
+				var contentScale:Number = Math.min(
+					H / floor.BitmapHeight
+					,W / floor.BitmapWidth
+				);
+				
 				var maxScale:Number = Math.max(2,contentScale);
 				var minScale:Number = Math.min(1,contentScale);
 				
@@ -64,7 +67,7 @@
 			
 			private function setScale(scaleIndex:Number):void
 			{				
-				var zoomPoint:Point = new Point(group.width / 2,group.height / 2);
+				var zoomPoint:Point = new Point(W / 2,H / 2);
 				
 				var oldScale:Number = groupFloor.scaleX;
 				var newScale:Number = scales[scaleIndex];
@@ -77,9 +80,9 @@
 				var scaleW:Number = groupFloor.width * groupFloor.scaleX;
 				var scaleH:Number = groupFloor.height * groupFloor.scaleY;
 				
-				if(this.group.width >= scaleW)
+				if(W >= scaleW)
 				{
-					this.groupFloor.x = int((this.group.width - scaleW) / 2);
+					this.groupFloor.x = int((W - scaleW) / 2);
 				}
 				else if((this.groupFloor.x - zoomPoint.x)/oldScale*newScale + zoomPoint.x > 0)
 				{
@@ -91,9 +94,9 @@
 					this.groupFloor.x = (this.groupFloor.x - zoomPoint.x)/oldScale*newScale + zoomPoint.x ;
 				}
 				
-				if(this.group.height >= scaleH)
+				if(H >= scaleH)
 				{
-					this.groupFloor.y = int((this.group.height - scaleH) / 2);
+					this.groupFloor.y = int((H - scaleH) / 2);
 				}
 				else if((this.groupFloor.y - zoomPoint.y)/oldScale*newScale + zoomPoint.y > 0)
 				{
@@ -138,15 +141,15 @@
 					var imageW:Number = groupFloor.width * groupFloor.scaleX;
 					var imageH:Number = groupFloor.height * groupFloor.scaleY;
 					
-					if(this.group.width < imageW)
+					if(W < imageW)
 					{
 						if(tempPoint.x > 0)
 						{
 							groupFloor.x = 0;
 						}
-						else if(tempPoint.x < this.group.width - imageW)
+						else if(tempPoint.x < W - imageW)
 						{
-							groupFloor.x = this.group.width - imageW;
+							groupFloor.x = W - imageW;
 						}
 						else
 						{
@@ -154,15 +157,15 @@
 						}		
 					}
 					
-					if(this.group.height < imageH)
+					if(H < imageH)
 					{
 						if(tempPoint.y > 0)
 						{
 							groupFloor.y = 0;
 						}
-						else if(tempPoint.y < this.group.height - imageH)
+						else if(tempPoint.y < H - imageH)
 						{
-							groupFloor.y = this.group.height - imageH;
+							groupFloor.y = H - imageH;
 						}
 						else
 						{
@@ -177,21 +180,29 @@
 		]]>
 	</fx:Script>
 	
-	<s:Group width="100%" height="80">		
-		<s:Label verticalCenter="0" horizontalCenter="0" text="{floor.floorName}" color="0xFFFFFF" fontSize="30"/>
-		<s:Image verticalCenter="0" right="5" buttonMode="true" source="@Embed('assets/image/x.png')" click="dispatchEvent(new Event(WIN_CLOSE));"/>
-	</s:Group>
+	<s:Rect id="background" left="0" right="0" top="0" bottom="0">
+		<s:fill>
+			<s:BitmapFill id="bgFill" source="@Embed('assets/image/弹出平面图背景.png')" fillMode="scale"/>
+		</s:fill>
+	</s:Rect>
 	
-	<s:Group id="group" width="100%" height="100%"
-			 clipAndEnableScrolling="true">		
-		<s:Group id="groupFloor">
-			<s:Image id="source" source="{floor.floorBitmap}" 
-					 mouseMove="image_mouseMoveHandler(event)"
-					 mouseDown="image_mouseDownHandler(event)"/>
-			<s:Group id="groupComponent"/>				
+	<s:VGroup gap="0" paddingBottom="35" paddingLeft="35" paddingRight="35" paddingTop="0">		
+		<s:Group width="{W}" height="80">		
+			<s:Label verticalCenter="0" horizontalCenter="0" text="{floor.T_FloorName}" color="0xFFFFFF" fontSize="30"/>
+			<s:Image verticalCenter="0" right="5" buttonMode="true" source="@Embed('assets/image/x.png')" click="dispatchEvent(new Event(Event.CLOSE));"/>
 		</s:Group>
-		<s:Image top="30" right="30" buttonMode="true" source="@Embed('assets/image/1比1.png')" click="setScale(trueScaleIndex);"/>
-		<s:Image top="80" right="30" buttonMode="true" source="@Embed('assets/image/放大.png')" click="zoomin();"/>
-		<s:Image top="130" right="30" buttonMode="true" source="@Embed('assets/image/缩小.png')" click="zoomout();"/>
-	</s:Group>
+		
+		<s:Group width="{W}" height="{H}"
+				 clipAndEnableScrolling="true">		
+			<s:Group id="groupFloor" width="{floor.BitmapWidth}" height="{floor.BitmapHeight}">
+				<s:Image source="{floor.T_FloorPicPath}" 
+						 mouseMove="image_mouseMoveHandler(event)"
+						 mouseDown="image_mouseDownHandler(event)"/>
+			</s:Group>
+			
+			<s:Image top="30" right="30" buttonMode="true" source="@Embed('assets/image/1比1.png')" click="setScale(trueScaleIndex);"/>
+			<s:Image top="80" right="30" buttonMode="true" source="@Embed('assets/image/放大.png')" click="zoomin();"/>
+			<s:Image top="130" right="30" buttonMode="true" source="@Embed('assets/image/缩小.png')" click="zoomout();"/>
+		</s:Group>
+	</s:VGroup>
 </s:SkinnableContainer>

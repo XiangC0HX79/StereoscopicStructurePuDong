@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" autoDrawBackground="false">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+						
+			protected function togglebutton_changeHandler(event:Event):void
+			{
+				var button:ToggleButton = event.currentTarget as ToggleButton;
+				
+				data.LayerVisible = button.selected;
+				
+				dispatchEvent(new Event(Event.CHANGE,true));
+			}			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:ToggleButton skinClass="app.skin.skinSubMenuToggleButton" width="175" height="36"
+					label="{data.LayerName}" buttonMode="true" selected="{data.LayerVisible}"
+					change="togglebutton_changeHandler(event)"/>
+</s:ItemRenderer>

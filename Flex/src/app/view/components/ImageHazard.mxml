@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Image xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 buttonMode="true" x="{hazard.T_HazardX}" y="{hazard.T_HazardY}">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import app.model.vo.HazardVO;
+			[Embed(source="assets/image/eletric.png")]
+			private static const CLASS_ELETRIC:Class;
+			
+			[Embed(source="assets/image/gas.png")]
+			private static const CLASS_STATION:Class;
+			
+			[Embed(source="assets/image/can.png")]
+			private static const CLASS_OIL:Class;
+			
+			[Bindable]private var hazard:HazardVO;
+			public function set Hazard(value:HazardVO):void
+			{
+				hazard = value;
+				
+				if(hazard.T_HazardType == 1)
+				{
+					this.source = CLASS_ELETRIC;
+				}
+				else if(hazard.T_HazardType == 2)
+				{
+					this.source = CLASS_STATION;
+				}
+				else
+				{
+					this.source = CLASS_OIL;
+				}
+			}
+			public function get Hazard():HazardVO
+			{
+				return hazard;
+			}
+		]]>
+	</fx:Script>
+</s:Image>

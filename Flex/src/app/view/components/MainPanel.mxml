@@ -1,326 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 xmlns:subComponents="app.view.components.subComponents.*" creationComplete="creationCompleteHandler(event)">
-	<fx:Declarations>
-		<!-- 将非可视元素（例如服务、值对象）放在此处 -->	
-		<s:DateTimeFormatter id="dateFormatterTime" dateTimePattern="HH:mm"/>
-		<s:DateTimeFormatter id="dateFormatterDate" dateTimePattern="yyyy年MM月dd日"/>
-	</fx:Declarations>
-	
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
 	<fx:Script>
 		<![CDATA[
-			import app.AppEvent;
-			import app.model.vo.FloorVO;
+			import app.model.vo.BuildVO;
 			
-			import mx.core.UIComponent;
+			import flash.net.navigateToURL;
+			
+			import mx.binding.utils.ChangeWatcher;
+			import mx.core.IVisualElement;
 			import mx.events.FlexEvent;
+			import mx.events.ResizeEvent;
 			
-			import spark.events.IndexChangeEvent;
-			import spark.skins.spark.ImageSkin;
+			public static const SURROUNDING:String = "Surrounding";
+			public static const INFO:String = "Info";
+			public static const STEREOSCOPIC:String = "StereoScopic";
+			public static const EMERGENCY:String = "Emergency";
 			
-			public static const FLOORCHANGE:String = "floorchange";	
-			public static const FLOOROFFSET:String = "flooroffset";	
+			[Bindable]public var Build:BuildVO;
 			
-			public static const FLOORROTATION:String = "floorrotation";		
-			
-			public static const FLOORSAVE:String = "floorsave";	
-			
-			public static const GROUPMOVE:String = "GroupMove";	
-			public static const GROUPOUT:String = "GroupOut";	
-			
-			public static const MENUYJSX:String = "menuyjsx";
-			public static const MENUZKS:String = "menuyzks";
-			public static const MENUJKZX:String = "menujkzx";
-			public static const MENUDT:String = "menudt";
-			public static const MENUQT:String = "menuqt";
-			
-			[Bindable]public var xOffset:Number = 0;
-			[Bindable]public var yOffset:Number = 0;
-			[Bindable]public var yRotation:Number = 0;
-			[Bindable]public var xRotation:Number = 0;
-			[Bindable]public var zRotation:Number = 0;
-			[Bindable]public var floorAlpha:Number = 0.5;
-			[Bindable]public var floorScale:Number = 1;
-			[Bindable]public var scale:Number = 0.2;
-			
-			protected function creationCompleteHandler(event:FlexEvent):void
+			private var buttonIndex:Number = -1;
+			public function get ButtonIndex():Number
 			{
-				var timer:Timer = new Timer(1000);
-				timer.addEventListener(TimerEvent.TIMER,onTimer);
-				timer.start();
-				
-				labelDate.text = dateFormatterDate.format(new Date);
+				return buttonIndex;
 			}
 			
-			private function onTimer(event:TimerEvent):void
+			private function initMenu(button:Button):void
 			{
-				labelTime.text = dateFormatterTime.format(new Date); 
-			}
-			
-			protected function hslider1_changeHandler(event:Event):void
-			{
-				var hslider:HSlider = event.currentTarget as HSlider;
-				this.xOffset = hslider.value;
-				
-				dispatchEvent(new Event(FLOOROFFSET));
-			}
-			
-			protected function sliderXOffset_changeHandler(event:Event):void
-			{
-				var num:NumericStepper = event.currentTarget as NumericStepper;
-				this.xOffset = num.value;
-				
-				dispatchEvent(new Event(FLOOROFFSET));
-			}
-			
-			protected function hslider2_changeHandler(event:Event):void
-			{
-				var hslider:HSlider = event.currentTarget as HSlider;
-				this.yOffset = hslider.value;
-				
-				dispatchEvent(new Event(FLOOROFFSET));
-			}
-			
-			protected function sliderYOffset_changeHandler(event:Event):void
-			{
-				var num:NumericStepper = event.currentTarget as NumericStepper;
-				this.yOffset = num.value;
-				
-				dispatchEvent(new Event(FLOOROFFSET));
-			}
-			
-			/* protected function hslider3_changeHandler(event:Event):void
-			{
-				var hslider:HSlider = event.currentTarget as HSlider;
-				this.scale = hslider.value;
-				
-				dispatchEvent(new Event(FLOOROFFSET));
-			}
-			
-			protected function sliderScale_changeHandler(event:Event):void
-			{
-				var num:NumericStepper = event.currentTarget as NumericStepper;
-				this.scale = num.value;
-				
-				dispatchEvent(new Event(FLOOROFFSET));
-			} */
-			
-			protected function Scale_changeHandler(event:Event):void
-			{
-				var floor:FloorVO = listFloor.selectedItem as FloorVO;
-				
-				if(floor != null)
+				for(var i:Number = Menu.numElements - 1; i >= 0; i--)
 				{
-					if(event.currentTarget is NumericStepper)
+					var element:IVisualElement = Menu.getElementAt(i);
+					if(element is Button)
 					{
-						this.floorScale = (event.currentTarget as NumericStepper).value;
+						(element as Button).enabled = true;
 					}
 					else
 					{
-						this.floorScale = (event.currentTarget as HSlider).value;					
+						Menu.removeElement(element);
 					}
-					
-					floor.scale = this.floorScale;
-					
-					dispatchEvent(new Event(FLOORROTATION));
 				}
-			}
-			
-			protected function YRotation_changeHandler(event:Event):void
-			{
-				var floor:FloorVO = listFloor.selectedItem as FloorVO;
 				
-				if(floor != null)
-				{
-					if(event.currentTarget is NumericStepper)
-					{
-						this.yRotation = (event.currentTarget as NumericStepper).value;
-					}
-					else
-					{
-						this.yRotation = (event.currentTarget as HSlider).value;					
-					}
-					
-					floor.yRotation = this.yRotation;
-					
-					dispatchEvent(new Event(FLOORROTATION));
-				}
+				button.enabled = false;
+				
+				buttonIndex = Menu.getElementIndex(button);
 			}
 			
-			protected function XRotation_changeHandler(event:Event):void
+			protected function buttonStereoscopic_buttonDownHandler(event:FlexEvent):void
 			{
-				var floor:FloorVO = listFloor.selectedItem as FloorVO;
-					
-				if(floor != null)
-				{
-					if(event.currentTarget is NumericStepper)
-					{
-						this.xRotation = (event.currentTarget as NumericStepper).value;
-					}
-					else
-					{
-						this.xRotation = (event.currentTarget as HSlider).value;					
-					}
-					
-					floor.xRotation = this.xRotation;					
-					
-					dispatchEvent(new Event(FLOORROTATION));
-				}
+				var button:Button = event.currentTarget as Button;
+				
+				initMenu(button);
+				
+				dispatchEvent(new Event(STEREOSCOPIC));
+			}			
+			
+			protected function buttonInfo_buttonDownHandler(event:FlexEvent):void
+			{
+				var button:Button = event.currentTarget as Button;
+				
+				initMenu(button);
+				
+				dispatchEvent(new Event(INFO));
+			}
+			
+			protected function buttonSurrounding_buttonDownHandler(event:FlexEvent):void
+			{
+				var button:Button = event.currentTarget as Button;
+				
+				initMenu(button);
+				
+				dispatchEvent(new Event(SURROUNDING));
 			}
 						
-			protected function ZRotation_changeHandler(event:Event):void
+			protected function ContentGroup_creationCompleteHandler(event:FlexEvent):void
 			{
-				var floor:FloorVO = listFloor.selectedItem as FloorVO;
-				
-				if(floor != null)
-				{
-					if(event.currentTarget is NumericStepper)
-					{
-						this.zRotation = (event.currentTarget as NumericStepper).value;
-					}
-					else
-					{
-						this.zRotation = (event.currentTarget as HSlider).value;					
-					}
-					
-					floor.zRotation = this.zRotation;					
-					
-					dispatchEvent(new Event(FLOORROTATION));
-				}
+				ChangeWatcher.watch(ContentGroup,"contentWidth",contentResize);
+				ChangeWatcher.watch(ContentGroup,"contentHeight",contentResize);
 			}
 			
-			protected function Alpha_changeHandler(event:Event):void
+			private function contentResize(event:Event):void
 			{
-				var floor:FloorVO = listFloor.selectedItem as FloorVO;
-				
-				if(floor != null)
-				{
-					if(event.currentTarget is NumericStepper)
-					{
-						this.floorAlpha = (event.currentTarget as NumericStepper).value;
-					}
-					else
-					{
-						this.floorAlpha = (event.currentTarget as HSlider).value;					
-					}
-					
-					floor.alpha = this.floorAlpha;					
-					
-					dispatchEvent(new Event(FLOORROTATION));
-				}
+				ContentGroup.horizontalScrollPosition = (ContentGroup.contentWidth - ContentGroup.width) / 2;
+				ContentGroup.verticalScrollPosition = (ContentGroup.contentHeight - ContentGroup.height) / 2;
 			}
-			
-			protected function contentGroup_mouseMoveHandler(event:MouseEvent):void
-			{
-				var pt:Point = new Point;
-				if(event.target != contentGroup)
-				{
-					var imageFloor:ImageFloor = (event.target as ImageSkin).hostComponent as ImageFloor;
-					
-					var pointLocal:Point = contentGroup.globalToLocal(imageFloor.localToGlobal(new Point(event.localX,event.localY)));
-										
-					pt.x = pointLocal.x;
-					pt.y = pointLocal.y;
-				}
-				else
-				{
-					pt.x = event.localX;
-					pt.y = event.localY;					
-				}
-				
-				dispatchEvent(new AppEvent(GROUPMOVE,pt));
-			}			
-			
-			protected function contentGroup_MouseOutHandle(event:MouseEvent):void
-			{				
-				dispatchEvent(new Event(GROUPOUT));
-			}			
 		]]>
 	</fx:Script>
 	
-	<s:Image source="@Embed('assets/image/背景.png')" mouseEnabled="false"/>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
 	
-	<s:Group id="group" x="28" y="123" width="740" height="620" clipAndEnableScrolling="true">			
-		<s:Group id="image" x="{imageHSlider.value}" y="{imageVSlider.value}">
-			<s:Image id="imageBuild"/>
-			<s:Group id="contentGroup" mouseMove="contentGroup_mouseMoveHandler(event)" mouseOut="contentGroup_MouseOutHandle(event)">
-			</s:Group>
+	<s:Image source="@Embed('assets/image/背景.jpg')" mouseEnabled="false"/>
+	
+	<s:Scroller x="25" y="95" width="777" height="649">
+		<s:Group id="ContentGroup" creationComplete="ContentGroup_creationCompleteHandler(event)">
 		</s:Group>
-		
-		<s:HSlider id="imageHSlider" visible="false" y="-4" width="80%" height="20"
-				   horizontalCenter="0" maximum="0" showDataTip="false" stepSize="10"/>
-		<s:VSlider right="-4" width="20" visible="false" verticalCenter="0" id="imageVSlider" height="80%" showDataTip="false" maximum="0" stepSize="10"/>
-	</s:Group>
+	</s:Scroller>
+			
+	<s:VGroup x="830" y="100" id="Menu">
+		<s:Button label="周边环境" buttonMode="true"
+				  width="175" height="47" 
+				  skinClass="app.skin.skinMenuButton" buttonDown="buttonSurrounding_buttonDownHandler(event)"/>
+		<s:Button label="目标信息" buttonMode="true"
+				  width="175" height="47" 
+				  skinClass="app.skin.skinMenuButton" buttonDown="buttonInfo_buttonDownHandler(event)"/>
+		<s:Button label="通道信息" buttonMode="true"
+				  width="175" height="47" 
+				  skinClass="app.skin.skinMenuButton"/>
+		<s:Button label="内部信息" buttonMode="true"
+				  width="175" height="47" 
+				  skinClass="app.skin.skinMenuButton" buttonDown="buttonStereoscopic_buttonDownHandler(event)"/>
+		<s:Button label="应急预案" buttonMode="true" buttonDown="dispatchEvent(new Event(EMERGENCY))"
+				  width="175" height="47" visible="{Boolean(Build.TMB_EmergPath)}"
+				  skinClass="app.skin.skinMenuButton"/>
+	</s:VGroup>
 	
-	<s:Label id="labelTime" x="840" y="18" color="0xFFFFFF" fontSize="36"/>
-	<s:Label id="labelDate" x="815" y="60" color="0xFFFFFF" fontSize="20"/>
-	<s:VGroup x="810" y="130" gap="25">
-		<s:ToggleButton id="btnYJSX" skinClass="skin.skinMenuYJSX" buttonMode="true" change="dispatchEvent(new Event(MENUYJSX));"/>
-		<s:ToggleButton id="btnZKS" skinClass="skin.skinMenuZKS" buttonMode="true" change="dispatchEvent(new Event(MENUZKS));"/>
-		<s:ToggleButton id="btnJKZX" skinClass="skin.skinMenuJKZX" buttonMode="true" change="dispatchEvent(new Event(MENUJKZX));"/>
-		<s:ToggleButton id="btnDT" skinClass="skin.skinMenuDT" buttonMode="true" change="dispatchEvent(new Event(MENUDT));"/>
-		<s:ToggleButton id="btnQT" skinClass="skin.skinMenuQT" buttonMode="true" change="dispatchEvent(new Event(MENUQT));"/>		
-	</s:VGroup>
-	<s:VGroup id="groupEdit" gap="1" visible="false" width="230" height="100%" right="10" top="470" fontSize="12" horizontalAlign="center" paddingBottom="10">
-		<s:HGroup verticalAlign="middle" width="100%">
-			<s:Label text="X偏移：" width="{labelScale.width}" color="0xFFFFFF"/>
-			<s:HSlider width="100%" minimum="{-imageBuild.width / 2}" maximum="{imageBuild.width / 2}" stepSize="1" dataTipPrecision="0" value="{xOffset}"
-					   change="hslider1_changeHandler(event)"/>
-			<s:NumericStepper width="60" id="sliderXOffset" minimum="{-imageBuild.width / 2}" maximum="{imageBuild.width / 2}" stepSize="1" value="{xOffset}"
-							  textInput="sliderXOffset_changeHandler(event)" 
-							  change="sliderXOffset_changeHandler(event)"/>
-		</s:HGroup>
-		<s:HGroup verticalAlign="middle" width="100%">
-			<s:Label text="Y偏移：" width="{labelScale.width}" color="0xFFFFFF"/>
-			<s:HSlider width="100%" minimum="{-imageBuild.height / 2}" maximum="{imageBuild.height / 2}" stepSize="1" dataTipPrecision="0" value="{yOffset}"
-					   change="hslider2_changeHandler(event)"/>
-			<s:NumericStepper width="60" id="sliderYOffset" minimum="{-imageBuild.height / 2}" maximum="{imageBuild.height / 2}" stepSize="1" value="{yOffset}"
-							  textInput="sliderYOffset_changeHandler(event)"
-							  change="sliderYOffset_changeHandler(event)"/>
-		</s:HGroup>
-		<s:HGroup verticalAlign="middle" width="100%">
-			<s:Label text="X轴旋转：" width="{labelScale.width}" color="0xFFFFFF"/>
-			<s:HSlider width="100%" minimum="0" maximum="360" stepSize="1" dataTipPrecision="0" value="{yRotation}"
-					   change="YRotation_changeHandler(event)"/>
-			<s:NumericStepper width="60" minimum="0" maximum="360" stepSize="1" value="{yRotation}"
-							  textInput="YRotation_changeHandler(event)"
-							  change="YRotation_changeHandler(event)"/>
-		</s:HGroup>
-		<s:HGroup verticalAlign="middle" width="100%">
-			<s:Label text="Y轴旋转：" width="{labelScale.width}" color="0xFFFFFF"/>
-			<s:HSlider width="100%" minimum="0" maximum="360" stepSize="1" dataTipPrecision="0" value="{xRotation}"
-					   change="XRotation_changeHandler(event)"/>
-			<s:NumericStepper width="60" minimum="0" maximum="360" stepSize="1" value="{xRotation}"
-							  textInput="XRotation_changeHandler(event)"
-							  change="XRotation_changeHandler(event)"/>
-		</s:HGroup>
-		<s:HGroup verticalAlign="middle" width="100%">
-			<s:Label text="Z轴旋转：" width="{labelScale.width}" color="0xFFFFFF"/>
-			<s:HSlider width="100%" minimum="0" maximum="360" stepSize="1" dataTipPrecision="0" value="{zRotation}"
-					   change="ZRotation_changeHandler(event)"/>
-			<s:NumericStepper width="60" minimum="0" maximum="360" stepSize="1" value="{zRotation}"
-							  textInput="ZRotation_changeHandler(event)"
-							  change="ZRotation_changeHandler(event)"/>
-		</s:HGroup>
-		<s:HGroup verticalAlign="middle" width="100%">
-			<s:Label text="透明度：" width="{labelScale.width}" color="0xFFFFFF"/>
-			<s:HSlider width="100%" minimum="0.0" maximum="1.0" stepSize="0.1" dataTipPrecision="1" value="{floorAlpha}"
-					   change="Alpha_changeHandler(event)"/>
-			<s:NumericStepper width="60" minimum="0.0" maximum="1.0" stepSize="0.1" value="{floorAlpha}"
-							  textInput="Alpha_changeHandler(event)"
-							  change="Alpha_changeHandler(event)"/>
-		</s:HGroup>
-		<s:HGroup verticalAlign="middle" width="100%">
-			<s:Label text="缩放比例：" id="labelScale" color="0xFFFFFF"/>
-			<s:HSlider width="100%" minimum="0.00" maximum="2.00" stepSize="0.01" value="{scale}"
-					   change="Scale_changeHandler(event)"/>
-			<s:NumericStepper width="60" id="sliderScale" minimum="0.00" maximum="2.00" stepSize="0.01" value="{scale}"
-							  textInput="Scale_changeHandler(event)"
-							  change="Scale_changeHandler(event)"/>
-		</s:HGroup>
-		<s:List id="listFloor" labelField="floorName" width="100%" height="100%" change="dispatchEvent(new Event(FLOORCHANGE));"/>
-		<s:Button label="保存" buttonDown="dispatchEvent(new Event(FLOORSAVE));"/>
-	</s:VGroup>
+	<s:Label y="15" color="#F6FF00" fontFamily="隶书" fontSize="40" horizontalCenter="0" text="{Build.TMB_Name}"/>
 </s:Group>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
+	<s:states>
+		<s:State name="Normal"/>
+		<s:State name="Edit"/>
+	</s:states>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			public static const DEFAULT:String = "Default";
+			public static const FIREADD:String = "FireAdd";
+			public static const FIREDEL:String = "FireDel";
+			public static const SAVE:String = "Save";
+			
+			[Bindable]public var dp:ArrayCollection = new ArrayCollection;
+		]]>
+	</fx:Script>
+	
+	<s:DataGroup itemRenderer="app.renderer.rendererMenuLayer" dataProvider="{dp}">		
+		<s:layout>
+			<s:VerticalLayout/>
+		</s:layout>
+	</s:DataGroup>
+	
+	<s:HGroup horizontalAlign="center" includeIn="Edit" width="100%">
+		<s:Image source="@Embed('assets/image/default.png')" buttonMode="true" click="dispatchEvent(new Event(DEFAULT))"/>
+		<s:Image source="@Embed('assets/image/fire_add.png')" toolTip="添加消防栓" buttonMode="true" click="dispatchEvent(new Event(FIREADD))"/>
+		<s:Image source="@Embed('assets/image/fire_del.png')" toolTip="删除消防栓" buttonMode="true" click="dispatchEvent(new Event(FIREDEL))"/>
+		<s:Image source="@Embed('assets/image/btnSave.png')" toolTip="保存数据" buttonMode="true" click="dispatchEvent(new Event(SAVE))"/>
+	</s:HGroup>
+</s:VGroup>

@@ -11,8 +11,6 @@ package app.controller
 		{			
 			addSubCommand(ModelPreCommand);
 			addSubCommand(ViewPreCommand);
-			
-			addSubCommand(LocalConfigCommand);
 		}
 	}
 }
