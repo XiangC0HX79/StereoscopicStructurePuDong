@@ -32,7 +32,7 @@
 			 click="dispatchEvent(new Event(BUILDCLICK));">
 		<s:Ellipse left="0" right="0" bottom="0" top="0">
 			<s:fill>
-				<s:SolidColor color="0" alpha="0.5"/>
+				<s:SolidColor color="0" alpha="0.01"/>
 			</s:fill>
 		</s:Ellipse>
 	</s:Group>

@@ -1,7 +1,5 @@
 package app.model.vo
 {
-	import app.controller.WebServiceCommand;
-
 	[Bindable]
 	public class TrafficInfoVO
 	{

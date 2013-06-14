@@ -18,44 +18,45 @@ public partial class Download : Page
             var pimg = HttpUtility.UrlDecode(Request.Params["img"]);
             var ps = HttpUtility.UrlDecode(Request.Params["scale"]);
 
-            var rq = (HttpWebRequest)WebRequest.Create(pimg);
-            var rp = (HttpWebResponse)rq.GetResponse();
-            var s = rp.GetResponseStream();
+            var root = System.Web.HttpContext.Current.Request.Url.AbsoluteUri;
+            root = root.Substring(0, root.IndexOf("Download.aspx"));
 
-            if (s == null)
+            var index = pimg.IndexOf(root);
+            if (index != 0)
             {
                 Response.Write("图片不存在" + pimg);
+                Response.End();
             }
-            else
-            {
-                var oi = Image.FromStream(s);
 
-                var scale = ps == "NaN" ? Math.Min(1, Math.Min((Double)pw / (2 * oi.Width), (Double)ph / (oi.Height * 2))) : Convert.ToDouble(ps);
-                scale = Math.Round(scale * 100) / 100;
+            var u = pimg.Substring(root.Length);
 
-                var w = (int)(scale * oi.Width);
-                var h = (int)(scale * oi.Height);
-                var ni = oi.GetThumbnailImage(w, h, () => false, IntPtr.Zero); // 对原图片进行缩放 
+            var oi = Image.FromFile(Server.MapPath(u));
 
-                var sm = new MemoryStream();
-                ni.Save(sm, ImageFormat.Png);
-                sm.Position = 0;
-                
-                //以字符流的形式下载文件
-                var b = new byte[(int)sm.Length];
-                sm.Read(b, 0, b.Length);
-                sm.Close();
+            var scale = ps == "NaN" ? Math.Min(1, Math.Min((Double)pw / (2 * oi.Width), (Double)ph / (oi.Height * 2))) : Convert.ToDouble(ps);
+            scale = Math.Round(scale * 100) / 100;
 
-                Response.BinaryWrite(b); 
-                Response.Flush();
-                Response.Clear();
-            }
+            var w = (int)(scale * oi.Width);
+            var h = (int)(scale * oi.Height);
+            var ni = oi.GetThumbnailImage(w, h, () => false, IntPtr.Zero); // 对原图片进行缩放 
+
+            var sm = new MemoryStream();
+            ni.Save(sm, ImageFormat.Png);
+            sm.Position = 0;
+            
+            //以字符流的形式下载文件
+            var b = new byte[(int)sm.Length];
+            sm.Read(b, 0, b.Length);
+            sm.Close();
+
+            Response.BinaryWrite(b); 
+            Response.Flush();
+            Response.Clear();
+            Response.End();
         }
         catch (Exception ex)
         {
             Response.Write(ex.Message);
+            Response.End();
         }
-
-        Response.End();
     }
 }

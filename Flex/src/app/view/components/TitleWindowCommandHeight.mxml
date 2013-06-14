@@ -48,37 +48,37 @@
 			 skinClass="app.skin.skinErrorImage" 
 			 source="{commandingHeight.T_ComPicPath}"/>
 	
-	<s:HGroup width="100%">
+	<s:HGroup width="320">
 		<s:Label text="距目标建筑物直线距离："/>	
 		<s:Label text="{commandingHeight.TCH_LineLength}米" width="100%"/>		
 	</s:HGroup>
 	
-	<s:HGroup width="100%">
+	<s:HGroup width="320">
 		<s:Label text="地址："/>
 		<s:Label text="{commandingHeight.TCH_Address}" width="100%"/>		
 	</s:HGroup>
 	
-	<s:HGroup width="100%">
+	<s:HGroup width="320">
 		<s:Label text="制高点（建筑）层数："/>
 		<s:Label text="{commandingHeight.TCH_Layers}" width="100%"/>	
 	</s:HGroup>
 	
-	<s:HGroup width="100%">
+	<s:HGroup width="320">
 		<s:Label text="制高点功能："/>
 		<s:Label text="{commandingHeight.TCH_ComHeightFunc}" width="100%"/>	
 	</s:HGroup>
 	
-	<s:HGroup width="100%">
+	<s:HGroup width="320">
 		<s:Label text="最佳观察位置："/>
 		<s:Label text="{commandingHeight.TCH_bestobservation}" width="100%"/>	
 	</s:HGroup>
 	
-	<s:HGroup width="100%">
+	<s:HGroup width="320">
 		<s:Label text="入口途径："/>
 		<s:Label text="{commandingHeight.TCH_Entranceway}" width="100%"/>	
 	</s:HGroup>
 	
-	<s:HGroup width="100%">
+	<s:HGroup width="320">
 		<s:Label text="物业情况："/>
 		<s:Label text="{commandingHeight.TCH_Property}" width="100%"/>	
 	</s:HGroup>

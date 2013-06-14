@@ -99,7 +99,7 @@ package app.view
 						
 			for each(var component:ComponentVO in imageFloor.floor.components)
 			{
-				if(component.layer.LayerVisible)
+				if(component.layer.LayerVisible || ConfigVO.EDIT)
 				{
 					var matrix:Matrix = new Matrix(1,0,0,1,component.T_FloorDetailX,component.T_FloorDetailY);					
 					matrix.scale(imageFloor.floor.T_FloorScale,imageFloor.floor.T_FloorScale);

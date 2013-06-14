@@ -110,7 +110,7 @@ package app.view
 					if(build.T_RescueimgPath)
 						menuSurrounding.dp.addItem(LayerVO.RESCUE);
 					
-					if(build.FireHydrant.length > 0)
+					if((build.FireHydrant.length > 0) || ConfigVO.EDIT)
 						menuSurrounding.dp.addItem(LayerVO.FIRE);
 					
 					if(build.KeyUnits.length > 0)

@@ -3,6 +3,7 @@ package app.controller
 	import app.model.BuildProxy;
 	import app.model.ConfigProxy;
 	import app.model.IconsProxy;
+	import app.model.PassageProxy;
 	
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.command.SimpleCommand;
@@ -18,6 +19,8 @@ package app.controller
 			facade.registerProxy(new IconsProxy);	
 			
 			facade.registerProxy(new BuildProxy);	
+			
+			facade.registerProxy(new PassageProxy);	
 		}
 	}
 }

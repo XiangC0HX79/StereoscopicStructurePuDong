@@ -7,8 +7,6 @@ package app.model.vo
 		
 		public static var EDIT:Boolean;
 		
-		public function ConfigVO()
-		{
-		}
+		public static var TMB_ID:Number;
 	}
 }

@@ -69,6 +69,10 @@ package app.model
 					case "8":
 						load(url,onLoadIconScenting);
 						break;
+					
+					case "9":
+						load(url,onLoadIconImportExport);
+						break;
 				}
 			}
 		}
@@ -111,6 +115,13 @@ package app.model
 		private function onLoadIconScenting(bitmap:Bitmap):void
 		{			
 			icons.IconScenting = bitmap;
+			
+			onLoadBitmap();
+		}	
+		
+		private function onLoadIconImportExport(bitmap:Bitmap):void
+		{			
+			icons.IconImportExport = bitmap;
 			
 			onLoadBitmap();
 		}

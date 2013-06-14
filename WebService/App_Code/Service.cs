@@ -69,6 +69,11 @@ public class Service : WebService
         row["IconPath"] = "../Icon/Scenting.png";
         table.Rows.Add(row);
 
+        row = table.NewRow();
+        row["IconID"] = "9";
+        row["IconPath"] = "../Icon/ImportExport.png";
+        table.Rows.Add(row);
+
         return table;
     }
     
@@ -302,17 +307,50 @@ public class Service : WebService
     }
 
     [WebMethod]
+    public DataTable InitPassage(String tmbId)
+    {
+        var result = _clsGetData.GetTable("Select * FROM T_Passage where tmb_ID = " + tmbId);
+
+        return result;
+    }
+
+    [WebMethod]
+    public DataTable InitImportExport(String tmbId)
+    {
+        var result = _clsGetData.GetTable("Select * FROM T_ImportExport where tmb_ID = " + tmbId);
+
+        return result;
+    }
+
+    [WebMethod]
+    public DataTable InitImportExportPic(String tmbId)
+    {
+        var result = _clsGetData.GetTable("Select * FROM T_ImportExportPic where tmb_ID = " + tmbId);
+
+        return result;
+    }
+
+    [WebMethod]
     public String GetBitmapSize(String url)
     {
-        var rq = (HttpWebRequest)WebRequest.Create(url);
-        var rp = (HttpWebResponse)rq.GetResponse();
-        var s = rp.GetResponseStream();
-        if (s == null)
+        try
+        {
+            var root = System.Web.HttpContext.Current.Request.Url.AbsoluteUri;
+            root = root.Substring(0, root.IndexOf("Service.asmx"));
+
+            var index = url.IndexOf(root);
+            if (index != 0)
+            {
+                return "0 0";
+            }
+
+            var u = url.Substring(root.Length);
+            var img = Image.FromFile(Server.MapPath(u));
+            return img.Width + " " + img.Height;
+        }
+        catch
         {
             return "0 0";
         }
-
-        var img = Image.FromStream(s);
-        return img.Width + " " + img.Height;
     }
 }

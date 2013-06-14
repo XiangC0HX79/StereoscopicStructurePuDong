@@ -63,6 +63,8 @@ package app.model
 			
 			setData(new BuildVO(result[0]));
 			
+			ConfigVO.TMB_ID = build.TMB_ID;
+			
 			send("GetBitmapSize",onGetBuildBitmapSize,build.TMB_PicPath);
 		}
 				

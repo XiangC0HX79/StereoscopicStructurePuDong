@@ -25,6 +25,7 @@ package app.view
 			
 			mainPanel.addEventListener(MainPanel.SURROUNDING,onSurrounding);
 			mainPanel.addEventListener(MainPanel.INFO,onInfo);
+			mainPanel.addEventListener(MainPanel.PASSAGE,onPassage);
 			mainPanel.addEventListener(MainPanel.STEREOSCOPIC,onStereoScopic);
 			mainPanel.addEventListener(MainPanel.EMERGENCY,onEmergency);
 		}
@@ -53,6 +54,13 @@ package app.view
 		private function onInfo(event:Event):void
 		{
 			mainPanel.Menu.addElementAt(facade.retrieveMediator(MenuInfoMediator.NAME).getViewComponent() as IVisualElement,mainPanel.ButtonIndex + 1);
+		}
+		
+		private function onPassage(event:Event):void
+		{
+			mainPanel.Menu.addElementAt(facade.retrieveMediator(MenuPassageMediator.NAME).getViewComponent() as IVisualElement,mainPanel.ButtonIndex + 1);
+			
+			contentGroupAddElement(PanelPassageMediator.NAME);
 		}
 		
 		private function onStereoScopic(event:Event):void

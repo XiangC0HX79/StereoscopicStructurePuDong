@@ -22,6 +22,7 @@ package app
 		public static const NOTIFY_INIT_CONFIG:String		= "InitConfig";
 		public static const NOTIFY_INIT_ICONS:String		= "InitIcons";
 		public static const NOTIFY_INIT_BUILD:String		= "InitBuild";
+		public static const NOTIFY_INIT_PASSAGE:String		= "InitPassage";
 		
 		public static const NOTIFY_INIT_APP:String			= "InitApp";
 						
@@ -38,9 +39,17 @@ package app
 		public static const NOTIFY_TITLEWINDOW_SCENTING:String	= "TitleWindowScenting";
 		public static const NOTIFY_TITLEWINDOW_TATICS:String	= "TitleWindowTatics";
 		public static const NOTIFY_TITLEWINDOW_TATICALPOINT:String	= "TitleWindowTaticalPoint";
+		public static const NOTIFY_TITLEWINDOW_IMPORTEXPORTPIC:String	= "TitleWindowImportExportPic";
 		
 		public static const NOTIFY_MOVIE_POPUP:String		= "movie_popup";
-				
+		
+		public static const NOTIFY_MENU_PASSAGE_PLAN:String			= "MenuPassagePlan";
+		public static const NOTIFY_MENU_PASSAGE_UNDERGROUND:String	= "MenuPassageUnderGround";
+		public static const NOTIFY_MENU_PASSAGE_GROUND:String			= "MenuPassageGround";
+		public static const NOTIFY_MENU_PASSAGE_TOPFLOOR:String		= "MenuPassageTopFloor";
+		public static const NOTIFY_MENU_PASSAGE_FRESHAIR:String		= "MenuPassageFreshAir";
+		public static const NOTIFY_MENU_PASSAGE_SPECIAL:String		= "MenuPassageSpecial";
+		
 		public static const NOTIFY_FLOOR_UPDATE:String		= "FloorUpdate";		
 		public static const NOTIFY_FLOOR_FOCUS:String		= "floor_focus";
 		

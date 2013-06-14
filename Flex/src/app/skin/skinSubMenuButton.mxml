@@ -23,8 +23,7 @@
 <s:SparkButtonSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
              xmlns:s="library://ns.adobe.com/flex/spark" 
              xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
-             minWidth="21" minHeight="21" 
-             alpha.disabled="0.5">
+             minWidth="21" minHeight="21">
      
     <fx:Metadata>
         <![CDATA[ 
@@ -74,11 +73,15 @@
 	<s:Rect id="fill" left="1" right="1" top="1" bottom="1" radiusX="5">
 		<s:fill>
 			<s:SolidColor color="black" 
-						  alpha="0" alpha.over="0.5"/>
+						  alpha="0" 
+						  alpha.over="0.5"
+						  alpha.disabled="0.5"/>
 		</s:fill>
 	</s:Rect>
 	
-	<s:Image source="@Embed('assets/image/iconNormal.png')" source.over="@Embed('assets/image/iconSelected.png')"
+	<s:Image source="@Embed('assets/image/iconNormal.png')" 
+			 source.over="@Embed('assets/image/iconSelected.png')" 
+			 source.disabled="@Embed('assets/image/iconSelected.png')"
 			 left="15" verticalCenter="0"/>
 	
 	<!-- layer 8: text -->
@@ -89,7 +92,9 @@
 			 maxDisplayedLines="1"
 			 horizontalCenter="0" verticalCenter="1" 
 			 fontSize="16" 
-			 color="white" color.over="0xF6FF00" 
+			 color="white" 
+			 color.over="0xF6FF00" 
+			 color.disabled="0xF6FF00" 
 			 fontWeight="bold"
 			 left="50" right="10" top="2" bottom="2">
 	</s:Label>

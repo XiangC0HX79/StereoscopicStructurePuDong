@@ -1,6 +1,5 @@
 package app.model.vo
 {
-	import app.controller.WebServiceCommand;
 	import app.model.WebServiceProxy;
 	
 	import flash.display.Bitmap;

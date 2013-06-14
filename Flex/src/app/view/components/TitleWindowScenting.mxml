@@ -29,7 +29,7 @@
 			 skinClass="app.skin.skinErrorImage" 
 			 source="{Scenting.T_ScentingimgPath}"/>
 	
-	<s:HGroup width="100%">
+	<s:HGroup width="320">
 		<s:Label text="{Scenting.T_Scentingremark}" width="100%"/>		
 	</s:HGroup>
 </s:SkinnableContainer>

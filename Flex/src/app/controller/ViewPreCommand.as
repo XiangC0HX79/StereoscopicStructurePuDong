@@ -1,6 +1,7 @@
 package app.controller
 {	
 	import app.view.*;
+	import app.view.components.PanelPassage;
 	
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.command.SimpleCommand;
@@ -35,9 +36,11 @@ package app.controller
 			facade.registerMediator(new TitleWindowHazardMediator);
 			facade.registerMediator(new TitleWindowTaticsMediator);
 			facade.registerMediator(new TitleWindowTaticalPointMediator);
+			facade.registerMediator(new TitleWindowImportExportPicMediator);
 			
 			facade.registerMediator(new MenuSurroundingMediator);	
 			facade.registerMediator(new MenuInfoMediator);	
+			facade.registerMediator(new MenuPassageMediator);	
 			facade.registerMediator(new MenuStereoScopicStructureMediator);
 			facade.registerMediator(new MenuStereoScopicEditMediator);
 			
@@ -52,6 +55,7 @@ package app.controller
 			facade.registerMediator(new LayerScentingMediator);
 			
 			facade.registerMediator(new PanelSurroundingMediator);			
+			facade.registerMediator(new PanelPassageMediator);			
 			facade.registerMediator(new PanelStereoScopicStructureMediator);
 			
 			facade.registerMediator(new ApplicationMediator(application));	

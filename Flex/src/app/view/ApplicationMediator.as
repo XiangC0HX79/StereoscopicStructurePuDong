@@ -3,6 +3,7 @@ package app.view
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
 	import app.model.IconsProxy;
+	import app.model.PassageProxy;
 	import app.model.vo.ConfigVO;
 	import app.view.components.TitleWindowFloor;
 	import app.view.components.TitleWindowImage;
@@ -46,6 +47,7 @@ package app.view
 				ApplicationFacade.NOTIFY_INIT_CONFIG,
 				ApplicationFacade.NOTIFY_INIT_ICONS,
 				ApplicationFacade.NOTIFY_INIT_BUILD,
+				ApplicationFacade.NOTIFY_INIT_PASSAGE,
 				
 				ApplicationFacade.NOTIFY_TITLEWINDOW_FLOOR,
 				ApplicationFacade.NOTIFY_TITLEWINDOW_IMAGE,
@@ -59,7 +61,8 @@ package app.view
 				ApplicationFacade.NOTIFY_TITLEWINDOW_TRAFFIC,
 				ApplicationFacade.NOTIFY_TITLEWINDOW_HAZARD,
 				ApplicationFacade.NOTIFY_TITLEWINDOW_TATICS,
-				ApplicationFacade.NOTIFY_TITLEWINDOW_TATICALPOINT
+				ApplicationFacade.NOTIFY_TITLEWINDOW_TATICALPOINT,
+				ApplicationFacade.NOTIFY_TITLEWINDOW_IMPORTEXPORTPIC
 			];
 		}
 		
@@ -76,11 +79,17 @@ package app.view
 				
 				case ApplicationFacade.NOTIFY_INIT_ICONS:
 					var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
-					buildProxy.Init(application.parameters.build);
+					buildProxy.Init("上海环球金融中心 ");//application.parameters.build);
 					break;
 				
 				case ApplicationFacade.NOTIFY_INIT_BUILD:
-					sendNotification(ApplicationFacade.NOTIFY_INIT_APP,notification.getBody());
+					var passage:PassageProxy = facade.retrieveProxy(PassageProxy.NAME) as PassageProxy;
+					passage.Init();
+					break;
+				
+				case ApplicationFacade.NOTIFY_INIT_PASSAGE:
+					var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;					
+					sendNotification(ApplicationFacade.NOTIFY_INIT_APP,buildProxy.build);
 					break;
 				
 				case ApplicationFacade.NOTIFY_TITLEWINDOW_FLOOR:
@@ -149,6 +158,12 @@ package app.view
 				
 				case ApplicationFacade.NOTIFY_TITLEWINDOW_TATICALPOINT:
 					popup = facade.retrieveMediator(TitleWindowTaticalPointMediator.NAME).getViewComponent() as IFlexDisplayObject;
+					PopUpManager.addPopUp(popup,this.application,true);
+					PopUpManager.centerPopUp(popup);
+					break;
+				
+				case ApplicationFacade.NOTIFY_TITLEWINDOW_IMPORTEXPORTPIC:
+					popup = facade.retrieveMediator(TitleWindowImportExportPicMediator.NAME).getViewComponent() as IFlexDisplayObject;
 					PopUpManager.addPopUp(popup,this.application,true);
 					PopUpManager.centerPopUp(popup);
 					break;

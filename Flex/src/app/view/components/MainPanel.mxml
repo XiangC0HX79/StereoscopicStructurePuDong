@@ -15,6 +15,7 @@
 			
 			public static const SURROUNDING:String = "Surrounding";
 			public static const INFO:String = "Info";
+			public static const PASSAGE:String = "Passage";
 			public static const STEREOSCOPIC:String = "StereoScopic";
 			public static const EMERGENCY:String = "Emergency";
 			
@@ -63,6 +64,16 @@
 				
 				dispatchEvent(new Event(INFO));
 			}
+						
+			protected function buttonPassage_buttonDownHandler(event:FlexEvent):void
+			{
+				var button:Button = event.currentTarget as Button;
+				
+				initMenu(button);
+				
+				dispatchEvent(new Event(PASSAGE));
+				
+			}
 			
 			protected function buttonSurrounding_buttonDownHandler(event:FlexEvent):void
 			{
@@ -84,6 +95,7 @@
 				ContentGroup.horizontalScrollPosition = (ContentGroup.contentWidth - ContentGroup.width) / 2;
 				ContentGroup.verticalScrollPosition = (ContentGroup.contentHeight - ContentGroup.height) / 2;
 			}
+			
 		]]>
 	</fx:Script>
 	
@@ -107,7 +119,7 @@
 				  skinClass="app.skin.skinMenuButton" buttonDown="buttonInfo_buttonDownHandler(event)"/>
 		<s:Button label="通道信息" buttonMode="true"
 				  width="175" height="47" 
-				  skinClass="app.skin.skinMenuButton"/>
+				  skinClass="app.skin.skinMenuButton" buttonDown="buttonPassage_buttonDownHandler(event)"/>
 		<s:Button label="内部信息" buttonMode="true"
 				  width="175" height="47" 
 				  skinClass="app.skin.skinMenuButton" buttonDown="buttonStereoscopic_buttonDownHandler(event)"/>

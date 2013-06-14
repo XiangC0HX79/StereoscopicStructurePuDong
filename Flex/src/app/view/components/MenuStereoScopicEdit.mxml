@@ -245,7 +245,7 @@
 		</s:HGroup>
 		<s:List id="listFloor" selectedIndex="0"
 				labelField="T_FloorName" 
-				width="100%" height="100%" 
+				width="100%" height="150" 
 				dataProvider="{build.floors}" 
 				changing="listFloor_changingHandler(event)" 
 				change="dispatchEvent(new Event(FLOOR_CHANGE));"/>

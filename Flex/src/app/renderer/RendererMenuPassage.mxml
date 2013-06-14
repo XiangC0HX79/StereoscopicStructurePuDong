@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" autoDrawBackground="false">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+									
+			protected function button_buttonDownHandler(event:FlexEvent):void
+			{
+				dispatchEvent(new FlexEvent(FlexEvent.BUTTON_DOWN));
+				
+				btn.enabled = false;
+			}			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<s:Button id="btn" skinClass="app.skin.skinSubMenuButton" width="175" height="36"
+					label="{data}" buttonMode="true" 
+					buttonDown="button_buttonDownHandler(event)"/>
+</s:ItemRenderer>

@@ -20,6 +20,8 @@ package app.model.vo
 		
 		public var IconScenting:Bitmap;
 		
+		public var IconImportExport:Bitmap;
+		
 		public function IconsVO()
 		{
 		}

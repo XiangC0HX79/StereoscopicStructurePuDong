@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="777" height="649">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[		
+			import app.model.vo.PassageVO;
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			
+			import spark.events.IndexChangeEvent;
+						
+			public static const IMAGE_READY:String = "ImageReady";
+			
+			[Bindable]private var dp:ArrayCollection;
+			public function set Datapro(value:ArrayCollection):void
+			{
+				dp = value;
+				
+				psg = dp[0];
+			}
+			
+			[Bindable]public var psg:PassageVO;
+			
+			private function zoomin():void
+			{
+				groupPassage.scaleX += 0.1
+				groupPassage.scaleY += 0.1
+			}
+			
+			private function zoomout():void
+			{
+				groupPassage.scaleX -= 0.1
+				groupPassage.scaleY -= 0.1
+			}
+			
+			protected function sizeToTrue():void
+			{
+				groupPassage.scaleX = 1;
+				groupPassage.scaleY = 1;
+			}
+			
+			protected function sizeToContain():void
+			{
+				var s:Number = Math.min(scrollPassage.width / imagePassage.sourceWidth,scrollPassage.height / imagePassage.sourceHeight);
+				groupPassage.scaleX = s;
+				groupPassage.scaleY = s;
+			}
+						
+			protected function imagePassage_readyHandler(event:FlexEvent):void
+			{
+				sizeToContain();
+				
+				dispatchEvent(new Event(IMAGE_READY));
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Binding source="list.selectedItem" destination="psg" twoWay="true"/>
+	
+	<s:Rect left="0" right="0" top="0" bottom="0">
+		<s:fill>
+			<s:BitmapFill id="bgFill" source="@Embed('assets/image/弹出平面图背景.png')" fillMode="scale"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:List id="list" left="22" top="15" bottom="23" width="100" borderVisible="false" 
+			dataProvider="{dp}" 
+			labelField="T_PassageName"/>
+	
+	<s:Rect left="130" right="22" top="15" bottom="23">
+		<s:fill>
+			<s:SolidColor color="white"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:Scroller id="scrollPassage" left="130" right="22" top="15" bottom="23">	
+		<s:Group id="groupPassage">
+			<s:Image id="imagePassage" ready="imagePassage_readyHandler(event)" source="{psg.T_PassagePicPath}"/>
+			<s:Group id="groupImportExport"/>
+		</s:Group>
+	</s:Scroller>
+	
+	<s:VGroup y="30" right="50">
+		<s:Image buttonMode="true" source="@Embed('assets/image/1比1.png')" click="sizeToTrue();"/>
+		<s:Image buttonMode="true" source="@Embed('assets/image/1比1.png')" click="sizeToContain();"/>
+		<s:Image buttonMode="true" source="@Embed('assets/image/放大.png')" click="zoomin();"/>
+		<s:Image buttonMode="true" source="@Embed('assets/image/缩小.png')" click="zoomout();"/>		
+	</s:VGroup>
+</s:Group>

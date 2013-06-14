@@ -12,5 +12,5 @@
 		]]>
 	</fx:Script>
 	
-	<s:Image backgroundAlpha="0" mouseEnabled="false" source="{pic}"/>
+	<!--<s:Image backgroundAlpha="0" mouseEnabled="false" source="{pic}"/>-->
 </s:Group>
