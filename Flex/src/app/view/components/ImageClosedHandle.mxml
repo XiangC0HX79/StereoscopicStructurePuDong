@@ -11,9 +11,9 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import app.model.vo.ClosedhandleVO;
+			import app.model.vo.ClosedHandleVO;
 			
-			[Bindable]public var closedhandle:ClosedhandleVO;			
+			[Bindable]public var closedhandle:ClosedHandleVO;			
 		]]>
 	</fx:Script>
 </s:Image>

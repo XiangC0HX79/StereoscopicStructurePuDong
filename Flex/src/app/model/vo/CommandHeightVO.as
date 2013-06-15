@@ -4,6 +4,7 @@ package app.model.vo
 	
 	import flash.display.Bitmap;
 	import flash.events.Event;
+	import flash.utils.Dictionary;
 	
 	import mx.collections.ArrayCollection;
 
@@ -23,6 +24,8 @@ package app.model.vo
 		}
 		public function set TCH_X(value:Number):void
 		{
+			edit = true;
+			
 			_source.TCH_X = value;
 		}
 		
@@ -32,6 +35,8 @@ package app.model.vo
 		}
 		public function set TCH_Y(value:Number):void
 		{
+			edit = true;
+			
 			_source.TCH_Y = value;
 		}
 		
@@ -80,10 +85,14 @@ package app.model.vo
 			return _source.TCH_Property;
 		}
 				
-		public var pics:ArrayCollection;
+		public var pics:Dictionary;
+		
+		public var edit:Boolean = false;
 		
 		public function CommandHeightVO(value:Object)
 		{
+			pics = new Dictionary;
+			
 			_source = value;
 		}
 	}

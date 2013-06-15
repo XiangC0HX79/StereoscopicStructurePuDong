@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
-using System.Net;
 using System.Web.Services;
 
 using System.Data;
@@ -10,20 +9,26 @@ using System.Data;
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 public class Service : WebService
 {
-    private readonly ClsGetData _clsGetData;
+    private readonly ClassDatabaseOperator _databaseOperator;
 
     public Service()
     {
         //如果使用设计的组件，请取消注释以下行 
         //InitializeComponent(); 
 
-        _clsGetData = new ClsGetData("System.Data.SqlClient", System.Configuration.ConfigurationManager.AppSettings["CONSTR"]);
+        _databaseOperator = new ClassDatabaseOperator("System.Data.SqlClient", System.Configuration.ConfigurationManager.AppSettings["CONSTR"]);
     }
 
     [WebMethod]
     public string HelloWorld()
     {
         return "Hello World";
+    }
+
+    [WebMethod]
+    public DataTable Test()
+    {
+        return _databaseOperator.GetTable("Select * FROM sdaf");
     }
 
     [WebMethod]
@@ -55,6 +60,21 @@ public class Service : WebService
         table.Rows.Add(row);
 
         row = table.NewRow();
+        row["IconID"] = "41";
+        row["IconPath"] = "../Icon/eletric.png";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
+        row["IconID"] = "42";
+        row["IconPath"] = "../Icon/gas.png";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
+        row["IconID"] = "43";
+        row["IconPath"] = "../Icon/can.png";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
         row["IconID"] = "6";
         row["IconPath"] = "../Icon/FireHydrant.png";
         table.Rows.Add(row);
@@ -74,11 +94,16 @@ public class Service : WebService
         row["IconPath"] = "../Icon/ImportExport.png";
         table.Rows.Add(row);
 
+        row = table.NewRow();
+        row["IconID"] = "10";
+        row["IconPath"] = "../Icon/Video.png";
+        table.Rows.Add(row);
+
         return table;
     }
     
     [WebMethod]
-    public DataTable SaveSurrouding(String data)
+    public int SaveSurrouding(String data)
     {
         var sql = "";
         var tmbId = "";
@@ -114,9 +139,10 @@ public class Service : WebService
             }
         }
 
-        sql = "DELETE FROM T_FireHydrant WHERE TMB_ID = " + tmbId + ";" + sql;
+        if(tmbId != "")
+            sql = "DELETE FROM T_FireHydrant WHERE TMB_ID = " + tmbId + ";" + sql;
 
-        return _clsGetData.ExcuteNoQuery(sql);
+        return _databaseOperator.ExcuteNoQuery(sql);
     }
 
     [WebMethod]
@@ -127,7 +153,7 @@ public class Service : WebService
                      + "LEFT JOIN T_FireInformation ON T_MainBulid.TMB_ID = T_FireInformation.TMB_ID "
                      + "WHERE TMB_Name = '" + buildName + "'";
 
-        return _clsGetData.GetTable(sql);
+        return _databaseOperator.GetTable(sql);
     }
 
     [WebMethod]
@@ -139,41 +165,49 @@ public class Service : WebService
                      + "AND T_CommandingHeightsPIC.T_ComType = 1 "
                      + "WHERE T_CommandingHeights.TMB_ID = " + tmbId;
 
-        return _clsGetData.GetTable(sql);
+        return _databaseOperator.GetTable(sql);
     }
 
     [WebMethod]
-    public DataTable InitCommandingHeightsPic(String tchId)
+    public DataTable InitCommandingHeightsPic(String tmbId)
     {
-        var sql = "Select * FROM T_CommandingHeightsPIC WHERE TCH_ID = " + tchId + " AND T_ComType = 2";
+        var sql = "Select * FROM T_CommandingHeightsPIC WHERE TMB_ID = " + tmbId + " AND T_ComType = 2";
 
-        return _clsGetData.GetTable(sql);
+        return _databaseOperator.GetTable(sql);
     }
 
     [WebMethod]
-    public DataTable InitClosedhandles(String buildId)
+    public DataTable InitClosedhandles(String tmbId)
     {
-        var sql = "Select * FROM T_Closedhandles WHERE  TMB_ID =" + buildId;
+        var sql = "Select * FROM T_Closedhandles WHERE TMB_ID =" + tmbId;
 
-        return _clsGetData.GetTable(sql);
+        return _databaseOperator.GetTable(sql);
     }
 
     [WebMethod]
-    public DataTable InitClosedhandlesPic(String closedhandlesId)
+    public DataTable InitClosedhandlesPic(String tmbId)
     {
-        var sql = "Select * FROM T_ClosedhandlesPic Where T_ClosedhandlesID = " + closedhandlesId;
+        var sql = "Select * FROM T_ClosedhandlesPic Where TMB_ID = " + tmbId;
 
-        return _clsGetData.GetTable(sql);
+        return _databaseOperator.GetTable(sql);
     }
     
     [WebMethod]
     public DataTable InitTraffic(String tmbId)
     {
         var sql = "Select * FROM T_Traffic "
-                     + "LEFT JOIN T_TrafficPic ON T_Traffic.T_TrafficID = T_TrafficPic.T_TrafficID "
-                     + "WHERE T_Traffic.TMB_ID = " + tmbId;
+                     + "WHERE TMB_ID = " + tmbId;
 
-        return _clsGetData.GetTable(sql);
+        return _databaseOperator.GetTable(sql);
+    }
+
+    [WebMethod]
+    public DataTable InitTrafficPic(String tmbId)
+    {
+        var sql = "Select * FROM T_TrafficPic "
+                     + "WHERE TMB_ID = " + tmbId;
+
+        return _databaseOperator.GetTable(sql);
     }
     
     [WebMethod]
@@ -183,7 +217,7 @@ public class Service : WebService
                      + "LEFT JOIN T_HazardPic ON T_Hazard.T_HazardID = T_HazardPic.T_HazardID "
                      + "WHERE T_Hazard.TMB_ID = " + tmbId;
 
-        return _clsGetData.GetTable(sql);
+        return _databaseOperator.GetTable(sql);
     }
 
     [WebMethod]
@@ -192,7 +226,7 @@ public class Service : WebService
         var sql = "Select * FROM T_FireHydrant "
                      + "WHERE TMB_ID = " + tmbId;
 
-        return _clsGetData.GetTable(sql);
+        return _databaseOperator.GetTable(sql);
     }
 
     [WebMethod]
@@ -202,7 +236,7 @@ public class Service : WebService
                     + "LEFT JOIN T_KeyUnitsPic ON T_KeyUnits.T_KeyUnitsID = T_KeyUnitsPic.T_KeyUnitsID "
                     + "WHERE T_KeyUnits.TMB_ID = " + tmbId;
 
-        return _clsGetData.GetTable(sql);
+        return _databaseOperator.GetTable(sql);
     }
     
     [WebMethod]
@@ -212,12 +246,12 @@ public class Service : WebService
                      + "LEFT JOIN T_ScentingImg ON T_Scenting.T_ScentingID = T_ScentingImg.T_ScentingID "
                      + "WHERE T_Scenting.TMB_ID = " + tmbId;
 
-        var scenting = _clsGetData.GetTable(sql);
+        var scenting = _databaseOperator.GetTable(sql);
 
         sql = "Select * FROM T_ScentingImg "
                     + "WHERE TMB_ID = " + tmbId;
 
-        var img = _clsGetData.GetTable(sql);
+        var img = _databaseOperator.GetTable(sql);
 
         foreach (DataRow k in img.Rows)
         {
@@ -237,7 +271,7 @@ public class Service : WebService
     {
         var sql = "Select * FROM T_TacticalPoints WHERE TMB_ID = " + tmbId;
 
-        return _clsGetData.GetTable(sql);
+        return _databaseOperator.GetTable(sql);
     }
 
     [WebMethod]
@@ -246,7 +280,7 @@ public class Service : WebService
         var sql = "SELECT * FROM T_FloorPic " +
                   "WHERE TMB_ID = " + tmbId;
 
-        return _clsGetData.GetTable(sql);
+        return _databaseOperator.GetTable(sql);
     }
 
     [WebMethod]
@@ -257,11 +291,11 @@ public class Service : WebService
                   "WHERE T_Floor.TMB_ID = " + buildId + " " +
                   "ORDER BY T_Floor.T_Floorsque DESC";
 
-        return _clsGetData.GetTable(sql);
+        return _databaseOperator.GetTable(sql);
     }
 
     [WebMethod]
-    public DataTable SaveFloor(String buildId, String data)
+    public int SaveFloor(String buildId, String data)
     {
         var sql = "";
 
@@ -271,7 +305,7 @@ public class Service : WebService
             sql += "INSERT T_FloorPos (TMB_ID,T_FloorID,T_FloorScale,T_FloorX,T_FloorY,T_FloorXRotation,T_FloorYRotation,T_FloorZRotation,T_FloorAlpha) VALUES (" + buildId + "," + floorPos[0] + "," + floorPos[1] + "," + floorPos[2] + "," + floorPos[3] + "," + floorPos[4] + "," + floorPos[5] + "," + floorPos[6] + "," + floorPos[7] + ");";
         }
 
-        return _clsGetData.ExcuteNoQuery(sql);
+        return _databaseOperator.ExcuteNoQuery(sql);
     }
 
     [WebMethod]
@@ -280,7 +314,7 @@ public class Service : WebService
         var sql = "SELECT * FROM T_FloorDetail " +
                   "WHERE TMB_ID = " + buildId + 
                   " ORDER BY T_FloorDetailID DESC";
-        var result = _clsGetData.GetTable(sql);
+        var result = _databaseOperator.GetTable(sql);
 
         for (var i = result.Rows.Count - 1; i >= 0; i--)
         {
@@ -301,7 +335,7 @@ public class Service : WebService
     [WebMethod]
     public DataTable InitComponentMedia(String componentId)
     {
-        var result = _clsGetData.GetTable("SELECT * FROM T_FloorMedia WHERE T_FloorDetailID = " + componentId);
+        var result = _databaseOperator.GetTable("SELECT * FROM T_FloorMedia WHERE T_FloorDetailID = " + componentId);
 
         return result;
     }
@@ -309,7 +343,7 @@ public class Service : WebService
     [WebMethod]
     public DataTable InitPassage(String tmbId)
     {
-        var result = _clsGetData.GetTable("Select * FROM T_Passage where tmb_ID = " + tmbId);
+        var result = _databaseOperator.GetTable("Select * FROM T_Passage where tmb_ID = " + tmbId);
 
         return result;
     }
@@ -317,7 +351,7 @@ public class Service : WebService
     [WebMethod]
     public DataTable InitImportExport(String tmbId)
     {
-        var result = _clsGetData.GetTable("Select * FROM T_ImportExport where tmb_ID = " + tmbId);
+        var result = _databaseOperator.GetTable("Select * FROM T_ImportExport where tmb_ID = " + tmbId);
 
         return result;
     }
@@ -325,7 +359,15 @@ public class Service : WebService
     [WebMethod]
     public DataTable InitImportExportPic(String tmbId)
     {
-        var result = _clsGetData.GetTable("Select * FROM T_ImportExportPic where tmb_ID = " + tmbId);
+        var result = _databaseOperator.GetTable("Select * FROM T_ImportExportPic where tmb_ID = " + tmbId);
+
+        return result;
+    }
+
+    [WebMethod]
+    public DataTable InitVideo(String tmbId)
+    {
+        var result = _databaseOperator.GetTable("Select * FROM T_Video where tmb_ID = " + tmbId);
 
         return result;
     }
@@ -336,9 +378,9 @@ public class Service : WebService
         try
         {
             var root = System.Web.HttpContext.Current.Request.Url.AbsoluteUri;
-            root = root.Substring(0, root.IndexOf("Service.asmx"));
+            root = root.Substring(0, root.IndexOf("Service.asmx", StringComparison.Ordinal));
 
-            var index = url.IndexOf(root);
+            var index = url.IndexOf(root, StringComparison.Ordinal);
             if (index != 0)
             {
                 return "0 0";

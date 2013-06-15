@@ -17,13 +17,23 @@ package app.model.vo
 		{
 			return _source.T_FireHydrantID;
 		}
-				
+		
+		public function get TMB_ID():Number
+		{
+			return _source.TMB_ID;
+		}	
+		public function set TMB_ID(value:Number):void
+		{
+			_source.TMB_ID = value;
+		}
+		
 		public function get T_FireHydrantX():Number
 		{
 			return _source.T_FireHydrantX;
 		}		
 		public function set T_FireHydrantX(value:Number):void
 		{
+			edit = true;
 			_source.T_FireHydrantX = value;
 		}
 		
@@ -33,8 +43,11 @@ package app.model.vo
 		}		
 		public function set T_FireHydrantY(value:Number):void
 		{
+			edit = true;
 			_source.T_FireHydrantY = value;
 		}
+		
+		public var edit:Boolean = false;
 		
 		public function FireHydrantVO(value:*)
 		{

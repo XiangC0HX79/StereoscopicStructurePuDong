@@ -20,6 +20,8 @@ package app.model.vo
 		public static const ELEVATOR:LayerVO = new LayerVO(14,"电梯");
 		public static const OTHERKEY:LayerVO = new LayerVO(15,"其他重要部位");
 		
+		public static const VIDEO:LayerVO = new LayerVO(16,"视频点位");
+		
 		public var LayerID:Number;
 		
 		public var LayerName:String;

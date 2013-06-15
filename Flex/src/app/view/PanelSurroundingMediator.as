@@ -2,14 +2,15 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
+	import app.model.FireHydrantProxy;
 	import app.model.vo.BuildVO;
-	import app.model.vo.ClosedhandleVO;
+	import app.model.vo.ClosedHandleVO;
 	import app.model.vo.CommandHeightVO;
 	import app.model.vo.FireHydrantVO;
 	import app.model.vo.HazardVO;
 	import app.model.vo.KeyUnitVO;
 	import app.model.vo.ScentingVO;
-	import app.model.vo.TrafficInfoVO;
+	import app.model.vo.TrafficVO;
 	import app.view.components.PanelSurrounding;
 	
 	import flash.events.Event;
@@ -40,6 +41,8 @@ package app.view
 			super(NAME, new PanelSurrounding);
 			
 			panelSurrounding.addElement(facade.retrieveMediator(LayerClosedPicMediator.NAME).getViewComponent() as IVisualElement);
+			
+			panelSurrounding.addElement(facade.retrieveMediator(LayerScentingPicMediator.NAME).getViewComponent() as IVisualElement);
 			
 			panelSurrounding.addElement(facade.retrieveMediator(LayerDrawMediator.NAME).getViewComponent() as IVisualElement);			
 
@@ -105,13 +108,13 @@ package app.view
 			}
 			else if(e.dragSource.hasFormat("ClosedhandleVO"))
 			{
-				var closeHandle:ClosedhandleVO = e.dragSource.dataForFormat("ClosedhandleVO") as ClosedhandleVO;
+				var closeHandle:ClosedHandleVO = e.dragSource.dataForFormat("ClosedhandleVO") as ClosedHandleVO;
 				closeHandle.T_ClosedX = e.localX - sp.x + e.dragInitiator.width / 2;
 				closeHandle.T_ClosedY = e.localY - sp.y + e.dragInitiator.height / 2;						
 			}			
 			else if(e.dragSource.hasFormat("TrafficInfoVO"))
 			{
-				var ti:TrafficInfoVO = e.dragSource.dataForFormat("TrafficInfoVO") as TrafficInfoVO;
+				var ti:TrafficVO = e.dragSource.dataForFormat("TrafficInfoVO") as TrafficVO;
 				ti.T_TrafficX = e.localX - sp.x + e.dragInitiator.width / 2;
 				ti.T_TrafficY = e.localY - sp.y + e.dragInitiator.height / 2;						
 			}			
@@ -162,8 +165,8 @@ package app.view
 		{			
 			if(FireHydrantVO.Tool == FireHydrantVO.ADD)
 			{				
-				var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
-				buildProxy.AddFireHydrant(event.localX,event.localY);
+				var fireHydrantProxy:FireHydrantProxy = facade.retrieveProxy(FireHydrantProxy.NAME) as FireHydrantProxy;
+				fireHydrantProxy.AddFireHydrant(event.localX,event.localY);
 			}
 		}
 		

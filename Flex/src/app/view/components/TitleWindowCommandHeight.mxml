@@ -2,7 +2,7 @@
 <s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
 			   xmlns:mx="library://ns.adobe.com/flex/mx" 
-			   x="15" y="117" skinClass="app.skin.skinTitleWindowFloor"
+			   x="25" y="95" skinClass="app.skin.skinTitleWindowFloor"
 			   color="0xFFFFFF" fontSize="15" fontWeight="bold">
 	<s:states>
 		<s:State name="Image"/>
@@ -21,17 +21,7 @@
 			
 			public static const IMAGELIST:String = "ImageList";
 			
-			[Bindable]private var commandingHeight:CommandHeightVO;
-			public function set CommandingHeight(value:CommandHeightVO):void
-			{
-				commandingHeight = value;
-				
-				this.currentState = (commandingHeight.pics.length > 0)?"Image":"NoImage";
-			}
-			public function get CommandingHeight():CommandHeightVO
-			{
-				return commandingHeight;
-			}			
+			[Bindable]public var commandingHeight:CommandHeightVO;
 		]]>
 	</fx:Script>
 	

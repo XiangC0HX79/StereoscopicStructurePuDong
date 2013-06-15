@@ -10,37 +10,8 @@
 	<fx:Script>
 		<![CDATA[
 			import app.model.vo.HazardVO;
-			[Embed(source="assets/image/eletric.png")]
-			private static const CLASS_ELETRIC:Class;
 			
-			[Embed(source="assets/image/gas.png")]
-			private static const CLASS_STATION:Class;
-			
-			[Embed(source="assets/image/can.png")]
-			private static const CLASS_OIL:Class;
-			
-			[Bindable]private var hazard:HazardVO;
-			public function set Hazard(value:HazardVO):void
-			{
-				hazard = value;
-				
-				if(hazard.T_HazardType == 1)
-				{
-					this.source = CLASS_ELETRIC;
-				}
-				else if(hazard.T_HazardType == 2)
-				{
-					this.source = CLASS_STATION;
-				}
-				else
-				{
-					this.source = CLASS_OIL;
-				}
-			}
-			public function get Hazard():HazardVO
-			{
-				return hazard;
-			}
+			[Bindable]public var hazard:HazardVO;
 		]]>
 	</fx:Script>
 </s:Image>

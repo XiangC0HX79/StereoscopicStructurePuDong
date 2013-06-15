@@ -3,9 +3,11 @@ package app.view
 	import app.ApplicationFacade;
 	import app.model.IconsProxy;
 	import app.model.vo.BuildVO;
-	import app.model.vo.ClosedhandleVO;
+	import app.model.vo.ClosedHandleVO;
 	import app.model.vo.ConfigVO;
 	import app.view.components.ImageClosedHandle;
+	
+	import com.adobe.utils.DictionaryUtil;
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -21,11 +23,13 @@ package app.view
 	
 	public class ImageClosedHandleMediator extends Mediator implements IMediator
 	{
-		public function ImageClosedHandleMediator(mediatorName:String=null, viewComponent:Object=null)
+		public static const NAME:String = "ImageClosedHandleMediator";
+		
+		public function ImageClosedHandleMediator(ch:ClosedHandleVO)
 		{
-			super(mediatorName, viewComponent);
-						
-			if(imageClosedHandle.closedhandle.pics.length > 0)
+			super(NAME + ch.T_ClosedhandlesID, new ImageClosedHandle);
+				
+			if(DictionaryUtil.getKeys(ch.pics).length > 0)
 			{
 				imageClosedHandle.buttonMode = true;
 				imageClosedHandle.addEventListener(MouseEvent.CLICK,onClick);
@@ -38,6 +42,8 @@ package app.view
 			
 			var iconsProxy:IconsProxy = facade.retrieveProxy(IconsProxy.NAME) as IconsProxy;
 			imageClosedHandle.source = iconsProxy.icons.IconCloseHandle;
+			
+			imageClosedHandle.closedhandle = ch;
 		}
 		
 		protected function get imageClosedHandle():ImageClosedHandle
@@ -47,7 +53,7 @@ package app.view
 		
 		private function onClick(event:Event):void
 		{				
-			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_CLOSED_IMGLST,imageClosedHandle.closedhandle.pics);
+			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_MEDIA,imageClosedHandle.closedhandle.pics);
 		}
 		
 		private function onDragStart(e:MouseEvent):void

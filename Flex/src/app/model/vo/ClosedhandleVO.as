@@ -1,11 +1,12 @@
 package app.model.vo
 {
 	import flash.events.Event;
+	import flash.utils.Dictionary;
 	
 	import mx.collections.ArrayCollection;
 
 	[Bindable]
-	public class ClosedhandleVO
+	public class ClosedHandleVO
 	{
 		private var source:Object;
 		
@@ -25,6 +26,7 @@ package app.model.vo
 		}
 		public function set T_ClosedX(value:Number):void
 		{
+			edit = true;
 			source.T_ClosedX = value;
 		}
 		
@@ -34,13 +36,18 @@ package app.model.vo
 		}
 		public function set T_ClosedY(value:Number):void
 		{
+			edit = true;
 			source.T_ClosedY = value;
 		}
 		
-		public var pics:ArrayCollection;
+		public var pics:Dictionary;
 		
-		public function ClosedhandleVO(value:Object)
+		public var edit:Boolean = false;
+		
+		public function ClosedHandleVO(value:Object)
 		{
+			pics = new Dictionary;
+			
 			source = value;
 		}
 	}

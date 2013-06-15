@@ -31,6 +31,7 @@ package app.model.vo
 		}		
 		public function set T_KeyUnitsX(value:Number):void
 		{
+			edit = true;
 			source.T_KeyUnitsX = value;
 		}
 		
@@ -40,6 +41,7 @@ package app.model.vo
 		}	
 		public function set T_KeyUnitsY(value:Number):void
 		{
+			edit = true;
 			source.T_KeyUnitsY = value;
 		}
 		
@@ -47,6 +49,8 @@ package app.model.vo
 		{
 			return  source.T_KeyUnitsPicimgPath.replace("../",ConfigVO.BASE_URL);	
 		}
+		
+		public var edit:Boolean = false;
 		
 		public function KeyUnitVO(value:Object)
 		{

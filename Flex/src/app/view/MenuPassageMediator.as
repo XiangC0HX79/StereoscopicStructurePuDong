@@ -3,9 +3,13 @@ package app.view
 	import app.ApplicationFacade;
 	import app.model.PassageProxy;
 	import app.model.vo.ConfigVO;
+	import app.model.vo.LayerVO;
+	import app.model.vo.VideoVO;
 	import app.view.components.MenuPassage;
 	
 	import flash.events.Event;
+	
+	import mx.managers.CursorManager;
 	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
@@ -25,6 +29,11 @@ package app.view
 			menuPassage.addEventListener(MenuPassage.TOPFLOOR,onTopFloor);		
 			menuPassage.addEventListener(MenuPassage.FRESHAIR,onFreshAir);		
 			menuPassage.addEventListener(MenuPassage.SPECIAL,onSpecail);
+			
+			menuPassage.addEventListener(MenuPassage.DEFAULT,onDefault);
+			menuPassage.addEventListener(MenuPassage.SAVE,onSave);
+			menuPassage.addEventListener(MenuPassage.VIDEOADD,onVideoAdd);
+			menuPassage.addEventListener(MenuPassage.VIDEODEL,onVideoDel);
 		}
 		
 		protected function get menuPassage():MenuPassage
@@ -60,6 +69,31 @@ package app.view
 		private function onSpecail(event:Event):void
 		{
 			sendNotification(ApplicationFacade.NOTIFY_MENU_PASSAGE_SPECIAL);
+		}
+		
+		private function onDefault(event:Event):void
+		{
+			VideoVO.Tool = VideoVO.MOVE;
+			CursorManager.removeAllCursors();
+		}
+		
+		private function onVideoAdd(event:Event):void
+		{
+			VideoVO.Tool = VideoVO.ADD;
+			
+			LayerVO.VIDEO.LayerVisible = true;
+		}
+		
+		private function onVideoDel(event:Event):void
+		{
+			VideoVO.Tool = VideoVO.DEL;
+			
+			LayerVO.VIDEO.LayerVisible = true;
+		}
+		
+		private function onSave(event:Event):void
+		{
+			
 		}
 		
 		override public function listNotificationInterests():Array

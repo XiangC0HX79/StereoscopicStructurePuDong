@@ -1,35 +1,45 @@
 package app.model.vo
-{	
-	import app.model.WebServiceProxy;
+{
+	import org.osmf.media.MediaType;
 	
-	import flash.display.Bitmap;
-	import flash.geom.Point;
-	
-	import mx.collections.ArrayCollection;
-
 	[Bindable]
-	public class CommandHeightPicVO
+	public class CommandHeightPicVO implements IMediaVO
 	{
-		private var source:Object;
+		private var _source:*;
 		
-		public function get T_ComTitle():String
+		public function CommandHeightPicVO(source:*)
 		{
-			return source.T_ComTitle;
+			_source = source;
 		}
 		
-		public function get T_ComRemark():String
+		public function get mediaID():Number
 		{
-			return source.T_ComRemark;
+			return _source.T_ComID;
 		}
 		
-		public function get T_ComPicPath():String
+		public function get containerID():Number
 		{
-			return  source.T_ComPicPath.replace("../",ConfigVO.BASE_URL);	
+			return _source.TCH_ID;
 		}
 		
-		public function CommandHeightPicVO(value:Object)
+		public function get mediaTitle():String
 		{
-			source = value;
+			return _source.T_ComTitle;
+		}
+		
+		public function get mediaRemark():String
+		{
+			return _source.T_ComRemark;
+		}
+		
+		public function get mediaPath():String
+		{
+			return  _source.T_ComPicPath?_source.T_ComPicPath.replace("../",ConfigVO.BASE_URL):"";	
+		}
+		
+		public function get mediaType():String
+		{
+			return MediaType.IMAGE;
 		}
 	}
 }

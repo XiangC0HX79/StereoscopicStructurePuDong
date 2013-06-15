@@ -6,30 +6,47 @@ package app.model.vo
 	import flash.geom.Point;
 	
 	import mx.collections.ArrayCollection;
+	
+	import org.osmf.media.MediaType;
 
 	[Bindable]
-	public class ClosedHandlePicVO
+	public class ClosedHandlePicVO implements IMediaVO
 	{
-		private var source:Object;
+		private var _source:Object;
 		
-		public function get T_ClosedhandlesPicTitle():String
+		public function ClosedHandlePicVO(source:Object)
 		{
-			return source.T_ClosedhandlesPicTitle;
+			_source = source;
 		}
 		
-		public function get T_ClosedhandlesPicRremark():String
+		public function get mediaID():Number
 		{
-			return source.T_ClosedhandlesPicRremark;
+			return _source.T_ClosedhandlesPicID;
 		}
 		
-		public function get T_ClosedhandlesPicimgPath():String
+		public function get containerID():Number
 		{
-			return  source.T_ClosedhandlesPicimgPath.replace("../",ConfigVO.BASE_URL);	
+			return _source.T_ClosedhandlesID;
 		}
 		
-		public function ClosedHandlePicVO(value:Object)
+		public function get mediaTitle():String
 		{
-			source = value;
+			return _source.T_ClosedhandlesPicTitle;
+		}
+		
+		public function get mediaRemark():String
+		{
+			return _source.T_ClosedhandlesPicRremark;
+		}
+		
+		public function get mediaPath():String
+		{
+			return  _source.T_ClosedhandlesPicimgPath?_source.T_ClosedhandlesPicimgPath.replace("../",ConfigVO.BASE_URL):"";	
+		}
+		
+		public function get mediaType():String
+		{
+			return MediaType.IMAGE;
 		}
 	}
 }

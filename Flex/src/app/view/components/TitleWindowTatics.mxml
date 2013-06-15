@@ -12,11 +12,19 @@
 		<![CDATA[									
 			import app.model.vo.BuildVO;
 			
+			import mx.collections.ArrayCollection;
+			
 			public static const COMMUNICATE:String = "Communicate";
 			public static const CABLEDROP:String = "Cabledrop";
 			public static const LANDING:String = "Landing";
 			public static const WINDOWS:String = "Windows";
 			public static const INTERNALHIGH:String = "Internalhigh";
+			
+			[Bindable]public var Communicate:ArrayCollection = new ArrayCollection;
+			[Bindable]public var Cabledrop:ArrayCollection = new ArrayCollection;
+			[Bindable]public var Landing:ArrayCollection = new ArrayCollection;
+			[Bindable]public var Windows:ArrayCollection = new ArrayCollection;
+			[Bindable]public var Internalhigh:ArrayCollection = new ArrayCollection;
 			
 			[Bindable]public var Build:BuildVO;
 		]]>
@@ -33,7 +41,7 @@
 		
 	<s:HGroup width="100%" verticalAlign="middle">
 		<s:Label text="通信条件："/>	
-		<s:Image source="@Embed('assets/image/Imglst.png')" buttonMode="true" width="30" height="30" visible="{Build.Communicate.length > 0}"
+		<s:Image source="@Embed('assets/image/Imglst.png')" buttonMode="true" width="30" height="30" visible="{Communicate.length > 0}"
 				 click="dispatchEvent(new Event(COMMUNICATE))"/>
 	</s:HGroup>
 	
@@ -43,7 +51,7 @@
 	
 	<s:HGroup width="100%" verticalAlign="middle">
 		<s:Label text="索降条件："/>	
-		<s:Image source="@Embed('assets/image/Imglst.png')" buttonMode="true" width="30" height="30" visible="{Build.Cabledrop.length > 0}"
+		<s:Image source="@Embed('assets/image/Imglst.png')" buttonMode="true" width="30" height="30" visible="{Cabledrop.length > 0}"
 				 click="dispatchEvent(new Event(CABLEDROP))"/>
 	</s:HGroup>
 	
@@ -53,7 +61,7 @@
 	
 	<s:HGroup width="100%" verticalAlign="middle">
 		<s:Label text="机降条件："/>	
-		<s:Image source="@Embed('assets/image/Imglst.png')" buttonMode="true" width="30" height="30" visible="{Build.Landing.length > 0}"
+		<s:Image source="@Embed('assets/image/Imglst.png')" buttonMode="true" width="30" height="30" visible="{Landing.length > 0}"
 				 click="dispatchEvent(new Event(LANDING))"/>
 	</s:HGroup>
 	
@@ -63,7 +71,7 @@
 	
 	<s:HGroup width="100%" verticalAlign="middle">
 		<s:Label text="门窗信息："/>	
-		<s:Image source="@Embed('assets/image/Imglst.png')" buttonMode="true" width="30" height="30" visible="{Build.Windows.length > 0}"
+		<s:Image source="@Embed('assets/image/Imglst.png')" buttonMode="true" width="30" height="30" visible="{Windows.length > 0}"
 				 click="dispatchEvent(new Event(WINDOWS))"/>
 	</s:HGroup>
 	
@@ -73,7 +81,7 @@
 	
 	<s:HGroup width="100%" verticalAlign="middle">
 		<s:Label text="内部制高点："/>	
-		<s:Image source="@Embed('assets/image/Imglst.png')" buttonMode="true" width="30" height="30" visible="{Build.Internalhigh.length > 0}"
+		<s:Image source="@Embed('assets/image/Imglst.png')" buttonMode="true" width="30" height="30" visible="{Internalhigh.length > 0}"
 				 click="dispatchEvent(new Event(INTERNALHIGH))"/>
 	</s:HGroup>
 	

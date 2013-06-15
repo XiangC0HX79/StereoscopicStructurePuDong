@@ -5,12 +5,4 @@
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
-	
-	<fx:Script>
-		<![CDATA[
-			[Bindable]public var pic:String;
-		]]>
-	</fx:Script>
-	
-	<!--<s:Image backgroundAlpha="0" mouseEnabled="false" source="{pic}"/>-->
 </s:Group>

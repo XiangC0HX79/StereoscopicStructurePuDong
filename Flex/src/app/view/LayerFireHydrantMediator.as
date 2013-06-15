@@ -32,7 +32,7 @@ package app.view
 		override public function listNotificationInterests():Array
 		{
 			return [
-				ApplicationFacade.NOTIFY_INIT_APP,
+				ApplicationFacade.NOTIFY_INIT_FIREHYDRANT,
 				
 				ApplicationFacade.NOTIFY_FIRE_ADD,
 				ApplicationFacade.NOTIFY_FIRE_DEL
@@ -43,8 +43,8 @@ package app.view
 		{
 			switch(notification.getName())
 			{
-				case ApplicationFacade.NOTIFY_INIT_APP:				
-					for each(var i:FireHydrantVO in (notification.getBody() as BuildVO).FireHydrant)
+				case ApplicationFacade.NOTIFY_INIT_FIREHYDRANT:				
+					for each(var i:FireHydrantVO in notification.getBody())
 						addFire(i);
 					
 					BindingUtils.bindProperty(layerFireHydrant,"visible",LayerVO.FIRE,"LayerVisible");
@@ -62,25 +62,21 @@ package app.view
 		
 		private function addFire(fireHydrant:FireHydrantVO):void
 		{			
-			var imageFireHydrant:ImageFireHydrant = new ImageFireHydrant;
+			var fhm:ImageFireHydrantMediator = new ImageFireHydrantMediator(fireHydrant);
+						
+			facade.registerMediator(fhm);
 			
-			imageFireHydrant.FireHydrant = fireHydrant;
-			
-			facade.registerMediator(new ImageFireHydrantMediator("ImageFireHydrantMediator" + fireHydrant.T_FireHydrantID,imageFireHydrant));
-			
-			layerFireHydrant.addElement(imageFireHydrant);
+			layerFireHydrant.addElement(fhm.getViewComponent() as IVisualElement);
 		}
 		
 		private function delFire(fireHydrant:FireHydrantVO):void
-		{			
-			var mn:String = "ImageFireHydrantMediator" + fireHydrant.T_FireHydrantID;
+		{						
+			var fhm:ImageFireHydrantMediator = facade.retrieveMediator(ImageFireHydrantMediator.NAME + fireHydrant.T_FireHydrantID) as ImageFireHydrantMediator;
 			
-			var fm:ImageFireHydrantMediator = facade.retrieveMediator(mn) as ImageFireHydrantMediator;
-			
-			if(fm)
+			if(fhm)
 			{
-				layerFireHydrant.removeElement(fm.getViewComponent() as IVisualElement);
-				facade.removeMediator(mn);
+				layerFireHydrant.removeElement(fhm.getViewComponent() as IVisualElement);
+				facade.removeMediator(fhm.getMediatorName());
 			}
 		}
 	}

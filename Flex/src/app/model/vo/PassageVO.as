@@ -29,9 +29,13 @@ package app.model.vo
 		
 		public var DictImportExport:Dictionary;
 		
+		public var dictVideo:Dictionary;
+		
 		public function PassageVO(value:*)
 		{
 			DictImportExport = new Dictionary;
+			
+			dictVideo = new Dictionary;
 			
 			_source = value;
 		}

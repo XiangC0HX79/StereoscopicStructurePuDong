@@ -5,6 +5,8 @@ package app.view
 	import app.model.vo.CommandHeightVO;
 	import app.view.components.TitleWindowCommandHeight;
 	
+	import com.adobe.utils.DictionaryUtil;
+	
 	import flash.events.Event;
 	
 	import mx.collections.ArrayCollection;
@@ -32,7 +34,7 @@ package app.view
 		
 		private function onImageList(event:Event):void
 		{
-			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_COMMAND_IMGLST,titleWindowCommandHeight.CommandingHeight);
+			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_MEDIA,titleWindowCommandHeight.commandingHeight.pics);
 		}
 		
 		override public function listNotificationInterests():Array
@@ -47,7 +49,9 @@ package app.view
 			switch(notification.getName())
 			{
 				case ApplicationFacade.NOTIFY_TITLEWINDOW_COMMAND:
-					titleWindowCommandHeight.CommandingHeight = notification.getBody() as CommandHeightVO;
+					var ch:CommandHeightVO = notification.getBody() as CommandHeightVO;
+					titleWindowCommandHeight.currentState = (DictionaryUtil.getKeys(ch.pics).length > 0)?"Image":"NoImage";
+					titleWindowCommandHeight.commandingHeight = ch;
 					break;
 			}
 		}

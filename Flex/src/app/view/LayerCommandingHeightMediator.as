@@ -5,11 +5,11 @@ package app.view
 	import app.model.vo.BuildVO;
 	import app.model.vo.CommandHeightVO;
 	import app.model.vo.LayerVO;
-	import app.view.components.ImageCommandingHeight;
 	import app.view.components.LayerCommandingHeightPoint;
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.core.IUIComponent;
+	import mx.core.IVisualElement;
 	import mx.events.DragEvent;
 	import mx.managers.DragManager;
 	
@@ -36,7 +36,7 @@ package app.view
 		override public function listNotificationInterests():Array
 		{
 			return [
-				ApplicationFacade.NOTIFY_INIT_APP
+				ApplicationFacade.NOTIFY_INIT_COMMANDHEIGHT
 			];
 		}
 		
@@ -44,16 +44,14 @@ package app.view
 		{
 			switch(notification.getName())
 			{
-				case ApplicationFacade.NOTIFY_INIT_APP:									
-					for each(var commandingHeight:CommandHeightVO in (notification.getBody() as BuildVO).CommandingHeights)
+				case ApplicationFacade.NOTIFY_INIT_COMMANDHEIGHT:									
+					for each(var ch:CommandHeightVO in notification.getBody())
 					{						
-						var imageCommandingHeight:ImageCommandingHeight = new ImageCommandingHeight;
+						var chm:ImageCommandHeightMediator = new ImageCommandHeightMediator(ch);
+												
+						facade.registerMediator(chm);
 						
-						imageCommandingHeight.commandingHeight = commandingHeight;
-						
-						facade.registerMediator(new ImageCommandHeightMediator("ImageCommandHeightMediator" + commandingHeight.TCH_ID,imageCommandingHeight));
-						
-						layerCommandingHeight.addElement(imageCommandingHeight);
+						layerCommandingHeight.addElement(chm.getViewComponent() as IVisualElement);
 					}
 					
 					BindingUtils.bindProperty(layerCommandingHeight,"visible",LayerVO.COMMANDHEIGHT,"LayerVisible");

@@ -1,0 +1,2 @@
+23:47:46 SQL:Select * FROM sdaf EX:对象名 'sdaf' 无效。
+23:48:18 SQL:Select * FROM sdaf EX:对象名 'sdaf' 无效。

@@ -16,6 +16,7 @@ package app.model
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	
+	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.soap.Operation;
@@ -32,59 +33,60 @@ package app.model
 			super(proxyName, data);
 		}
 				
-		protected function send(name:String,listener:Function,...args):void
+		protected function send(name:String,listener:Function,...args):AsyncToken
 		{
 			var webService:WebService = new WebService;
 			webService.loadWSDL(ConfigVO.BASE_URL + "Service.asmx?wsdl");
 			
 			var operation:Operation = webService.getOperation(name) as Operation;
-			operation.addEventListener(ResultEvent.RESULT,onResult);
+			operation.addEventListener(ResultEvent.RESULT,listener);
 			operation.addEventListener(FaultEvent.FAULT,onFault);
 			operation.arguments = args;
 			operation.resultFormat = "object";
-			operation.send();	
 			
-			function onResult(event:ResultEvent):void
-			{									
-				if(event.result == null)
-					return;
-				
-				if(event.result is ObjectProxy)
-				{
-					if(event.result.hasOwnProperty("Tables"))
-					{
-						var tables:Object = event.result.Tables;
-						if(tables.hasOwnProperty("Table"))
-						{
-							listener(tables.Table.Rows);
-						}
-						if(tables.hasOwnProperty("Count"))
-						{
-							listener(tables.Count.Rows[0].Count);
-						}
-						else if(tables.hasOwnProperty("Error"))
-						{							
-							sendNotification(ApplicationFacade.NOTIFY_APP_ALERTERROR,"后台服务错误" + "\n" + tables.Error.Rows[0]["ErrorInfo"]);
-						}
-					}
-					else
-					{
-						listener(event.result);
-					}
-				}
-				else 
-				{
-					listener(event.result);
-				}
-			}
-			
-			function onFault(event:FaultEvent):void
-			{				
-				sendNotification(ApplicationFacade.NOTIFY_APP_ALERTERROR,event.fault.faultString + "\n" + event.fault.faultDetail);
-			}
+			return operation.send();
 		}
 				
-		protected function load(url:String,listener:Function):void
+		private function onResult(event:ResultEvent):void
+		{								
+			if(event.result == null)
+				return;
+			
+			if(event.result is ObjectProxy)
+			{
+				if(event.result.hasOwnProperty("Tables"))
+				{
+					var tables:Object = event.result.Tables;
+					if(tables.hasOwnProperty("Table"))
+					{
+						event.token.listener(tables.Table.Rows);
+					}
+					if(tables.hasOwnProperty("Count"))
+					{
+						event.token.listener(tables.Count.Rows[0].Count);
+					}
+					else if(tables.hasOwnProperty("Error"))
+					{							
+						sendNotification(ApplicationFacade.NOTIFY_APP_ALERTERROR,"后台服务错误" + "\n" + tables.Error.Rows[0]["ErrorInfo"]);
+					}
+				}
+				else
+				{
+					event.token.listener(event.result);
+				}
+			}
+			else 
+			{
+				event.token.listener(event.result);
+			}
+		}
+		
+		private function onFault(event:FaultEvent):void
+		{				
+			sendNotification(ApplicationFacade.NOTIFY_APP_ALERTERROR,event.fault.faultString + "\n" + event.fault.faultDetail);
+		}
+		
+		protected function load(url:String,listener:Function):*
 		{			
 			var downloadURL:URLRequest = new URLRequest(encodeURI(url));	
 			downloadURL.method = URLRequestMethod.POST;
@@ -94,6 +96,9 @@ package app.model
 			urlLoader.addEventListener(Event.COMPLETE,completeHandler);				
 			urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
 			urlLoader.load(downloadURL);
+			
+			var token:Object = {};
+			return token;
 			
 			function completeHandler(event:Event):void   
 			{   								
@@ -105,8 +110,8 @@ package app.model
 			
 			function loaderCompleteHandler(event:Event):void
 			{							
-				var bitmap:Bitmap = Bitmap((event.currentTarget as LoaderInfo).content);  
-				listener(bitmap);
+				token.bitmap = Bitmap((event.currentTarget as LoaderInfo).content);  
+				listener(token);
 			}
 									
 			function onError(event:IOErrorEvent):void
@@ -136,7 +141,8 @@ package app.model
 				var bitmapData:BitmapData = new BitmapData(500,400);
 				bitmapData.draw(text);
 				
-				listener(new Bitmap(bitmapData));
+				token.bitmap = new Bitmap(bitmapData);  
+				listener(token);
 			}
 		}
 	}

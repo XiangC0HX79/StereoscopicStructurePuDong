@@ -1,6 +1,7 @@
 package app.view
 {
 	import app.model.BuildProxy;
+	import app.model.FireHydrantProxy;
 	import app.model.IconsProxy;
 	import app.model.vo.ConfigVO;
 	import app.model.vo.FireHydrantVO;
@@ -20,9 +21,11 @@ package app.view
 	
 	public class ImageFireHydrantMediator extends Mediator implements IMediator
 	{
-		public function ImageFireHydrantMediator(mediatorName:String=null, viewComponent:Object=null)
+		public static const NAME:String = "ImageFireHydrantMediator";
+		
+		public function ImageFireHydrantMediator(fh:FireHydrantVO)
 		{
-			super(mediatorName, viewComponent);
+			super(NAME + fh.T_FireHydrantID, new ImageFireHydrant);
 			
 			imageFireHydrant.addEventListener(MouseEvent.CLICK,onClick);
 			
@@ -33,6 +36,8 @@ package app.view
 			
 			var iconsProxy:IconsProxy = facade.retrieveProxy(IconsProxy.NAME) as IconsProxy;
 			imageFireHydrant.source = iconsProxy.icons.IconFireHydrant;
+			
+			imageFireHydrant.FireHydrant = fh;
 		}
 		
 		protected function get imageFireHydrant():ImageFireHydrant
@@ -44,8 +49,8 @@ package app.view
 		{
 			if(FireHydrantVO.Tool == FireHydrantVO.DEL)
 			{
-				var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
-				buildProxy.DelFireHydrant(imageFireHydrant.FireHydrant);
+				var fireHydrantProxy:FireHydrantProxy = facade.retrieveProxy(FireHydrantProxy.NAME) as FireHydrantProxy;
+				fireHydrantProxy.DelFireHydrant(imageFireHydrant.FireHydrant);
 			}
 		}
 		

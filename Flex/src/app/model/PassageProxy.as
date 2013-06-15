@@ -5,10 +5,12 @@ package app.model
 	import app.model.vo.ImportExportPicVO;
 	import app.model.vo.ImportExportVO;
 	import app.model.vo.PassageVO;
+	import app.model.vo.VideoVO;
 	
 	import flash.utils.Dictionary;
 	
 	import mx.collections.ArrayCollection;
+	import mx.rpc.events.ResultEvent;
 	
 	import org.puremvc.as3.interfaces.IProxy;
 	import org.puremvc.as3.patterns.proxy.Proxy;
@@ -104,9 +106,9 @@ package app.model
 			send("InitPassage",onInitPassage,ConfigVO.TMB_ID);			
 		}
 		
-		private function onInitPassage(result:ArrayCollection):void
+		private function onInitPassage(event:ResultEvent):void
 		{
-			for each(var i:Object in result)
+			for each(var i:Object in event.result.Tables.Table.Rows)
 			{
 				var psg:PassageVO = new PassageVO(i);				
 				dict[psg.T_PassageID] = psg;
@@ -117,9 +119,9 @@ package app.model
 			send("InitImportExport",onInitImportExport,ConfigVO.TMB_ID);
 		}
 		
-		private function onInitImportExport(result:ArrayCollection):void
+		private function onInitImportExport(event:ResultEvent):void
 		{			
-			for each(var i:Object in result)
+			for each(var i:Object in event.result.Tables.Table.Rows)
 			{
 				var ie:ImportExportVO = new ImportExportVO(i);	
 				
@@ -133,23 +135,41 @@ package app.model
 			send("InitImportExportPic",onInitImportExportPic,ConfigVO.TMB_ID);
 		}
 		
-		private function onInitImportExportPic(result:ArrayCollection):void
+		private function onInitImportExportPic(event:ResultEvent):void
 		{			
-			for each(var i:Object in result)
+			for each(var i:Object in event.result.Tables.Table.Rows)
 			{
 				var iep:ImportExportPicVO = new ImportExportPicVO(i);	
 				
 				var psg:PassageVO = dict[iep.T_PassageID];
 				if(psg)
 				{
-					var ie:ImportExportVO = psg.DictImportExport[iep.T_ImportExportID];
+					var ie:ImportExportVO = psg.DictImportExport[iep.containerID];
 					
 					if(ie)
-						ie.DictImportExportPic[iep.T_ImportExportPicID] = iep;
+						ie.DictImportExportPic[iep.mediaID] = iep;
 				}
 			}
 			
 			sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：出入口图片加载完成...");
+			
+			send("InitVideo",onInitVideo,ConfigVO.TMB_ID);
+		}
+		
+		private function onInitVideo(event:ResultEvent):void
+		{			
+			for each(var i:Object in event.result.Tables.Table.Rows)
+			{
+				var video:VideoVO = new VideoVO(i);	
+				
+				var psg:PassageVO = dict[video.T_PassageID];
+				if(psg)
+				{
+					psg.dictVideo[video.T_VideoID] = video;
+				}
+			}
+			
+			sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：视频信息加载完成...");
 			
 			sendNotification(ApplicationFacade.NOTIFY_INIT_PASSAGE);
 		}

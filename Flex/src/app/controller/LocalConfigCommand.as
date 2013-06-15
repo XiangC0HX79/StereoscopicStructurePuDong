@@ -15,7 +15,7 @@ package app.controller
 	import app.model.vo.KeyUnitVO;
 	import app.model.vo.ScentingVO;
 	import app.model.vo.TaticalVO;
-	import app.model.vo.TrafficInfoVO;
+	import app.model.vo.TrafficVO;
 	import app.view.TitleWindowFloorMediator;
 	import app.view.components.TitleWindowFloor;
 	
@@ -174,7 +174,7 @@ package app.controller
 		{			
 			for each(var i:Object in result)
 			{
-				buildProxy.build.Traffic.addItem(new TrafficInfoVO(i));
+				buildProxy.build.Traffic.addItem(new TrafficVO(i));
 			}
 			
 			sendNotification(ApplicationFacade.NOTIFY_WEBSERVICE_SEND,

@@ -22,6 +22,14 @@ package app.model.vo
 		
 		public var IconImportExport:Bitmap;
 		
+		public var IconEletric:Bitmap;
+		
+		public var IconGas:Bitmap;
+		
+		public var IconCan:Bitmap;
+		
+		public var IconVideo:Bitmap;
+		
 		public function IconsVO()
 		{
 		}

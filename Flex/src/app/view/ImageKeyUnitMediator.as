@@ -3,6 +3,7 @@ package app.view
 	import app.ApplicationFacade;
 	import app.model.IconsProxy;
 	import app.model.vo.ConfigVO;
+	import app.model.vo.KeyUnitVO;
 	import app.view.components.ImageKeyUnit;
 	
 	import flash.events.Event;
@@ -19,9 +20,11 @@ package app.view
 	
 	public class ImageKeyUnitMediator extends Mediator implements IMediator
 	{
-		public function ImageKeyUnitMediator(mediatorName:String=null, viewComponent:Object=null)
+		public static const NAME:String = "ImageKeyUnitMediator";
+		
+		public function ImageKeyUnitMediator(ku:KeyUnitVO)
 		{
-			super(mediatorName, viewComponent);
+			super(NAME + ku.T_KeyUnitsID, new ImageKeyUnit);
 						
 			imageKeyUnit.addEventListener(MouseEvent.CLICK,onClick);
 			
@@ -32,6 +35,8 @@ package app.view
 			
 			var iconsProxy:IconsProxy = facade.retrieveProxy(IconsProxy.NAME) as IconsProxy;
 			imageKeyUnit.source = iconsProxy.icons.IconKeyUnit;
+			
+			imageKeyUnit.keyUnit = ku;
 		}
 		
 		protected function get imageKeyUnit():ImageKeyUnit

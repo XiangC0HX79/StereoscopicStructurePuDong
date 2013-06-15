@@ -9,47 +9,82 @@
 	<fx:Script>
 		<![CDATA[		
 			import app.model.vo.PassageVO;
+			import app.model.vo.VideoVO;
 			
 			import mx.collections.ArrayCollection;
+			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
+			import mx.managers.CursorManager;
+			import mx.managers.DragManager;
 			
 			import spark.events.IndexChangeEvent;
 						
-			public static const IMAGE_READY:String = "ImageReady";
+			public static const IMAGE_READY:String 	= "ImageReady";
+			
+			public static const ROLLOVER:String 	= "RollOver";
+			public static const ROLLOUT:String 		= "RollOut";
+			public static const MOUSECLICK:String 	= "MouseClick";
 			
 			[Bindable]private var dp:ArrayCollection;
 			public function set Datapro(value:ArrayCollection):void
 			{
 				dp = value;
 				
-				psg = dp[0];
+				if(dp.length > 0)
+					psg = dp[0];
 			}
 			
 			[Bindable]public var psg:PassageVO;
 			
+			private function adjustPosition():void
+			{			
+				var w:Number = imagePassage.sourceWidth * groupPassage.scaleX;
+				if(w < scrollPassage.width)
+					groupPassage.x = (scrollPassage.width - w) / 2;
+				else
+					groupPassage.x = 0;
+				
+				var h:Number = imagePassage.sourceHeight * groupPassage.scaleY;
+				if(h < scrollPassage.height)
+					groupPassage.y = (scrollPassage.height - h) / 2;
+				else
+					groupPassage.y = 0;
+			}
+			
 			private function zoomin():void
 			{
-				groupPassage.scaleX += 0.1
-				groupPassage.scaleY += 0.1
+				var s:Number = Math.floor(groupPassage.scaleX*10) / 10;
+				groupPassage.scaleX = s + 0.1;
+				groupPassage.scaleY = s + 0.1;
+				
+				adjustPosition();
 			}
 			
 			private function zoomout():void
 			{
-				groupPassage.scaleX -= 0.1
-				groupPassage.scaleY -= 0.1
+				var s:Number = Math.floor(groupPassage.scaleX*10) / 10;
+				groupPassage.scaleX = s - 0.1;
+				groupPassage.scaleY = s - 0.1;
+				
+				adjustPosition();
 			}
 			
 			protected function sizeToTrue():void
 			{
 				groupPassage.scaleX = 1;
 				groupPassage.scaleY = 1;
+				
+				adjustPosition();
 			}
 			
 			protected function sizeToContain():void
 			{
 				var s:Number = Math.min(scrollPassage.width / imagePassage.sourceWidth,scrollPassage.height / imagePassage.sourceHeight);
+				
 				groupPassage.scaleX = s;
 				groupPassage.scaleY = s;
+				
+				adjustPosition();
 			}
 						
 			protected function imagePassage_readyHandler(event:FlexEvent):void
@@ -59,6 +94,27 @@
 				dispatchEvent(new Event(IMAGE_READY));
 			}
 			
+			protected function groupPassage_dragEnterHandler(e:DragEvent):void
+			{	
+				if(
+					e.dragSource.hasFormat("VideoVO")			
+				)
+				{  
+					DragManager.acceptDragDrop(groupPassage);	
+				}  
+			}
+			
+			protected function groupPassage_dragDropHandler(e:DragEvent):void
+			{
+				var sp:Point = e.dragSource.dataForFormat("StartPoint") as Point;
+				
+				if(e.dragSource.hasFormat("VideoVO"))
+				{  
+					var v:VideoVO = e.dragSource.dataForFormat("VideoVO") as VideoVO;
+					v.T_VideoX = e.localX - sp.x + e.dragInitiator.width / 2;
+					v.T_VideoY = e.localY - sp.y + e.dragInitiator.height / 2;
+				}
+			}			
 		]]>
 	</fx:Script>
 	
@@ -81,16 +137,26 @@
 	</s:Rect>
 	
 	<s:Scroller id="scrollPassage" left="130" right="22" top="15" bottom="23">	
-		<s:Group id="groupPassage">
-			<s:Image id="imagePassage" ready="imagePassage_readyHandler(event)" source="{psg.T_PassagePicPath}"/>
-			<s:Group id="groupImportExport"/>
+		<s:Group minWidth="625" minHeight="611">			
+			<s:Group id="groupPassage" 
+					 dragEnter="groupPassage_dragEnterHandler(event)" 
+					 dragDrop="groupPassage_dragDropHandler(event)" 
+					 rollOut="dispatchEvent(new Event(ROLLOUT))" 
+					 rollOver="dispatchEvent(new Event(ROLLOVER))" 
+					 click="dispatchEvent(new Event(MOUSECLICK))">
+				<s:Image id="imagePassage"
+						 ready="imagePassage_readyHandler(event)" source="{psg.T_PassagePicPath}"/>
+				<s:Group id="groupVideo"/>
+				<s:Group id="groupImportExport"/>
+			</s:Group>
 		</s:Group>
 	</s:Scroller>
 	
-	<s:VGroup y="30" right="50">
+	<s:VGroup y="20" right="40">
+		<s:Image buttonMode="true" source="@Embed('assets/image/实际大小.png')" click="sizeToContain();"/>
 		<s:Image buttonMode="true" source="@Embed('assets/image/1比1.png')" click="sizeToTrue();"/>
-		<s:Image buttonMode="true" source="@Embed('assets/image/1比1.png')" click="sizeToContain();"/>
 		<s:Image buttonMode="true" source="@Embed('assets/image/放大.png')" click="zoomin();"/>
 		<s:Image buttonMode="true" source="@Embed('assets/image/缩小.png')" click="zoomout();"/>		
+		<s:Image buttonMode="true" source="@Embed('assets/image/cam.png')"/>	
 	</s:VGroup>
 </s:Group>

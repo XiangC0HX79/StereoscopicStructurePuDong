@@ -9,6 +9,7 @@ package app.view
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
+	import mx.core.IVisualElement;
 	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
@@ -35,7 +36,7 @@ package app.view
 		override public function listNotificationInterests():Array
 		{
 			return [				
-				ApplicationFacade.NOTIFY_INIT_APP
+				ApplicationFacade.NOTIFY_INIT_HAZZARD
 			];
 		}
 		
@@ -43,18 +44,17 @@ package app.view
 		{
 			switch(notification.getName())
 			{					
-				case ApplicationFacade.NOTIFY_INIT_APP:	
-					BindingUtils.bindProperty(layerHazard,"visible",LayerVO.HAZARD,"LayerVisible");
-					
-					for each(var i:HazardVO in buildProxy.build.Hazzard)
+				case ApplicationFacade.NOTIFY_INIT_HAZZARD:						
+					for each(var i:HazardVO in notification.getBody())
 					{
-						var imageHazard:ImageHazard = new ImageHazard;
-						imageHazard.Hazard = i;
+						var hzm:ImageHazardMediator = new ImageHazardMediator(i);
 						
-						facade.registerMediator(new ImageHazardMediator("ImageHazardMediator" + i.T_HazardID,imageHazard));
+						facade.registerMediator(hzm);
 						
-						layerHazard.addElement(imageHazard);
+						layerHazard.addElement(hzm.getViewComponent() as IVisualElement);
 					}
+					
+					BindingUtils.bindProperty(layerHazard,"visible",LayerVO.HAZARD,"LayerVisible");
 					break;
 			}
 		}

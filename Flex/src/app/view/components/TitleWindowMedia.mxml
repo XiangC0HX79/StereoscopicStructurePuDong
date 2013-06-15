@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  skinClass="app.skin.skinTitleWindowImage"
+					  width="600" minHeight="500">
+	
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[			
+			import app.model.vo.IMediaVO;
+			
+			import mx.events.FlexEvent;
+			import mx.events.IndexChangedEvent;
+			import mx.managers.PopUpManager;
+			
+			import org.osmf.media.MediaType;
+			
+			private var images:Array;
+			private var videos:Array;
+			
+			private var imageIndex:Number;
+			private var videoIndex:Number;	
+			
+			[Bindable]private var image:IMediaVO;	
+			[Bindable]private var video:IMediaVO;	
+			
+			[Bindable]private var _toggleVisible:Boolean;	
+			[Bindable]private var _viewIndex:Number;	
+			[Bindable]private var _imagePreVisible:Boolean;	
+			[Bindable]private var _imageNextVisible:Boolean;	
+			[Bindable]private var _videoPreVisible:Boolean;	
+			[Bindable]private var _videoNextVisible:Boolean;	
+			
+			public function set medias(value:Dictionary):void
+			{
+				images = new Array;
+				videos = new Array;
+				
+				imageIndex = 0;
+				videoIndex = 0;
+				
+				for each(var m:IMediaVO in value)
+				{
+					if(m.mediaType == MediaType.IMAGE)
+						images.push(m);
+					else if(m.mediaType == MediaType.VIDEO)
+						videos.push(m);
+				}
+				
+				_toggleVisible = ((images.length > 0) && (videos.length > 0));
+				
+				_viewIndex = (images.length > 0)?0:1;
+								
+				if(images.length > 0)
+				{
+					_imagePreVisible = false;
+					_imageNextVisible = (images.length > 1);
+					image = images[0];
+				}
+				
+				if(videos.length > 0)
+				{
+					_videoPreVisible = false;
+					_videoNextVisible = (videos.length > 1);
+					video = videos[0];
+				}
+			}
+					
+			protected function imageClose_clickHandler(event:MouseEvent):void
+			{
+				videoPlayer.stop();
+				
+				PopUpManager.removePopUp(this);
+			}			
+			
+			protected function content_updateCompleteHandler(event:FlexEvent):void
+			{
+				if(_viewIndex == 1)
+					videoPlayer.play();
+			}
+			
+			protected function imageImage_clickHandler(event:MouseEvent):void
+			{
+				imageVideo.enabled = true;
+				imageImage.enabled = false;
+				
+				_viewIndex = 0;
+			}
+			
+			protected function imageVideo_clickHandler(event:MouseEvent):void
+			{
+				imageImage.enabled = true;
+				imageVideo.enabled = false;
+				
+				_viewIndex = 1;
+			}
+			
+			protected function imagePre_clickHandler(event:MouseEvent):void
+			{				
+				if(imageIndex > 0)
+				{
+					imageIndex--;
+					_imagePreVisible = (imageIndex >0);
+					_imageNextVisible = (imageIndex < images.length - 1);
+				}
+				
+				image = images[imageIndex];
+			}
+			
+			protected function imageNext_clickHandler(event:MouseEvent):void
+			{				
+				if(imageIndex < images.length - 1)
+				{
+					imageIndex++;
+					_imagePreVisible = (imageIndex > 0);
+					_imageNextVisible = (imageIndex < images.length - 1);
+				}	
+								
+				image = images[imageIndex];
+			}
+			
+			protected function videoPre_clickHandler(event:MouseEvent):void
+			{				
+				if(videoIndex > 0)
+				{
+					videoIndex--;
+					_videoPreVisible = (videoIndex >0);
+					_videoNextVisible = (videoIndex < videos.length - 1);
+				}
+				
+				video = videos[videoIndex];
+				
+				videoPlayer.play();
+			}
+			
+			protected function videoNext_clickHandler(event:MouseEvent):void
+			{				
+				if(videoIndex < videos.length - 1)
+				{
+					videoIndex++;
+					_videoPreVisible = (videoIndex >0);
+					_videoNextVisible = (videoIndex < videos.length - 1);
+				}	
+				
+				video = videos[videoIndex];
+				
+				videoPlayer.play();
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Image top="20" right="30" buttonMode="true" source="@Embed('assets/image/x.png')" 
+			 click="imageClose_clickHandler(event)"/>
+		
+	<mx:ViewStack width="100%" height="100%" selectedIndex="{_viewIndex}" creationPolicy="all">
+		<s:NavigatorContent width="100%" height="100%" label="Image">		
+			<s:Label top="25" horizontalCenter="0" text="{image.mediaTitle}" color="0xFFFFFF" fontSize="25"/>	
+			<s:Image x="25" visible="{_imagePreVisible}"
+					 buttonMode="true" click="imagePre_clickHandler(event)"
+					 source="@Embed('assets/image/图片左按钮.png')"
+					 verticalCenter="0"/>
+			<s:Image right="25" visible="{_imageNextVisible}"
+					 buttonMode="true" click="imageNext_clickHandler(event)"
+					 source="@Embed('assets/image/图片右按钮.png')" verticalCenter="0"/>
+			<s:Image width="460" height="380" horizontalCenter="0" top="60"
+					 source="{image.mediaPath}"/>			
+			<s:Label color="0xFFFFFF" fontSize="16" fontWeight="bold" paddingTop="10"
+					 text="{image.mediaRemark}"
+					 y="440" horizontalCenter="0"/>
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Movie" 
+							updateComplete="content_updateCompleteHandler(event)">		
+			<s:Label top="25" horizontalCenter="0" text="{video.mediaTitle}" color="0xFFFFFF" fontSize="25"/>
+			<s:Image x="25" visible="{_videoPreVisible}"
+					 buttonMode="true" click="videoPre_clickHandler(event)"
+					 source="@Embed('assets/image/图片左按钮.png')"
+					 verticalCenter="0"/>
+			<s:Image right="25" visible="{_videoNextVisible}"
+					 buttonMode="true" click="videoNext_clickHandler(event)"
+					 source="@Embed('assets/image/图片右按钮.png')" verticalCenter="0"/>
+			<s:VideoPlayer id="videoPlayer"  width="460" height="380" horizontalCenter="0" top="60"
+						   source="{video.mediaPath}" autoPlay="false"/>			
+			<s:Label color="0xFFFFFF" fontSize="16" fontWeight="bold" paddingTop="10"
+					 text="{video.mediaRemark}"
+					 y="440" horizontalCenter="0"/>
+		</s:NavigatorContent>
+	</mx:ViewStack>
+	
+	<s:HGroup visible="{_toggleVisible}" x="70" y="18">		
+		<s:Image id="imageImage"  width="40" height="40"
+				 source="@Embed('assets/image/Imglst.png')" 
+				 skinClass="app.skin.SkinToggleImage" 
+				 buttonMode="true" click="imageImage_clickHandler(event)"/>
+		<s:Image id="imageVideo"  width="40" height="40"
+				 source="@Embed('assets/image/视频图标.png')" 
+				 skinClass="app.skin.SkinToggleImage" 
+				 buttonMode="true" click="imageVideo_clickHandler(event)"/>
+	</s:HGroup>
+</s:SkinnableContainer>

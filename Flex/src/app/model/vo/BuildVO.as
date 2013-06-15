@@ -113,25 +113,9 @@ package app.model.vo
 			return _source.TMB_Internalhigh;
 		}
 				
-		//周边环境		
-		public var CommandingHeights:ArrayCollection;	
-		public var CloseHandles:ArrayCollection;			
-		public var Traffic:ArrayCollection;		
-		public var Hazzard:ArrayCollection;
-		public var FireHydrant:ArrayCollection;
-		public var KeyUnits:ArrayCollection;		
-		public var Scenting:ArrayCollection;	
-		
-		//信息
-		public var Communicate:ArrayCollection = new ArrayCollection;
-		public var Cabledrop:ArrayCollection = new ArrayCollection;
-		public var Landing:ArrayCollection = new ArrayCollection;
-		public var Windows:ArrayCollection = new ArrayCollection;
-		public var Internalhigh:ArrayCollection = new ArrayCollection;
-				
 		//内部结构图		
-		public var floors:ArrayCollection;
-		public var floorPics:ArrayCollection;
+		public var floors:ArrayCollection = new ArrayCollection;
+		public var floorPics:ArrayCollection = new ArrayCollection;
 						
 		public var BitmapWidth:Number = 0;
 		public var BitmapHeight:Number = 0;

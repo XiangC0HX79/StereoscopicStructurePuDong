@@ -3,6 +3,7 @@ package app.view
 	import app.ApplicationFacade;
 	import app.model.IconsProxy;
 	import app.model.vo.ConfigVO;
+	import app.model.vo.ScentingVO;
 	import app.view.components.ImageScenting;
 	
 	import flash.events.Event;
@@ -20,9 +21,11 @@ package app.view
 	
 	public class ImageScentingMediator extends Mediator implements IMediator
 	{
-		public function ImageScentingMediator(mediatorName:String=null, viewComponent:Object=null)
+		public static const NAME:String = "ImageScentingMediator";
+		
+		public function ImageScentingMediator(sc:ScentingVO)
 		{
-			super(mediatorName, viewComponent);
+			super(NAME + sc.T_ScentingID, new ImageScenting);
 						
 			imageScenting.addEventListener(MouseEvent.CLICK,onClick);
 			
@@ -33,6 +36,8 @@ package app.view
 			
 			var iconsProxy:IconsProxy = facade.retrieveProxy(IconsProxy.NAME) as IconsProxy;
 			imageScenting.source = iconsProxy.icons.IconScenting;
+			
+			imageScenting.scenting = sc;
 		}
 		
 		protected function get imageScenting():ImageScenting

@@ -42,15 +42,8 @@ package app.view
 		}
 				
 		private function onComponentClick(event:MouseEvent):void
-		{			
-			var arr:Array = new Array;
-			
-			for each(var i:ImportExportPicVO in imageImportExport.ImportExport.DictImportExportPic)
-			{
-				arr.push(i);
-			}
-			
-			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_IMPORTEXPORTPIC,new ArrayCollection(arr));
+		{						
+			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_MEDIA,imageImportExport.ImportExport.DictImportExportPic);
 		}
 	}
 }

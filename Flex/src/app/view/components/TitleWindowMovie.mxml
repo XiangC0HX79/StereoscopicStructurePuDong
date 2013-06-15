@@ -24,8 +24,7 @@
 			protected function group1_updateCompleteHandler(event:FlexEvent):void
 			{
 				videoPlayer.play()
-			}
-			
+			}			
 		]]>
 	</fx:Script>
 	

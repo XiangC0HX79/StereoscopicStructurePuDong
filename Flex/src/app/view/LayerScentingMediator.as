@@ -9,6 +9,7 @@ package app.view
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
+	import mx.core.IVisualElement;
 	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
@@ -35,7 +36,7 @@ package app.view
 		override public function listNotificationInterests():Array
 		{
 			return [				
-				ApplicationFacade.NOTIFY_INIT_APP
+				ApplicationFacade.NOTIFY_INIT_SCENTING
 			];
 		}
 		
@@ -43,20 +44,17 @@ package app.view
 		{
 			switch(notification.getName())
 			{					
-				case ApplicationFacade.NOTIFY_INIT_APP:	
-					BindingUtils.bindProperty(layerScenting,"visible",LayerVO.SCENTING,"LayerVisible");
-					
-					layerScenting.pic = buildProxy.build.T_ScentingPicPath;
-					
-					for each(var i:ScentingVO in buildProxy.build.Scenting)
+				case ApplicationFacade.NOTIFY_INIT_SCENTING:									
+					for each(var i:ScentingVO in notification.getBody())
 					{
-						var imageScenting:ImageScenting = new ImageScenting;
-						imageScenting.scenting = i;
+						var scm:ImageScentingMediator = new ImageScentingMediator(i);
 						
-						facade.registerMediator(new ImageScentingMediator("ImageScentingMediator" + i.T_ScentingID,imageScenting));
+						facade.registerMediator(scm);
 						
-						layerScenting.addElement(imageScenting);
+						layerScenting.addElement(scm.getViewComponent() as IVisualElement);
 					}
+					
+					BindingUtils.bindProperty(layerScenting,"visible",LayerVO.SCENTING,"LayerVisible");
 					break;
 			}
 		}

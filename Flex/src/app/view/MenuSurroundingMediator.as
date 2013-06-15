@@ -2,6 +2,13 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
+	import app.model.ClosedHandleProxy;
+	import app.model.CommandHeightProxy;
+	import app.model.FireHydrantProxy;
+	import app.model.HazardProxy;
+	import app.model.KeyUnitProxy;
+	import app.model.ScentingProxy;
+	import app.model.TrafficProxy;
 	import app.model.vo.BuildVO;
 	import app.model.vo.ConfigVO;
 	import app.model.vo.FireHydrantVO;
@@ -9,10 +16,16 @@ package app.view
 	import app.model.vo.LayerVO;
 	import app.view.components.MenuSurrounding;
 	
+	import com.adobe.utils.DictionaryUtil;
+	
 	import flash.events.Event;
+	import flash.utils.Dictionary;
 	
 	import mx.collections.ArrayCollection;
 	import mx.managers.CursorManager;
+	import mx.rpc.AsyncToken;
+	import mx.rpc.CallResponder;
+	import mx.rpc.events.ResultEvent;
 	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
@@ -56,10 +69,61 @@ package app.view
 			CursorManager.removeAllCursors();
 		}
 		
+		private var _dictSave:Dictionary;
 		private function onSave(event:Event):void
 		{
-			var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
-			buildProxy.SaveSurrouding();
+			_dictSave = new Dictionary;
+			
+			var responder:CallResponder = new CallResponder;
+			responder.addEventListener(ResultEvent.RESULT,onSaveListener);
+			
+			var commandHeightProxy:CommandHeightProxy = facade.retrieveProxy(CommandHeightProxy.NAME) as CommandHeightProxy;						
+			var token:AsyncToken = commandHeightProxy.save();			
+			token.addResponder(responder);			
+			_dictSave[token] = false;
+			
+			var closedHandleProxy:ClosedHandleProxy = facade.retrieveProxy(ClosedHandleProxy.NAME) as ClosedHandleProxy;						
+			token = closedHandleProxy.save();			
+			token.addResponder(responder);			
+			_dictSave[token] = false;
+			
+			var trafficProxy:TrafficProxy = facade.retrieveProxy(TrafficProxy.NAME) as TrafficProxy;						
+			token = trafficProxy.save();			
+			token.addResponder(responder);			
+			_dictSave[token] = false;
+			
+			var hazardProxy:HazardProxy = facade.retrieveProxy(HazardProxy.NAME) as HazardProxy;						
+			token = hazardProxy.save();			
+			token.addResponder(responder);			
+			_dictSave[token] = false;
+			
+			var fireHydrantProxy:FireHydrantProxy = facade.retrieveProxy(FireHydrantProxy.NAME) as FireHydrantProxy;						
+			token = fireHydrantProxy.save();			
+			token.addResponder(responder);			
+			_dictSave[token] = false;
+			
+			var keyUnitProxy:KeyUnitProxy = facade.retrieveProxy(KeyUnitProxy.NAME) as KeyUnitProxy;						
+			token = keyUnitProxy.save();			
+			token.addResponder(responder);			
+			_dictSave[token] = false;
+			
+			var scentingProxy:ScentingProxy = facade.retrieveProxy(ScentingProxy.NAME) as ScentingProxy;						
+			token = scentingProxy.save();			
+			token.addResponder(responder);			
+			_dictSave[token] = false;
+		}
+		
+		private function onSaveListener(event:ResultEvent):void
+		{
+			_dictSave[event.token] = true;
+			
+			for each(var b:Boolean in _dictSave)
+			{
+				if(!b)
+					return;
+			}
+			
+			sendNotification(ApplicationFacade.NOTIFY_APP_ALERTINFO,"周边环境信息保存成功。");
 		}
 		
 		private function onFireAdd(event:Event):void
@@ -78,7 +142,7 @@ package app.view
 		
 		override public function listNotificationInterests():Array
 		{
-			return [
+			return [				
 				ApplicationFacade.NOTIFY_INIT_APP
 			];
 		}
@@ -86,37 +150,43 @@ package app.view
 		override public function handleNotification(notification:INotification):void
 		{
 			switch(notification.getName())
-			{
+			{				
 				case ApplicationFacade.NOTIFY_INIT_APP:
 					if(ConfigVO.EDIT)
 					{
 						menuSurrounding.currentState = "Edit";
 					}
 					
-					var build:BuildVO = notification.getBody() as BuildVO;					
-													
-					if(build.CommandingHeights.length > 0)
+					var commandHeightProxy:CommandHeightProxy = facade.retrieveProxy(CommandHeightProxy.NAME) as CommandHeightProxy;
+					if(DictionaryUtil.getKeys(commandHeightProxy.dict).length > 0)
 						menuSurrounding.dp.addItem(LayerVO.COMMANDHEIGHT);	
-										
-					if(build.CloseHandles.length > 0)
-						menuSurrounding.dp.addItem(LayerVO.CLOSEHANDLE);		
 					
-					if(build.Traffic.length > 0)
-						menuSurrounding.dp.addItem(LayerVO.TRAFFIC);		
+					var closedHandleProxy:ClosedHandleProxy = facade.retrieveProxy(ClosedHandleProxy.NAME) as ClosedHandleProxy;
+					if(DictionaryUtil.getKeys(closedHandleProxy.dict).length > 0)
+						menuSurrounding.dp.addItem(LayerVO.CLOSEHANDLE);	
 					
-					if(build.Hazzard.length > 0)
-						menuSurrounding.dp.addItem(LayerVO.HAZARD);		
+					var trafficProxy:TrafficProxy = facade.retrieveProxy(TrafficProxy.NAME) as TrafficProxy;
+					if(DictionaryUtil.getKeys(trafficProxy.dict).length > 0)
+						menuSurrounding.dp.addItem(LayerVO.TRAFFIC);	
 					
-					if(build.T_RescueimgPath)
+					var hazardProxy:HazardProxy = facade.retrieveProxy(HazardProxy.NAME) as HazardProxy;
+					if(DictionaryUtil.getKeys(hazardProxy.dict).length > 0)
+						menuSurrounding.dp.addItem(LayerVO.HAZARD);	
+					
+					var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
+					if(buildProxy.build.T_RescueimgPath)
 						menuSurrounding.dp.addItem(LayerVO.RESCUE);
 					
-					if((build.FireHydrant.length > 0) || ConfigVO.EDIT)
+					var fireHydrantProxy:FireHydrantProxy = facade.retrieveProxy(FireHydrantProxy.NAME) as FireHydrantProxy;
+					if((DictionaryUtil.getKeys(fireHydrantProxy.dict).length > 0) || ConfigVO.EDIT)
 						menuSurrounding.dp.addItem(LayerVO.FIRE);
 					
-					if(build.KeyUnits.length > 0)
+					var keyUnitProxy:KeyUnitProxy = facade.retrieveProxy(KeyUnitProxy.NAME) as KeyUnitProxy;
+					if((DictionaryUtil.getKeys(keyUnitProxy.dict).length > 0) || ConfigVO.EDIT)
 						menuSurrounding.dp.addItem(LayerVO.KEYUNITS);
 					
-					if(build.Scenting.length > 0)
+					var scentingProxy:ScentingProxy = facade.retrieveProxy(ScentingProxy.NAME) as ScentingProxy;
+					if((DictionaryUtil.getKeys(scentingProxy.dict).length > 0) || ConfigVO.EDIT)
 						menuSurrounding.dp.addItem(LayerVO.SCENTING);
 					break;
 			}

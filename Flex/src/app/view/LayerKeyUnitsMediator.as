@@ -9,6 +9,7 @@ package app.view
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
+	import mx.core.IVisualElement;
 	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
@@ -35,7 +36,7 @@ package app.view
 		override public function listNotificationInterests():Array
 		{
 			return [				
-				ApplicationFacade.NOTIFY_INIT_APP
+				ApplicationFacade.NOTIFY_INIT_KEYUNIT
 			];
 		}
 		
@@ -43,18 +44,17 @@ package app.view
 		{
 			switch(notification.getName())
 			{					
-				case ApplicationFacade.NOTIFY_INIT_APP:	
-					BindingUtils.bindProperty(layerKeyUnits,"visible",LayerVO.KEYUNITS,"LayerVisible");
-					
-					for each(var i:KeyUnitVO in buildProxy.build.KeyUnits)
+				case ApplicationFacade.NOTIFY_INIT_KEYUNIT:						
+					for each(var i:KeyUnitVO in notification.getBody())
 					{
-						var imageKeyUnit:ImageKeyUnit = new ImageKeyUnit;
-						imageKeyUnit.keyUnit = i;
+						var kum:ImageKeyUnitMediator = new ImageKeyUnitMediator(i);
 						
-						facade.registerMediator(new ImageKeyUnitMediator("ImageKeyUnitMediator" + i.T_KeyUnitsID,imageKeyUnit));
+						facade.registerMediator(kum);
 						
-						layerKeyUnits.addElement(imageKeyUnit);
+						layerKeyUnits.addElement(kum.getViewComponent() as IVisualElement);
 					}
+					
+					BindingUtils.bindProperty(layerKeyUnits,"visible",LayerVO.KEYUNITS,"LayerVisible");
 					break;
 			}
 		}

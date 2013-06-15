@@ -22,21 +22,18 @@ package app.controller
 						
 			
 			facade.registerMediator(new AppAlertMediator);
-						
+			
+			facade.registerMediator(new TitleWindowMediaMediator);
 			facade.registerMediator(new TitleWindowFloorMediator);
 			facade.registerMediator(new TitleWindowImageMediator);			
 			facade.registerMediator(new TitleWindowMovieMediator);			
 			facade.registerMediator(new TitleWindowCommandHeightMediator);	
-			facade.registerMediator(new TitleWindowCommandHeightPicMediator);
-			facade.registerMediator(new TitleWindowClosedHandlesPicMediator);;
 			facade.registerMediator(new TitleWindowRescueImgMediator);
 			facade.registerMediator(new TitleWindowKeyUnitMediator);
 			facade.registerMediator(new TitleWindowScentingMediator);
-			facade.registerMediator(new TitleWindowTrafficMediator);
 			facade.registerMediator(new TitleWindowHazardMediator);
 			facade.registerMediator(new TitleWindowTaticsMediator);
 			facade.registerMediator(new TitleWindowTaticalPointMediator);
-			facade.registerMediator(new TitleWindowImportExportPicMediator);
 			
 			facade.registerMediator(new MenuSurroundingMediator);	
 			facade.registerMediator(new MenuInfoMediator);	
@@ -45,7 +42,8 @@ package app.controller
 			facade.registerMediator(new MenuStereoScopicEditMediator);
 			
 			facade.registerMediator(new LayerDrawMediator);
-			facade.registerMediator(new LayerClosedPicMediator);			
+			facade.registerMediator(new LayerClosedPicMediator);	
+			facade.registerMediator(new LayerScentingPicMediator);			
 			facade.registerMediator(new LayerCommandingHeightMediator);
 			facade.registerMediator(new LayerCloseHandlesMediator);
 			facade.registerMediator(new LayerTrafficMediator);

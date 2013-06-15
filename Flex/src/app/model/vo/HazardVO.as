@@ -16,6 +16,7 @@ package app.model.vo
 		}
 		public function set T_HazardX(value:Number):void
 		{
+			edit = true;
 			source.T_HazardX = value;
 		}
 		
@@ -25,6 +26,7 @@ package app.model.vo
 		}
 		public function set T_HazardY(value:Number):void
 		{
+			edit = true;
 			source.T_HazardY = value;
 		}
 		
@@ -52,6 +54,8 @@ package app.model.vo
 		{
 			return  source.T_HazardPicimgPath.replace("../",ConfigVO.BASE_URL);	
 		}
+		
+		public var edit:Boolean = false;
 		
 		public function HazardVO(value:Object)
 		{

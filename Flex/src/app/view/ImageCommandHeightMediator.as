@@ -7,6 +7,8 @@ package app.view
 	import app.model.vo.ConfigVO;
 	import app.view.components.ImageCommandingHeight;
 	
+	import com.adobe.utils.DictionaryUtil;
+	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -22,12 +24,14 @@ package app.view
 	
 	public class ImageCommandHeightMediator extends Mediator implements IMediator
 	{
-		public function ImageCommandHeightMediator(mediatorName:String=null, viewComponent:Object=null)
+		public static const NAME:String = "ImageCommandHeightMediator";
+		
+		public function ImageCommandHeightMediator(commandHeight:CommandHeightVO)
 		{
-			super(mediatorName, viewComponent);
+			super(NAME + commandHeight.TCH_ID, new ImageCommandingHeight);
 			
 			imageCommandingHeight.addEventListener(MouseEvent.ROLL_OVER,onOver);
-			imageCommandingHeight.addEventListener(MouseEvent.ROLL_OUT,onOut);
+			imageCommandingHeight.addEventListener(MouseEvent.ROLL_OUT,onOut);	
 			
 			imageCommandingHeight.addEventListener(MouseEvent.CLICK,onClick);
 			
@@ -38,6 +42,8 @@ package app.view
 						
 			var iconsProxy:IconsProxy = facade.retrieveProxy(IconsProxy.NAME) as IconsProxy;
 			imageCommandingHeight.source = iconsProxy.icons.IconCommandHeight;
+			
+			imageCommandingHeight.commandingHeight = commandHeight;
 		}
 		
 		protected function get imageCommandingHeight():ImageCommandingHeight

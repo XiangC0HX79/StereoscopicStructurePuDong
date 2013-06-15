@@ -16,6 +16,7 @@ package app.model.vo
 		}
 		public function set T_ScentingX(value:Number):void
 		{
+			edit = true;
 			source.T_ScentingX = value;
 		}
 		
@@ -25,6 +26,7 @@ package app.model.vo
 		}
 		public function set T_ScentingY(value:Number):void
 		{
+			edit = true;
 			source.T_ScentingY = value;
 		}
 		
@@ -42,6 +44,8 @@ package app.model.vo
 		{
 			return  source.T_ScentingimgPath.replace("../",ConfigVO.BASE_URL);	
 		}
+		
+		public var edit:Boolean = false;
 		
 		public function ScentingVO(value:Object)
 		{

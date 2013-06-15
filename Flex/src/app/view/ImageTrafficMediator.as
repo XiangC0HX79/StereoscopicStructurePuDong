@@ -3,8 +3,10 @@ package app.view
 	import app.ApplicationFacade;
 	import app.model.IconsProxy;
 	import app.model.vo.ConfigVO;
-	import app.model.vo.TrafficInfoVO;
+	import app.model.vo.TrafficVO;
 	import app.view.components.ImageTraffic;
+	
+	import com.adobe.utils.DictionaryUtil;
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -20,11 +22,17 @@ package app.view
 	
 	public class ImageTrafficMediator extends Mediator implements IMediator
 	{
-		public function ImageTrafficMediator(mediatorName:String=null, viewComponent:Object=null)
+		public static const NAME:String = "ImageTrafficMediator";
+		
+		public function ImageTrafficMediator(tr:TrafficVO)
 		{
-			super(mediatorName, viewComponent);
+			super(NAME + tr.T_TrafficID, new ImageTraffic);
 						
-			imageTraffic.addEventListener(MouseEvent.CLICK,onClick);
+			if(DictionaryUtil.getKeys(tr.pics).length > 0)
+			{
+				imageTraffic.buttonMode = true;
+				imageTraffic.addEventListener(MouseEvent.CLICK,onClick);
+			}
 			
 			if(ConfigVO.EDIT)
 			{
@@ -33,6 +41,8 @@ package app.view
 			
 			var iconsProxy:IconsProxy = facade.retrieveProxy(IconsProxy.NAME) as IconsProxy;
 			imageTraffic.source = iconsProxy.icons.IconTraffic;
+			
+			imageTraffic.trafficInfo = tr;
 		}
 		
 		protected function get imageTraffic():ImageTraffic
@@ -42,7 +52,7 @@ package app.view
 		
 		private function onClick(event:Event):void
 		{				
-			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_TRAFFIC,imageTraffic.trafficInfo);
+			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_MEDIA,imageTraffic.trafficInfo.pics);
 		}
 		
 		private function onDragStart(e:MouseEvent):void

@@ -3,14 +3,17 @@ package app.view
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
 	import app.model.vo.BuildVO;
-	import app.model.vo.ClosedhandleVO;
+	import app.model.vo.ClosedHandleVO;
 	import app.model.vo.CommandHeightVO;
 	import app.model.vo.LayerVO;
 	import app.view.components.ImageClosedHandle;
 	import app.view.components.LayerClosedhandles;
 	
+	import flash.utils.Dictionary;
+	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
+	import mx.core.IVisualElement;
 	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
@@ -37,7 +40,7 @@ package app.view
 		override public function listNotificationInterests():Array
 		{
 			return [
-				ApplicationFacade.NOTIFY_INIT_APP
+				ApplicationFacade.NOTIFY_INIT_CLOSEDHANDLE
 			];
 		}
 		
@@ -45,16 +48,14 @@ package app.view
 		{
 			switch(notification.getName())
 			{
-				case ApplicationFacade.NOTIFY_INIT_APP:		
-					for each(var closedHandle:ClosedhandleVO in (notification.getBody() as BuildVO).CloseHandles)
+				case ApplicationFacade.NOTIFY_INIT_CLOSEDHANDLE:		
+					for each(var ch:ClosedHandleVO in notification.getBody() as Dictionary)
 					{						
-						var imageClosedHandle:ImageClosedHandle = new ImageClosedHandle;
+						var chm:ImageClosedHandleMediator = new ImageClosedHandleMediator(ch);
+												
+						facade.registerMediator(chm);
 						
-						imageClosedHandle.closedhandle = closedHandle;
-						
-						facade.registerMediator(new ImageClosedHandleMediator("ImageClosedHandleMediator" + closedHandle.T_ClosedhandlesID,imageClosedHandle));
-						
-						layerClosedhandles.addElement(imageClosedHandle);
+						layerClosedhandles.addElement(chm.getViewComponent() as IVisualElement);
 					}
 					
 					BindingUtils.bindProperty(layerClosedhandles,"visible",LayerVO.CLOSEHANDLE,"LayerVisible");

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Net;
 using System.Web;
 using System.Web.UI;
 
@@ -18,10 +17,10 @@ public partial class Download : Page
             var pimg = HttpUtility.UrlDecode(Request.Params["img"]);
             var ps = HttpUtility.UrlDecode(Request.Params["scale"]);
 
-            var root = System.Web.HttpContext.Current.Request.Url.AbsoluteUri;
-            root = root.Substring(0, root.IndexOf("Download.aspx"));
+            var root = HttpContext.Current.Request.Url.AbsoluteUri;
+            root = root.Substring(0, root.IndexOf("Download.aspx", StringComparison.Ordinal));
 
-            var index = pimg.IndexOf(root);
+            var index = pimg.IndexOf(root, StringComparison.Ordinal);
             if (index != 0)
             {
                 Response.Write("图片不存在" + pimg);

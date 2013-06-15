@@ -1,9 +1,6 @@
 package app.controller
 {	
-	import app.model.BuildProxy;
-	import app.model.ConfigProxy;
-	import app.model.IconsProxy;
-	import app.model.PassageProxy;
+	import app.model.*;
 	
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.command.SimpleCommand;
@@ -14,11 +11,19 @@ package app.controller
 	{
 		override public function execute(note:INotification):void
 		{						
-			facade.registerProxy(new ConfigProxy);	
-			
+			facade.registerProxy(new ConfigProxy);				
 			facade.registerProxy(new IconsProxy);	
 			
-			facade.registerProxy(new BuildProxy);	
+			facade.registerProxy(new BuildProxy);				
+			facade.registerProxy(new CommandHeightProxy);		
+			facade.registerProxy(new ClosedHandleProxy);		
+			facade.registerProxy(new TrafficProxy);					
+			facade.registerProxy(new HazardProxy);					
+			facade.registerProxy(new FireHydrantProxy);				
+			facade.registerProxy(new KeyUnitProxy);			
+			facade.registerProxy(new ScentingProxy);	
+			
+			facade.registerProxy(new TaticsProxy);	
 			
 			facade.registerProxy(new PassageProxy);	
 		}

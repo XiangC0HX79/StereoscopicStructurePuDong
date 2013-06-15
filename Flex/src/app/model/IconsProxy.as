@@ -15,6 +15,7 @@ package app.model
 	import flash.text.TextFormat;
 	
 	import mx.collections.ArrayCollection;
+	import mx.rpc.events.ResultEvent;
 	
 	import org.puremvc.as3.interfaces.IProxy;
 	import org.puremvc.as3.patterns.proxy.Proxy;
@@ -38,105 +39,81 @@ package app.model
 			send("InitIcon",onInitIcon);
 		}
 				
-		private function onInitIcon(result:ArrayCollection):void
+		private function onInitIcon(event:ResultEvent):void
 		{
-			for each(var i:Object in result)
+			for each(var i:Object in event.result.Tables.Table.Rows)
 			{
 				var url:String = i.IconPath.replace("../",ConfigVO.BASE_URL);
-				
-				switch(i.IconID)
-				{
-					case "1":
-						load(url,onLoadIconCommandHeight);
-						break;
-					
-					case "2":
-						load(url,onLoadIconCloseHandle);
-						break;
-					
-					case "3":
-						load(url,onLoadIconTraffic);
-						break;
-					
-					case "6":
-						load(url,onLoadIconFireHydrant);
-						break;
-					
-					case "7":
-						load(url,onLoadIconKeyUnit);
-						break;
-					
-					case "8":
-						load(url,onLoadIconScenting);
-						break;
-					
-					case "9":
-						load(url,onLoadIconImportExport);
-						break;
-				}
+				var token:* = load(url,onLoadIcon);
+				token.IconID = i.IconID;
 			}
 		}
 		
-		private function onLoadIconCommandHeight(bitmap:Bitmap):void
-		{			
-			icons.IconCommandHeight = bitmap;
-			
-			onLoadBitmap();
-		}		
+		private function onLoadIcon(token:*):void
+		{
+			switch(token.IconID)
+			{
+				case "1":
+					icons.IconCommandHeight = token.bitmap;
+					break;
 				
-		private function onLoadIconCloseHandle(bitmap:Bitmap):void
-		{			
-			icons.IconCloseHandle = bitmap;
+				case "2":
+					icons.IconCloseHandle = token.bitmap;
+					break;
+				
+				case "3":
+					icons.IconTraffic = token.bitmap;
+					break;
+				
+				case "41":
+					icons.IconEletric = token.bitmap;
+					break;
+				
+				case "42":
+					icons.IconGas = token.bitmap;
+					break;
+				
+				case "43":
+					icons.IconCan = token.bitmap;
+					break;
+				
+				case "6":
+					icons.IconFireHydrant = token.bitmap;
+					break;
+				
+				case "7":
+					icons.IconKeyUnit = token.bitmap;
+					break;
+				
+				case "8":
+					icons.IconScenting = token.bitmap;
+					break;
+				
+				case "9":
+					icons.IconImportExport = token.bitmap;
+					break;
+				
+				case "10":
+					icons.IconVideo = token.bitmap;
+					break;
+			}
 			
-			onLoadBitmap();
-		}			
-		
-		private function onLoadIconTraffic(bitmap:Bitmap):void
-		{			
-			icons.IconTraffic = bitmap;
-			
-			onLoadBitmap();
-		}		
-		
-		private function onLoadIconFireHydrant(bitmap:Bitmap):void
-		{			
-			icons.IconFireHydrant = bitmap;
-			
-			onLoadBitmap();
-		}		
-		
-		private function onLoadIconKeyUnit(bitmap:Bitmap):void
-		{			
-			icons.IconKeyUnit = bitmap;
-			
-			onLoadBitmap();
-		}		
-		
-		private function onLoadIconScenting(bitmap:Bitmap):void
-		{			
-			icons.IconScenting = bitmap;
-			
-			onLoadBitmap();
-		}	
-		
-		private function onLoadIconImportExport(bitmap:Bitmap):void
-		{			
-			icons.IconImportExport = bitmap;
-			
-			onLoadBitmap();
-		}
-		
-		private function onLoadBitmap():void
-		{			
 			if(
 				icons.IconCommandHeight
 				&& icons.IconCloseHandle
 				&& icons.IconTraffic
+				&& icons.IconEletric
+				&& icons.IconGas
+				&& icons.IconCan
 				&& icons.IconFireHydrant
 				&& icons.IconKeyUnit
 				&& icons.IconScenting
+				&& icons.IconImportExport
+				&& icons.IconVideo
 			)
 			{
+				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：图标加载完成...");	
+				
 				sendNotification(ApplicationFacade.NOTIFY_INIT_ICONS);
 			}			
 		}

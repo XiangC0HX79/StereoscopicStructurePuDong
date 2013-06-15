@@ -71,8 +71,8 @@
 	
 	<s:HGroup horizontalAlign="center" includeIn="Edit" width="100%">
 		<s:Image source="@Embed('assets/image/default.png')" buttonMode="true" click="dispatchEvent(new Event(DEFAULT))"/>
-		<s:Image source="@Embed('assets/image/fire_add.png')" toolTip="添加摄像头" buttonMode="true" click="dispatchEvent(new Event(VIDEOADD))"/>
-		<s:Image source="@Embed('assets/image/fire_del.png')" toolTip="删除摄像头" buttonMode="true" click="dispatchEvent(new Event(VIDEODEL))"/>
+		<s:Image source="@Embed('assets/image/cam_add.png')" toolTip="添加摄像头" buttonMode="true" click="dispatchEvent(new Event(VIDEOADD))"/>
+		<s:Image source="@Embed('assets/image/cam_del.png')" toolTip="删除摄像头" buttonMode="true" click="dispatchEvent(new Event(VIDEODEL))"/>
 		<s:Image source="@Embed('assets/image/btnSave.png')" toolTip="保存数据" buttonMode="true" click="dispatchEvent(new Event(SAVE))"/>
 	</s:HGroup>
 </s:VGroup>
