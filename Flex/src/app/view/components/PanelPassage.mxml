@@ -8,9 +8,12 @@
 	
 	<fx:Script>
 		<![CDATA[		
+			import app.model.vo.ImportExportVO;
+			import app.model.vo.LayerVO;
 			import app.model.vo.PassageVO;
 			import app.model.vo.VideoVO;
 			
+			import mx.binding.utils.BindingUtils;
 			import mx.collections.ArrayCollection;
 			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
@@ -18,7 +21,9 @@
 			import mx.managers.DragManager;
 			
 			import spark.events.IndexChangeEvent;
-						
+			
+			public static const LIST_CHANGING:String 	= "ListChanging";
+			
 			public static const IMAGE_READY:String 	= "ImageReady";
 			
 			public static const ROLLOVER:String 	= "RollOver";
@@ -97,7 +102,8 @@
 			protected function groupPassage_dragEnterHandler(e:DragEvent):void
 			{	
 				if(
-					e.dragSource.hasFormat("VideoVO")			
+					e.dragSource.hasFormat("VideoVO")	
+					|| e.dragSource.hasFormat("ImportExportVO")	
 				)
 				{  
 					DragManager.acceptDragDrop(groupPassage);	
@@ -114,11 +120,19 @@
 					v.T_VideoX = e.localX - sp.x + e.dragInitiator.width / 2;
 					v.T_VideoY = e.localY - sp.y + e.dragInitiator.height / 2;
 				}
-			}			
+				else if(e.dragSource.hasFormat("ImportExportVO"))
+				{  
+					var ie:ImportExportVO = e.dragSource.dataForFormat("ImportExportVO") as ImportExportVO;
+					ie.T_ImportExportX = e.localX - sp.x;
+					ie.T_ImportExportY = e.localY - sp.y;
+				}
+			}		
 		]]>
 	</fx:Script>
 	
 	<fx:Binding source="list.selectedItem" destination="psg" twoWay="true"/>
+	<fx:Binding source="groupVideo.visible" destination="LayerVO.VIDEO.LayerVisible" twoWay="true"/>
+	<fx:Binding source="toggleButtonVideo.selected" destination="LayerVO.VIDEO.LayerVisible" twoWay="true"/>
 	
 	<s:Rect left="0" right="0" top="0" bottom="0">
 		<s:fill>
@@ -127,7 +141,7 @@
 	</s:Rect>
 	
 	<s:List id="list" left="22" top="15" bottom="23" width="100" borderVisible="false" 
-			dataProvider="{dp}" 
+			dataProvider="{dp}"
 			labelField="T_PassageName"/>
 	
 	<s:Rect left="130" right="22" top="15" bottom="23">
@@ -157,6 +171,6 @@
 		<s:Image buttonMode="true" source="@Embed('assets/image/1比1.png')" click="sizeToTrue();"/>
 		<s:Image buttonMode="true" source="@Embed('assets/image/放大.png')" click="zoomin();"/>
 		<s:Image buttonMode="true" source="@Embed('assets/image/缩小.png')" click="zoomout();"/>		
-		<s:Image buttonMode="true" source="@Embed('assets/image/cam.png')"/>	
+		<s:ToggleButton id="toggleButtonVideo" buttonMode="true" skinClass="app.skin.SkinToggleButtonVideo" width="50" height="50"/>
 	</s:VGroup>
 </s:Group>

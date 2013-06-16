@@ -2,7 +2,7 @@
 <s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
 			   xmlns:mx="library://ns.adobe.com/flex/mx" 
-			   x="15" y="117">
+			   x="25" y="110">
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
@@ -29,8 +29,8 @@
 			public function initScales():void
 			{											
 				var contentScale:Number = Math.min(
-					H / floor.BitmapHeight
-					,W / floor.BitmapWidth
+					H / floor.T_BitmapHeight
+					,W / floor.T_BitmapWidth
 				);
 				
 				var maxScale:Number = Math.max(2,contentScale);
@@ -194,7 +194,7 @@
 		
 		<s:Group width="{W}" height="{H}"
 				 clipAndEnableScrolling="true">		
-			<s:Group id="groupFloor" width="{floor.BitmapWidth}" height="{floor.BitmapHeight}">
+			<s:Group id="groupFloor" width="{floor.T_BitmapWidth}" height="{floor.T_BitmapHeight}">
 				<s:Image source="{floor.T_FloorPicPath}" 
 						 mouseMove="image_mouseMoveHandler(event)"
 						 mouseDown="image_mouseDownHandler(event)"/>

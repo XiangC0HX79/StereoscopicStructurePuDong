@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
+using System.Web;
 using System.Web.Services;
 
 using System.Data;
@@ -106,11 +107,8 @@ public class Service : WebService
     public int SaveSurrouding(String data)
     {
         var sql = "";
-        var tmbId = "";
 
-        var s1 = data.Split(';');
-
-        foreach (var s2 in s1.Select(i => i.Split(' ')))
+        foreach (var s2 in data.Split(';').Select(i => i.Split(' ')))
         {
             switch (s2[0])
             {
@@ -127,8 +125,7 @@ public class Service : WebService
                     sql += "UPDATE T_Hazard SET T_HazardX = " + s2[2] + ",T_HazardY = " + s2[3] + " WHERE T_HazardID = " + s2[1] + ";";
                     break;
                 case "6":
-                    tmbId = s2[1];
-                    sql += "INSERT T_FireHydrant (TMB_ID,T_FireHydrantX,T_FireHydrantY) VALUES (" + s2[1] + "," +s2[2] + "," + s2[3] + ");";
+                    sql += "UPDATE T_FireHydrant SET T_FireHydrantX = " + s2[2] + ",T_FireHydrantY = " + s2[3] + " WHERE T_FireHydrantID = " + s2[1] + ";";
                     break;
                 case "7":
                     sql += "UPDATE T_KeyUnits SET T_KeyUnitsX = " + s2[2] + ",T_KeyUnitsY = " + s2[3] + " WHERE T_KeyUnitsID = " + s2[1] + ";";
@@ -139,8 +136,25 @@ public class Service : WebService
             }
         }
 
-        if(tmbId != "")
-            sql = "DELETE FROM T_FireHydrant WHERE TMB_ID = " + tmbId + ";" + sql;
+        return _databaseOperator.ExcuteNoQuery(sql);
+    }
+       
+    [WebMethod]
+    public int AddFireHydrant(String data)
+    {
+        var s = data.Split(' ');
+
+        var sql = "INSERT T_FireHydrant (TMB_ID,T_FireHydrantX,T_FireHydrantY) VALUES (" + s[0] + "," + s[1] + "," + s[2]  + ");";
+
+        _databaseOperator.ExcuteNoQuery(sql);
+
+        return Convert.ToInt32(_databaseOperator.GetValue("select IDENT_CURRENT('T_FireHydrant')"));
+    }
+
+    [WebMethod]
+    public int DelFireHydrant(String id)
+    {
+        var sql = "DELETE FROM T_FireHydrant WHERE T_FireHydrantID = " + id;
 
         return _databaseOperator.ExcuteNoQuery(sql);
     }
@@ -286,12 +300,30 @@ public class Service : WebService
     [WebMethod]
     public DataTable InitFloor(String buildId)
     {
-        var sql = "SELECT * FROM T_Floor " +
+        var sql = "SELECT *,0 T_BitmapWidth,0 T_BitmapHeight FROM T_Floor " +
                   "LEFT JOIN T_FloorPos ON T_Floor.T_FloorID = T_FloorPos.T_FloorID AND T_Floor.TMB_ID = T_FloorPos.TMB_ID " +
                   "WHERE T_Floor.TMB_ID = " + buildId + " " +
                   "ORDER BY T_Floor.T_Floorsque DESC";
 
-        return _databaseOperator.GetTable(sql);
+        var dt = _databaseOperator.GetTable(sql);
+
+        foreach (DataRow row in dt.Rows)
+        {
+            var path = row["T_FloorPicPath"].ToString();
+            path =path.Replace("..","~");
+
+            try
+            {
+                var img = Image.FromFile(Server.MapPath(path));
+                row["T_BitmapWidth"] = img.Width;
+                row["T_BitmapHeight"] = img.Height;
+            }
+            finally
+            {
+            }
+        }
+
+        return dt;
     }
 
     [WebMethod]
@@ -309,35 +341,20 @@ public class Service : WebService
     }
 
     [WebMethod]
-    public DataTable InitComponent(String buildId, String floorId)
+    public DataTable InitComponent(String buildId)
     {
         var sql = "SELECT * FROM T_FloorDetail " +
-                  "WHERE TMB_ID = " + buildId + 
-                  " ORDER BY T_FloorDetailID DESC";
-        var result = _databaseOperator.GetTable(sql);
+                  "WHERE TMB_ID = " + buildId;
 
-        for (var i = result.Rows.Count - 1; i >= 0; i--)
-        {
-            var row = result.Rows[i];
-
-            if (floorId == row["T_FloorID"].ToString()) continue;
-
-            var childfloors = row["T_FloorDetailchildfloor"].ToString().Split(',');
-            var b = childfloors.Any(childfloor => floorId == childfloor);
-
-            if (!b)
-                result.Rows.Remove(row);
-        }
-
-        return result;
+        return _databaseOperator.GetTable(sql);
     }
 
     [WebMethod]
-    public DataTable InitComponentMedia(String componentId)
+    public DataTable InitComponentMedia(String tmbId)
     {
-        var result = _databaseOperator.GetTable("SELECT * FROM T_FloorMedia WHERE T_FloorDetailID = " + componentId);
+        var sql = "SELECT * FROM T_FloorMedia WHERE TMB_ID = " + tmbId;
 
-        return result;
+        return _databaseOperator.GetTable(sql);
     }
 
     [WebMethod]
@@ -371,6 +388,47 @@ public class Service : WebService
 
         return result;
     }
+       
+    [WebMethod]
+    public int AddVideo(String data)
+    {
+        var s = data.Split(' ');
+
+        var sql = "INSERT T_Video (TMB_ID,T_PassageID,T_VideoX,T_VideoY) VALUES (" + s[0] + "," + s[1] + "," + s[2] + "," + s[3] + ");";
+
+        _databaseOperator.ExcuteNoQuery(sql);
+
+        return Convert.ToInt32(_databaseOperator.GetValue("select IDENT_CURRENT('T_Video')"));
+    }
+
+    [WebMethod]
+    public int DelVideo(String id)
+    {
+        var sql = "DELETE FROM T_Video WHERE T_VideoID = " + id;
+
+        return _databaseOperator.ExcuteNoQuery(sql);
+    }
+      
+    [WebMethod]
+    public int SavePassage(String data)
+    {
+        var sql = "";
+        foreach (var f in data.Split(';').Select(s => s.Split(' ')))
+        {
+            switch (f[0])
+            {
+                case "10":
+                    sql += "UPDATE T_Video SET T_VideoX = " + f[2] + ",T_VideoY = " + f[3] + " WHERE T_VideoID = " + f[1] + ";";
+                    break;
+
+                case "11":
+                    sql += "UPDATE T_ImportExport SET T_ImportExportX = " + f[2] + ",T_ImportExportY = " + f[3] + " WHERE T_ImportExportID = " + f[1] + ";";
+                    break;
+            }
+        }
+
+        return _databaseOperator.ExcuteNoQuery(sql);
+    }
 
     [WebMethod]
     public String GetBitmapSize(String url)
@@ -385,7 +443,7 @@ public class Service : WebService
             {
                 return "0 0";
             }
-
+           
             var u = url.Substring(root.Length);
             var img = Image.FromFile(Server.MapPath(u));
             return img.Width + " " + img.Height;

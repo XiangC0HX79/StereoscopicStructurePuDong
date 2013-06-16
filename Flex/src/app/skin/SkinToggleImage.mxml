@@ -43,15 +43,9 @@ in accordance with the terms of the license agreement accompanying it.
                 // Handle undefined backgroundColor by hiding the background object.
                 if (isNaN(getStyle("backgroundColor")))
                 {
-                    background.visible = false;
-                    background.includeInLayout = false;
                 }
                 else
                 {
-                    background.visible = true;
-                    background.includeInLayout = true;
-                    bgFill.color = getStyle("backgroundColor");
-                    bgFill.alpha = getStyle("backgroundAlpha");
                 }
                 
                 super.updateDisplayList(unscaledWidth, unscaledHeight);
@@ -69,23 +63,85 @@ in accordance with the terms of the license agreement accompanying it.
         ]]>
     </fx:Metadata>
     
-    <!--- Defines the appearance of the image background. -->
-	<s:Rect left="0" right="0" top="0" bottom="0" radiusX="5" radiusY="5">
+	<!-- layer 1: shadow -->
+	<!--- @private -->
+	<s:Rect id="shadow" left="-1" right="-1" top="-1" bottom="-1" radiusX="2" visible.ready="false">
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="0x000000" 
+								 alpha="0.01"/>
+				<s:GradientEntry color="0x000000" 
+								 alpha="0.07"/>
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	
+	<!-- layer 2: fill -->
+	<!--- @private -->
+	<s:Rect id="fill" left="1" right="1" top="1" bottom="1" radiusX="2" visible.ready="false">
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="0xFFFFFF" 
+								 alpha="0.85" />
+				<s:GradientEntry color="0xD8D8D8" 
+								 alpha="0.85"/>
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	
+	<!-- layer 3: fill lowlight -->
+	<!--- @private -->
+	<s:Rect id="lowlight" left="1" right="1" top="1" bottom="1" radiusX="2" visible.ready="false">
+		<s:fill>
+			<s:LinearGradient rotation="270">
+				<s:GradientEntry color="0x000000" ratio="0.0" alpha="0.0627" />
+				<s:GradientEntry color="0x000000" ratio="0.48" alpha="0.0099" />
+				<s:GradientEntry color="0x000000" ratio="0.48001" alpha="0" />
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	
+	<!-- layer 4: fill highlight -->
+	<!--- @private -->
+	<s:Rect id="highlight" left="1" right="1" top="1" bottom="1" radiusX="2" visible.ready="false">
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="0xFFFFFF"
+								 ratio="0.0"
+								 alpha="0.33" />
+				<s:GradientEntry color="0xFFFFFF"
+								 ratio="0.48"
+								 alpha="0.33"/>
+				<s:GradientEntry color="0xFFFFFF"
+								 ratio="0.48001"
+								 alpha="0" />
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	
+	<!-- layer 5: highlight stroke (all states except down) -->
+	<!--- @private -->
+	<s:Rect id="highlightStroke" left="1" right="1" top="1" bottom="1" radiusX="2" visible.ready="false">
 		<s:stroke>
-			<s:SolidColorStroke color.disabled="0x7DA2CE"/>
+			<s:LinearGradientStroke rotation="90" weight="1">
+				<s:GradientEntry color="0xFFFFFF" />
+				<s:GradientEntry color="0xD8D8D8" />
+			</s:LinearGradientStroke>
 		</s:stroke>
 	</s:Rect>
-	<s:Rect left="1" right="1" top="1" bottom="1" radiusX="5" radiusY="5">
+		
+	<!-- layer 7: border - put on top of the fill so it doesn't disappear when scale is less than 1 -->
+	<!--- @private -->
+	<s:Rect id="border" left="0" right="0" top="0" bottom="0" width="69" height="20" radiusX="2" visible.ready="false">
 		<s:stroke>
-			<s:SolidColorStroke color.disabled="0xEBF4FD"/>
+			<s:LinearGradientStroke rotation="90" weight="1">
+				<s:GradientEntry color="0x000000" 
+								 alpha="0.5625"/>
+				<s:GradientEntry color="0x000000" 
+								 alpha="0.75" />
+			</s:LinearGradientStroke>
 		</s:stroke>
 	</s:Rect>
-    <s:Rect id="background" left="2" right="2" top="2" bottom="2" radiusX="5" radiusY="5">
-        <s:fill>
-            <!-- @private -->
-            <s:SolidColor id="bgFill" color.disabled="0x7DA2CE" alpha.disabled="0.5"/>
-        </s:fill>
-    </s:Rect>
     
     <!--- Primary image display skin part. -->
     <s:BitmapImage id="imageDisplay" left="5" top="5" right="5" bottom="5"/>

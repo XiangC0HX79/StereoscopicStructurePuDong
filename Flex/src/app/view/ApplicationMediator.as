@@ -5,6 +5,8 @@ package app.view
 	import app.model.ClosedHandleProxy;
 	import app.model.CommandHeightProxy;
 	import app.model.FireHydrantProxy;
+	import app.model.FloorPicProxy;
+	import app.model.FloorPorxy;
 	import app.model.HazardProxy;
 	import app.model.IconsProxy;
 	import app.model.KeyUnitProxy;
@@ -12,9 +14,9 @@ package app.view
 	import app.model.ScentingProxy;
 	import app.model.TaticsProxy;
 	import app.model.TrafficProxy;
+	import app.model.vo.BuildVO;
 	import app.model.vo.ConfigVO;
 	import app.view.components.TitleWindowFloor;
-	import app.view.components.TitleWindowImage;
 	import app.view.components.TitleWindowMovie;
 	
 	import flash.events.Event;
@@ -64,10 +66,11 @@ package app.view
 				ApplicationFacade.NOTIFY_INIT_SCENTING,
 				ApplicationFacade.NOTIFY_INIT_TATICS,
 				ApplicationFacade.NOTIFY_INIT_PASSAGE,
+				ApplicationFacade.NOTIFY_INIT_FLOORPIC,
+				ApplicationFacade.NOTIFY_INIT_FLOOR,
 				
 				ApplicationFacade.NOTIFY_TITLEWINDOW_MEDIA,
 				ApplicationFacade.NOTIFY_TITLEWINDOW_FLOOR,
-				ApplicationFacade.NOTIFY_TITLEWINDOW_IMAGE,
 				ApplicationFacade.NOTIFY_TITLEWINDOW_MOVIE,
 				ApplicationFacade.NOTIFY_TITLEWINDOW_COMMAND,
 				ApplicationFacade.NOTIFY_TITLEWINDOW_RESCUE,
@@ -84,7 +87,7 @@ package app.view
 			switch(notification.getName())
 			{
 				case ApplicationFacade.NOTIFY_INIT_CONFIG:
-					ConfigVO.EDIT = (application.parameters.edit == "1");
+					ConfigVO.EDIT = false;//(application.parameters.edit == "1");
 					
 					var iconsProxy:IconsProxy = facade.retrieveProxy(IconsProxy.NAME) as IconsProxy;
 					iconsProxy.Init();
@@ -96,9 +99,14 @@ package app.view
 					break;
 				
 				case ApplicationFacade.NOTIFY_INIT_BUILD:
+					var floorPorxy:FloorPorxy = facade.retrieveProxy(FloorPorxy.NAME) as FloorPorxy;
+					floorPorxy.Init(notification.getBody() as BuildVO);
+					break;
+				
+				case ApplicationFacade.NOTIFY_INIT_FLOOR:	
 					var commandHeightProxy:CommandHeightProxy = facade.retrieveProxy(CommandHeightProxy.NAME) as CommandHeightProxy;
 					commandHeightProxy.Init();
-					break;
+					break;	
 				
 				case ApplicationFacade.NOTIFY_INIT_COMMANDHEIGHT:	
 					var closedHandleProxy:ClosedHandleProxy = facade.retrieveProxy(ClosedHandleProxy.NAME) as ClosedHandleProxy;
@@ -141,10 +149,13 @@ package app.view
 					break;
 				
 				case ApplicationFacade.NOTIFY_INIT_PASSAGE:
-					var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;					
-					sendNotification(ApplicationFacade.NOTIFY_INIT_APP,buildProxy.build);
+					var floorPicProxy:FloorPicProxy = facade.retrieveProxy(FloorPicProxy.NAME) as FloorPicProxy;
+					floorPicProxy.Init();
 					break;
 				
+				case ApplicationFacade.NOTIFY_INIT_FLOORPIC:		
+					sendNotification(ApplicationFacade.NOTIFY_INIT_APP);
+					break;
 				
 				case ApplicationFacade.NOTIFY_TITLEWINDOW_MEDIA:					
 					popup = facade.retrieveMediator(TitleWindowMediaMediator.NAME).getViewComponent() as IFlexDisplayObject;
@@ -155,12 +166,6 @@ package app.view
 				case ApplicationFacade.NOTIFY_TITLEWINDOW_FLOOR:
 					var popup:IFlexDisplayObject = facade.retrieveMediator(TitleWindowFloorMediator.NAME).getViewComponent() as IFlexDisplayObject;
 					PopUpManager.addPopUp(popup,this.application,false);
-					break;
-				
-				case ApplicationFacade.NOTIFY_TITLEWINDOW_IMAGE:
-					popup = facade.retrieveMediator(TitleWindowImageMediator.NAME).getViewComponent() as IFlexDisplayObject;
-					PopUpManager.addPopUp(popup,this.application,true);
-					PopUpManager.centerPopUp(popup);
 					break;
 				
 				case ApplicationFacade.NOTIFY_TITLEWINDOW_MOVIE:

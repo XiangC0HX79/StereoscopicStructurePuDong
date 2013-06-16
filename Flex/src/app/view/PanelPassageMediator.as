@@ -9,6 +9,8 @@ package app.view
 	import app.view.components.PanelPassage;
 	
 	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.media.Video;
 	
 	import mx.core.IVisualElement;
 	import mx.managers.CursorManager;
@@ -68,8 +70,8 @@ package app.view
 		{
 			if(VideoVO.Tool == VideoVO.ADD)
 			{				
-				//var fireHydrantProxy:FireHydrantProxy = facade.retrieveProxy(FireHydrantProxy.NAME) as FireHydrantProxy;
-				//fireHydrantProxy.AddFireHydrant(event.localX,event.localY);
+				var passageProxy:PassageProxy = facade.retrieveProxy(PassageProxy.NAME) as PassageProxy;
+				passageProxy.AddVideo(panelPassage.psg,panelPassage.groupPassage.mouseX,panelPassage.groupPassage.mouseY);
 			}
 		}
 		
@@ -84,7 +86,7 @@ package app.view
 			
 			panelPassage.groupImportExport.removeAllElements();
 			
-			for each(var j:ImportExportVO in panelPassage.psg.DictImportExport)
+			for each(var j:ImportExportVO in panelPassage.psg.dictImportExport)
 			{
 				var imageImportExportMediator:ImageImportExportMediator = new ImageImportExportMediator(j);
 				
@@ -121,7 +123,10 @@ package app.view
 				ApplicationFacade.NOTIFY_MENU_PASSAGE_GROUND,
 				ApplicationFacade.NOTIFY_MENU_PASSAGE_TOPFLOOR,
 				ApplicationFacade.NOTIFY_MENU_PASSAGE_FRESHAIR,
-				ApplicationFacade.NOTIFY_MENU_PASSAGE_SPECIAL
+				ApplicationFacade.NOTIFY_MENU_PASSAGE_SPECIAL,
+				
+				ApplicationFacade.NOTIFY_VIDEO_ADD,
+				ApplicationFacade.NOTIFY_VIDEO_DEL
 			];
 		}
 		
@@ -152,6 +157,34 @@ package app.view
 				case ApplicationFacade.NOTIFY_MENU_PASSAGE_SPECIAL:		
 					panelPassage.Datapro = passageProxy.ArrSpecial;
 					break;
+				
+				case ApplicationFacade.NOTIFY_VIDEO_ADD:
+					addVideo(notification.getBody() as VideoVO);
+					break;
+				
+				case ApplicationFacade.NOTIFY_VIDEO_DEL:			
+					delVideo(notification.getBody() as VideoVO);
+					break;
+			}
+		}
+		
+		private function addVideo(v:VideoVO):void
+		{			
+			var imageVideoMediator:ImageVideoMediator = new ImageVideoMediator(v);
+			
+			facade.registerMediator(imageVideoMediator);
+			
+			panelPassage.groupVideo.addElement(imageVideoMediator.getViewComponent() as IVisualElement);
+		}
+		
+		private function delVideo(v:VideoVO):void
+		{			
+			var vm:ImageVideoMediator = facade.retrieveMediator(ImageVideoMediator.NAME + v.T_VideoID) as ImageVideoMediator;
+			
+			if(vm)
+			{
+				panelPassage.groupVideo.removeElement(vm.getViewComponent() as IVisualElement);
+				facade.removeMediator(vm.getMediatorName());
 			}
 		}
 	}

@@ -1,15 +1,21 @@
 package app.view
 {
 	import app.ApplicationFacade;
-	import app.model.BuildProxy;
+	import app.model.FloorPorxy;
 	import app.model.vo.BuildVO;
 	import app.model.vo.ConfigVO;
 	import app.model.vo.FloorVO;
 	import app.model.vo.LayerVO;
 	import app.view.components.MenuStereoScopicEdit;
 	
+	import com.adobe.utils.DictionaryUtil;
+	
+	import flash.display.Bitmap;
 	import flash.events.Event;
+	import flash.utils.Dictionary;
 	import flash.utils.setTimeout;
+	
+	import mx.collections.ArrayCollection;
 	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
@@ -18,6 +24,8 @@ package app.view
 	public class MenuStereoScopicEditMediator extends Mediator implements IMediator
 	{
 		public static const NAME:String = "MenuStereoScopicEditMediator";
+		
+		private var floorPorxy:FloorPorxy;
 		
 		public function MenuStereoScopicEditMediator()
 		{
@@ -30,6 +38,8 @@ package app.view
 			menuStereoScopicEdit.addEventListener(MenuStereoScopicEdit.FLOOR_ROTATION,onFloorRotation);			
 						
 			menuStereoScopicEdit.addEventListener(MenuStereoScopicEdit.FLOOR_SAVE,onFloorSave);
+			
+			floorPorxy = facade.retrieveProxy(FloorPorxy.NAME) as FloorPorxy;
 		}
 		
 		protected function get menuStereoScopicEdit():MenuStereoScopicEdit
@@ -37,15 +47,20 @@ package app.view
 			return viewComponent as MenuStereoScopicEdit;
 		}
 		
+		private var token:Object;
 		private function onFloorScale(event:Event):void
-		{			
-			var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
-			buildProxy.LoadFloorBitmap(menuStereoScopicEdit.floor,onLoadFloorBitmap);
-						
-			function onLoadFloorBitmap():void
-			{
-				sendNotification(ApplicationFacade.NOTIFY_FLOOR_UPDATE,menuStereoScopicEdit.floor);
-			}
+		{		
+			token = floorPorxy.LoadFloorBitmap(menuStereoScopicEdit.floor,onLoadFloorBitmap);
+		}
+		
+		private function onLoadFloorBitmap(bitmap:Bitmap,t:Object):void
+		{
+			if(token != t)
+				return;
+			
+			menuStereoScopicEdit.floor.floorBitmap = bitmap;	
+			
+			sendNotification(ApplicationFacade.NOTIFY_FLOOR_UPDATE,menuStereoScopicEdit.floor);
 		}
 				
 		private function onFloorAlpha(event:Event):void
@@ -55,23 +70,16 @@ package app.view
 		
 		private function onFloorChange(event:Event):void
 		{
-			var s:Number = Math.round(menuStereoScopicEdit.floor.floorBitmap.width / menuStereoScopicEdit.floor.BitmapWidth * 100) / 100;
+			var s:Number = Math.round(menuStereoScopicEdit.floor.floorBitmap.width / menuStereoScopicEdit.floor.T_BitmapWidth * 100) / 100;
 			if(s != menuStereoScopicEdit.floor.T_FloorScale)
 			{				
-				var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
-				buildProxy.LoadFloorBitmap(menuStereoScopicEdit.floor,onLoadFloorBitmap);
-				
-				function onLoadFloorBitmap():void
-				{
-					sendNotification(ApplicationFacade.NOTIFY_FLOOR_UPDATE,menuStereoScopicEdit.floor);
-				}
+				token = floorPorxy.LoadFloorBitmap(menuStereoScopicEdit.floor,onLoadFloorBitmap);
 			}
 		}
 				
 		private function onFloorSave(event:Event):void
 		{			
-			var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
-			buildProxy.SaveFloors();
+			floorPorxy.SaveFloors();
 		}
 		
 		private function onFloorRotation(event:Event):void
@@ -82,7 +90,8 @@ package app.view
 		override public function listNotificationInterests():Array
 		{
 			return [
-				ApplicationFacade.NOTIFY_INIT_APP
+				ApplicationFacade.NOTIFY_INIT_BUILD,
+				ApplicationFacade.NOTIFY_INIT_FLOOR
 			];
 		}
 		
@@ -90,8 +99,12 @@ package app.view
 		{
 			switch(notification.getName())
 			{
-				case ApplicationFacade.NOTIFY_INIT_APP:
+				case ApplicationFacade.NOTIFY_INIT_BUILD:
 					menuStereoScopicEdit.build = notification.getBody() as BuildVO;					
+					break;
+				
+				case ApplicationFacade.NOTIFY_INIT_FLOOR:
+					menuStereoScopicEdit.floors = new ArrayCollection(DictionaryUtil.getValues((notification.getBody() as Dictionary)));
 					break;
 			}
 		}

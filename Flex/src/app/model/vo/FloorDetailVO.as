@@ -1,16 +1,15 @@
 package app.model.vo
 {
 	import flash.display.Bitmap;
+	import flash.utils.Dictionary;
 	
 	import mx.collections.ArrayCollection;
 	import mx.utils.UIDUtil;
 
 	[Bindable]
-	public class ComponentVO
+	public class FloorDetailVO
 	{		
 		private var _source:*;
-		
-		public var Id:String;
 		
 		public function get layer():LayerVO
 		{
@@ -45,6 +44,11 @@ package app.model.vo
 			return  _source.T_FloorDetailID;	
 		}
 		
+		public function get T_FloorID():Number
+		{
+			return  _source.T_FloorID;	
+		}
+		
 		public function get T_FloorPicID():Number
 		{
 			return  _source.T_FloorPicID;	
@@ -70,13 +74,18 @@ package app.model.vo
 			return  isNaN(_source.T_FloorDetailY)?0:_source.T_FloorDetailY;	
 		}
 		
-		public var floorPic:FloorPicVO;
-												
-		public function ComponentVO(item:Object)
+		public function get T_FloorDetailchildfloor():String
 		{
-			_source = item;
+			return  _source.T_FloorDetailchildfloor;	
+		}
+								
+		public var medias:Dictionary; 
+		
+		public function FloorDetailVO(item:Object)
+		{
+			medias = new Dictionary;
 			
-			Id = UIDUtil.createUID();	
+			_source = item;
 		}
 	}
 }

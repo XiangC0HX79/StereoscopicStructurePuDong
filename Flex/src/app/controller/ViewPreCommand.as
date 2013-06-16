@@ -24,8 +24,7 @@ package app.controller
 			facade.registerMediator(new AppAlertMediator);
 			
 			facade.registerMediator(new TitleWindowMediaMediator);
-			facade.registerMediator(new TitleWindowFloorMediator);
-			facade.registerMediator(new TitleWindowImageMediator);			
+			facade.registerMediator(new TitleWindowFloorMediator);		
 			facade.registerMediator(new TitleWindowMovieMediator);			
 			facade.registerMediator(new TitleWindowCommandHeightMediator);	
 			facade.registerMediator(new TitleWindowRescueImgMediator);

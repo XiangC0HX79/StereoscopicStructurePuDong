@@ -1,6 +1,7 @@
 package app.model.vo
 {
 	import flash.display.Bitmap;
+	import flash.utils.Dictionary;
 	
 	import mx.collections.ArrayCollection;
 
@@ -11,8 +12,15 @@ package app.model.vo
 		
 		public var floorBitmap:Bitmap;
 		
-		public var BitmapWidth:Number = 0;
-		public var BitmapHeight:Number = 0;
+		public function get T_BitmapWidth():Number
+		{
+			return  _source.T_BitmapWidth;	
+		}
+		
+		public function get T_BitmapHeight():Number
+		{
+			return  _source.T_BitmapHeight;	
+		}
 		
 		public function get T_FloorID():Number
 		{
@@ -97,12 +105,14 @@ package app.model.vo
 			_source.T_FloorZRotation = value;	
 		}
 				
-		public var components:ArrayCollection;
+		public var floorDetails:Dictionary;
 		
 		public var edit:Boolean = false;
 		
 		public function FloorVO(value:*)
 		{
+			floorDetails = new Dictionary;
+			
 			_source = value;
 		}
 	}

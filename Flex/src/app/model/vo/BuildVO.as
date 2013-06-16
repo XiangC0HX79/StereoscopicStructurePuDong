@@ -114,8 +114,8 @@ package app.model.vo
 		}
 				
 		//内部结构图		
-		public var floors:ArrayCollection = new ArrayCollection;
-		public var floorPics:ArrayCollection = new ArrayCollection;
+		//public var floors:ArrayCollection = new ArrayCollection;
+		//public var floorPics:ArrayCollection = new ArrayCollection;
 						
 		public var BitmapWidth:Number = 0;
 		public var BitmapHeight:Number = 0;

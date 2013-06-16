@@ -13,9 +13,13 @@ package app.model.vo
 		
 		private var _source:*;
 				
-		public function get T_FireHydrantID():String
+		public function get T_FireHydrantID():Number
 		{
 			return _source.T_FireHydrantID;
+		}
+		public function set T_FireHydrantID(value:Number):void
+		{
+			_source.T_FireHydrantID = value;
 		}
 		
 		public function get TMB_ID():Number
@@ -52,8 +56,6 @@ package app.model.vo
 		public function FireHydrantVO(value:*)
 		{
 			_source = value;
-			
-			_source.T_FireHydrantID = UIDUtil.createUID();
 		}
 	}
 }

@@ -44,57 +44,57 @@ package app.model
 			for each(var i:Object in event.result.Tables.Table.Rows)
 			{
 				var url:String = i.IconPath.replace("../",ConfigVO.BASE_URL);
-				var token:* = load(url,onLoadIcon);
+				var token:Object = load(url,onLoadIcon);
 				token.IconID = i.IconID;
 			}
 		}
 		
-		private function onLoadIcon(token:*):void
+		private function onLoadIcon(bitmap:Bitmap,token:Object):void
 		{
 			switch(token.IconID)
 			{
 				case "1":
-					icons.IconCommandHeight = token.bitmap;
+					icons.IconCommandHeight = bitmap;
 					break;
 				
 				case "2":
-					icons.IconCloseHandle = token.bitmap;
+					icons.IconCloseHandle = bitmap;
 					break;
 				
 				case "3":
-					icons.IconTraffic = token.bitmap;
+					icons.IconTraffic = bitmap;
 					break;
 				
 				case "41":
-					icons.IconEletric = token.bitmap;
+					icons.IconEletric = bitmap;
 					break;
 				
 				case "42":
-					icons.IconGas = token.bitmap;
+					icons.IconGas = bitmap;
 					break;
 				
 				case "43":
-					icons.IconCan = token.bitmap;
+					icons.IconCan = bitmap;
 					break;
 				
 				case "6":
-					icons.IconFireHydrant = token.bitmap;
+					icons.IconFireHydrant = bitmap;
 					break;
 				
 				case "7":
-					icons.IconKeyUnit = token.bitmap;
+					icons.IconKeyUnit = bitmap;
 					break;
 				
 				case "8":
-					icons.IconScenting = token.bitmap;
+					icons.IconScenting = bitmap;
 					break;
 				
 				case "9":
-					icons.IconImportExport = token.bitmap;
+					icons.IconImportExport = bitmap;
 					break;
 				
 				case "10":
-					icons.IconVideo = token.bitmap;
+					icons.IconVideo = bitmap;
 					break;
 			}
 			

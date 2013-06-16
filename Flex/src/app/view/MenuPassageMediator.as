@@ -19,6 +19,8 @@ package app.view
 	{
 		public static const NAME:String = "MenuPassageMediator";
 		
+		private var passageProxy:PassageProxy
+		
 		public function MenuPassageMediator()
 		{
 			super(NAME, new MenuPassage);
@@ -34,6 +36,8 @@ package app.view
 			menuPassage.addEventListener(MenuPassage.SAVE,onSave);
 			menuPassage.addEventListener(MenuPassage.VIDEOADD,onVideoAdd);
 			menuPassage.addEventListener(MenuPassage.VIDEODEL,onVideoDel);
+			
+			passageProxy = facade.retrieveProxy(PassageProxy.NAME) as PassageProxy;
 		}
 		
 		protected function get menuPassage():MenuPassage
@@ -93,7 +97,7 @@ package app.view
 		
 		private function onSave(event:Event):void
 		{
-			
+			passageProxy.Save(); 
 		}
 		
 		override public function listNotificationInterests():Array
@@ -113,7 +117,6 @@ package app.view
 						menuPassage.currentState = "Edit";
 					}
 					
-					var passageProxy:PassageProxy = facade.retrieveProxy(PassageProxy.NAME) as PassageProxy;
 					menuPassage.dp.addItem(MenuPassage.PLAN);
 						
 					if(passageProxy.ArrUnderGround.length > 0)

@@ -2,7 +2,7 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
-	import app.model.vo.ComponentVO;
+	import app.model.vo.FloorDetailVO;
 	import app.model.vo.FloorVO;
 	import app.view.components.ImageComponent;
 	import app.view.components.TitleWindowFloor;
@@ -51,13 +51,13 @@ package app.view
 				
 		private function onClose(event:Event):void
 		{
-			for each(var component:ComponentVO in titleWindowFloor.floor.components)
+			for each(var component:FloorDetailVO in titleWindowFloor.floor.floorDetails)
 			{
-				var mediator:ImageComponentMediator = facade.retrieveMediator("ImageComponentMediator" + component.Id) as ImageComponentMediator;
+				var mediator:ImageComponentMediator = facade.retrieveMediator(ImageComponentMediator.NAME + component.T_FloorDetailID) as ImageComponentMediator;
 				
 				titleWindowFloor.groupFloor.removeElement(mediator.getViewComponent() as IVisualElement);
 				
-				facade.removeMediator("ImageComponentMediator" + component.Id);
+				facade.removeMediator(mediator.getMediatorName());
 			}
 			
 			PopUpManager.removePopUp(titleWindowFloor);
@@ -79,15 +79,13 @@ package app.view
 										
 					titleWindowFloor.initScales();
 					
-					for each(var component:ComponentVO in titleWindowFloor.floor.components)
+					for each(var component:FloorDetailVO in titleWindowFloor.floor.floorDetails)
 					{
-						var imageComponent:ImageComponent = new ImageComponent;
+						var c:ImageComponentMediator = new ImageComponentMediator(component);
 						
-						imageComponent.component = component;
+						facade.registerMediator(c);
 						
-						facade.registerMediator(new ImageComponentMediator("ImageComponentMediator" + component.Id,imageComponent));
-						
-						titleWindowFloor.groupFloor.addElement(imageComponent);
+						titleWindowFloor.groupFloor.addElement(c.getViewComponent() as IVisualElement);
 					}
 					break;
 			}

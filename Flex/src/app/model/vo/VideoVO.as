@@ -12,10 +12,14 @@ package app.model.vo
 		public static var Tool:String = MOVE;
 		
 		private var _source:*;
-		
-		public function get T_VideoID():String
+				
+		public function get T_VideoID():Number
 		{
 			return _source.T_VideoID;
+		}
+		public function set T_VideoID(value:Number):void
+		{
+			_source.T_VideoID = value;
 		}
 		
 		public function get TMB_ID():Number
@@ -61,8 +65,6 @@ package app.model.vo
 		public function VideoVO(value:*)
 		{
 			_source = value;
-			
-			_source.T_VideoID = UIDUtil.createUID();
 		}
 	}
 }

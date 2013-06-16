@@ -1,6 +1,7 @@
 package app.view
 {
 	import app.model.IconsProxy;
+	import app.model.PassageProxy;
 	import app.model.vo.ConfigVO;
 	import app.model.vo.VideoVO;
 	import app.view.components.ImageVideo;
@@ -45,8 +46,8 @@ package app.view
 		{
 			if(VideoVO.Tool == VideoVO.DEL)
 			{
-				//var fireHydrantProxy:FireHydrantProxy = facade.retrieveProxy(FireHydrantProxy.NAME) as FireHydrantProxy;
-				//fireHydrantProxy.DelFireHydrant(imageFireHydrant.FireHydrant);
+				var passageProxy:PassageProxy = facade.retrieveProxy(PassageProxy.NAME) as PassageProxy;
+				passageProxy.DelVideo(imageVideo.v);
 			}
 		}
 		

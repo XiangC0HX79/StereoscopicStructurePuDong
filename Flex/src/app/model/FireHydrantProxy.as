@@ -32,7 +32,7 @@ package app.model
 			for each(var fh:FireHydrantVO in dict)
 			{
 				if(fh.edit)
-					s += "6 " + fh.TMB_ID + " " + fh.T_FireHydrantX + " " + fh.T_FireHydrantY + ";"
+					s += "6 " + fh.T_FireHydrantID + " " + fh.T_FireHydrantX + " " + fh.T_FireHydrantY + ";"
 			}
 			
 			return send("SaveSurrouding",onSaveSurrouding,s);
@@ -72,14 +72,34 @@ package app.model
 			fh.T_FireHydrantY = y;				
 			dict[fh.T_FireHydrantID] = fh;
 			
+			var s:String = fh.TMB_ID + " " + fh.T_FireHydrantX + " " + fh.T_FireHydrantY;
+			
+			var token:AsyncToken = send("AddFireHydrant",onAddFireHydrant,s);
+			token.fireHydrant = fh;
+		}
+		
+		private function onAddFireHydrant(event:ResultEvent):void
+		{
+			var fh:FireHydrantVO = event.token.fireHydrant;
+			
+			fh.T_FireHydrantID = Number(event.result);
+			
 			sendNotification(ApplicationFacade.NOTIFY_FIRE_ADD,fh);
 		}
 		
 		public function DelFireHydrant(fireHydrant:FireHydrantVO):void
 		{
-			delete dict[fireHydrant.T_FireHydrantID];
+			var token:AsyncToken = send("DelFireHydrant",onDelFireHydrant,fireHydrant.T_FireHydrantID);
+			token.fireHydrant = fireHydrant;
+		}
+		
+		private function onDelFireHydrant(event:ResultEvent):void
+		{
+			var fh:FireHydrantVO = event.token.fireHydrant;
 			
-			sendNotification(ApplicationFacade.NOTIFY_FIRE_DEL,fireHydrant);
+			delete dict[fh.T_FireHydrantID];
+			
+			sendNotification(ApplicationFacade.NOTIFY_FIRE_DEL,fh);
 		}
 	}
 }

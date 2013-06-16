@@ -27,13 +27,13 @@ package app.model.vo
 			return  _source.T_PassagePicPath?_source.T_PassagePicPath.replace("../",ConfigVO.BASE_URL):"";
 		}
 		
-		public var DictImportExport:Dictionary;
+		public var dictImportExport:Dictionary;
 		
 		public var dictVideo:Dictionary;
-		
+				
 		public function PassageVO(value:*)
 		{
-			DictImportExport = new Dictionary;
+			dictImportExport = new Dictionary;
 			
 			dictVideo = new Dictionary;
 			

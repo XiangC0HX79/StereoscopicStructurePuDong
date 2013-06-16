@@ -26,6 +26,9 @@ package app.controller
 			facade.registerProxy(new TaticsProxy);	
 			
 			facade.registerProxy(new PassageProxy);	
+			
+			facade.registerProxy(new FloorPicProxy);
+			facade.registerProxy(new FloorPorxy);	
 		}
 	}
 }

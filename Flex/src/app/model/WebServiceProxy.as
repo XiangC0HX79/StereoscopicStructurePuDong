@@ -86,7 +86,7 @@ package app.model
 			sendNotification(ApplicationFacade.NOTIFY_APP_ALERTERROR,event.fault.faultString + "\n" + event.fault.faultDetail);
 		}
 		
-		protected function load(url:String,listener:Function):*
+		protected function load(url:String,listener:Function):Object
 		{			
 			var downloadURL:URLRequest = new URLRequest(encodeURI(url));	
 			downloadURL.method = URLRequestMethod.POST;
@@ -110,8 +110,8 @@ package app.model
 			
 			function loaderCompleteHandler(event:Event):void
 			{							
-				token.bitmap = Bitmap((event.currentTarget as LoaderInfo).content);  
-				listener(token);
+				var bitmap:Bitmap = Bitmap((event.currentTarget as LoaderInfo).content);  
+				listener(bitmap,token);
 			}
 									
 			function onError(event:IOErrorEvent):void
@@ -141,8 +141,8 @@ package app.model
 				var bitmapData:BitmapData = new BitmapData(500,400);
 				bitmapData.draw(text);
 				
-				token.bitmap = new Bitmap(bitmapData);  
-				listener(token);
+				var bitmap:Bitmap = new Bitmap(bitmapData);  
+				listener(bitmap,token);
 			}
 		}
 	}

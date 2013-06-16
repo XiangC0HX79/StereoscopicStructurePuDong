@@ -2,15 +2,21 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
+	import app.model.FloorPorxy;
 	import app.model.vo.BuildVO;
 	import app.model.vo.FloorVO;
 	import app.view.components.ImageFloor;
 	import app.view.components.PanelStereoScopicStructure;
 	
+	import com.adobe.utils.DictionaryUtil;
+	
 	import flash.display.BitmapData;
 	import flash.events.Event;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.utils.Dictionary;
+	
+	import mx.collections.ArrayCollection;
 	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
@@ -35,11 +41,12 @@ package app.view
 	
 		private function onGroupMove(event:Event):void
 		{
-			var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
+			//var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
+			var floorPorxy:FloorPorxy = facade.retrieveProxy(FloorPorxy.NAME) as FloorPorxy;
 			
 			var floorFocus:ImageFloor;
 						
-			for each(var floor:FloorVO in buildProxy.build.floors)
+			for each(var floor:FloorVO in floorPorxy.dict)
 			{
 				var imageFloorMediator:ImageFloorMediator = facade.retrieveMediator("ImageFloorMediator" + floor.T_FloorID) as ImageFloorMediator;
 				var imageFloor:ImageFloor = imageFloorMediator.getViewComponent() as ImageFloor;
@@ -58,19 +65,21 @@ package app.view
 				}
 			}
 			
-			var floorTop:ImageFloor = panelStereoScopicStructure.getElementAt(buildProxy.build.floors.length) as ImageFloor;
+			var floors:ArrayCollection = new ArrayCollection(DictionaryUtil.getValues(floorPorxy.dict));
+			
+			var floorTop:ImageFloor = panelStereoScopicStructure.getElementAt(floors.length) as ImageFloor;
 			
 			if(floorTop != floorFocus)
 			{
-				var index:Number = buildProxy.build.floors.getItemIndex(floorTop.floor);
+				var index:Number = floors.getItemIndex(floorTop.floor);
 				if(index != 0)
 				{
-					panelStereoScopicStructure.setElementIndex(floorTop,buildProxy.build.floors.length - index);
+					panelStereoScopicStructure.setElementIndex(floorTop,floors.length - index);
 				}		
 				
 				if(floorFocus)
 				{
-					panelStereoScopicStructure.setElementIndex(floorFocus,buildProxy.build.floors.length);
+					panelStereoScopicStructure.setElementIndex(floorFocus,floors.length);
 				}
 			}
 			
@@ -85,7 +94,8 @@ package app.view
 		override public function listNotificationInterests():Array
 		{
 			return [
-				ApplicationFacade.NOTIFY_INIT_APP
+				ApplicationFacade.NOTIFY_INIT_BUILD,
+				ApplicationFacade.NOTIFY_INIT_FLOOR
 			];
 		}
 		
@@ -93,14 +103,16 @@ package app.view
 		{
 			switch(notification.getName())
 			{
-				case ApplicationFacade.NOTIFY_INIT_APP:							
-					var build:BuildVO = notification.getBody() as BuildVO;
+				case ApplicationFacade.NOTIFY_INIT_BUILD:		
+					panelStereoScopicStructure.Build = notification.getBody() as BuildVO;	
+					break;
+				
+				case ApplicationFacade.NOTIFY_INIT_FLOOR:				
+					var floors:ArrayCollection = new ArrayCollection(DictionaryUtil.getValues((notification.getBody() as Dictionary)));
 					
-					panelStereoScopicStructure.Build = build;
-					
-					for(var i:Number = build.floors.length - 1;i >=0;i--)
+					for(var i:Number = floors.length - 1;i >=0;i--)
 					{
-						var floor:FloorVO = build.floors[i];
+						var floor:FloorVO = floors[i];
 						
 						var imageFloor:ImageFloor = new ImageFloor;
 						imageFloor.floor = floor;

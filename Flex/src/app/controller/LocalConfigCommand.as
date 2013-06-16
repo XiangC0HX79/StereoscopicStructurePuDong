@@ -9,7 +9,7 @@ package app.controller
 	import app.model.vo.BuildVO;
 	import app.model.vo.CommandHeightPicVO;
 	import app.model.vo.CommandHeightVO;
-	import app.model.vo.ComponentVO;
+	import app.model.vo.FloorDetailVO;
 	import app.model.vo.FloorVO;
 	import app.model.vo.HazardVO;
 	import app.model.vo.KeyUnitVO;
@@ -279,7 +279,7 @@ package app.controller
 			var indexFloor:Number = 0;
 			var indexComponent:Number = 0;
 			var floor:FloorVO;
-			var component:ComponentVO;
+			var component:FloorDetailVO;
 			
 			for each(var item:Object in resultFloors)
 			{
@@ -311,13 +311,13 @@ package app.controller
 				{
 					for each(var item:Object in resultComponents)
 					{
-						component = new ComponentVO(item);
+						component = new FloorDetailVO(item);
 						component.layer = layerSettingStereoScopicProxy.getLayer(item.T_FloorDetailType);
 						
 						floor.components.addItem(component);
 					}
 					
-					component = floor.components[indexComponent] as ComponentVO;	
+					component = floor.components[indexComponent] as FloorDetailVO;	
 					
 					sendNotification(ApplicationFacade.NOTIFY_COMMAND_LOADIMAGE,[component.componentBitmapName,loaderComponentImageHandle]);
 				}

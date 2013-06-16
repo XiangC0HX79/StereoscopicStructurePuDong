@@ -85,7 +85,7 @@ package app.view
 		override public function listNotificationInterests():Array
 		{
 			return [
-				ApplicationFacade.NOTIFY_INIT_APP
+				ApplicationFacade.NOTIFY_INIT_BUILD
 			];
 		}
 		
@@ -93,7 +93,7 @@ package app.view
 		{
 			switch(notification.getName())
 			{
-				case ApplicationFacade.NOTIFY_INIT_APP:
+				case ApplicationFacade.NOTIFY_INIT_BUILD:
 					mainPanel.Build = notification.getBody() as BuildVO;
 										
 					contentGroupAddElement(PanelSurroundingMediator.NAME);

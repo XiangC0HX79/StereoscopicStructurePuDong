@@ -30,24 +30,26 @@ package app.model.vo
 		public function get T_ImportExportX():Number
 		{
 			return _source.T_ImportExportX;
+		}		
+		public function set T_ImportExportX(value:Number):void
+		{
+			edit = true;
+			_source.T_ImportExportX = value;
 		}
 		
 		public function get T_ImportExportY():Number
 		{
 			return _source.T_ImportExportY;
 		}
+		public function set T_ImportExportY(value:Number):void
+		{
+			edit = true;
+			_source.T_ImportExportY = value;
+		}
 		
 		public var DictImportExportPic:Dictionary;
-		
-		public function get DictImportExportPicLength():Number
-		{
-			var i:Number = 0;
-			
-			for(var key:* in DictImportExportPic)
-				i++;
-			
-			return i;
-		}
+				
+		public var edit:Boolean = false;
 		
 		public function ImportExportVO(value:*)
 		{

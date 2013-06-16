@@ -34,11 +34,14 @@ package app
 		
 		public static const NOTIFY_INIT_PASSAGE:String		= "InitPassage";
 		
+		public static const NOTIFY_INIT_FLOORPIC:String		= "InitFloorPic";
+		public static const NOTIFY_INIT_FLOOR:String		= "InitFloor";
+		
 		public static const NOTIFY_INIT_APP:String			= "InitApp";
 		
 		public static const NOTIFY_TITLEWINDOW_MEDIA:String	= "TitleWindowMedia";
 		public static const NOTIFY_TITLEWINDOW_FLOOR:String	= "titlewindow_floor";
-		public static const NOTIFY_TITLEWINDOW_IMAGE:String	= "titlewindow_image";
+		//public static const NOTIFY_TITLEWINDOW_IMAGE:String	= "titlewindow_image";
 		public static const NOTIFY_TITLEWINDOW_MOVIE:String	= "titlewindow_movie";
 		public static const NOTIFY_TITLEWINDOW_COMMAND:String	= "titlewindow_command";
 		//public static const NOTIFY_TITLEWINDOW_COMMAND_IMGLST:String	= "titlewindow_command_imglst";
@@ -73,6 +76,9 @@ package app
 		
 		public static const NOTIFY_FIRE_ADD:String			= "FireAdd";
 		public static const NOTIFY_FIRE_DEL:String			= "FireDel";
+		
+		public static const NOTIFY_VIDEO_ADD:String			= "VideoAdd";
+		public static const NOTIFY_VIDEO_DEL:String			= "VideoDel";
 				
 		/**
 		 * Singleton ApplicationFacade Factory Method

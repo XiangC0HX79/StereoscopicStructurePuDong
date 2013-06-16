@@ -2,8 +2,10 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
-	import app.model.vo.ComponentVO;
+	import app.model.FloorPicProxy;
 	import app.model.vo.ConfigVO;
+	import app.model.vo.FloorDetailVO;
+	import app.model.vo.FloorPicVO;
 	import app.model.vo.FloorVO;
 	import app.model.vo.LayerVO;
 	import app.view.components.ImageFloor;
@@ -33,8 +35,6 @@ package app.view
 			
 			updateFloor();
 						
-			//imageFloor.addEventListener(MouseEvent.MOUSE_OVER,onMouseOver);
-			//imageFloor.addEventListener(MouseEvent.MOUSE_OUT,onMouseOut);
 			imageFloor.addEventListener(MouseEvent.CLICK,onMouseClick);
 		}
 		
@@ -97,14 +97,18 @@ package app.view
 				,new Point(0,0)
 				,filter);
 						
-			for each(var component:ComponentVO in imageFloor.floor.components)
+			var floorPicProxy:FloorPicProxy = facade.retrieveProxy(FloorPicProxy.NAME) as FloorPicProxy;
+			for each(var component:FloorDetailVO in imageFloor.floor.floorDetails)
 			{
 				if(component.layer.LayerVisible || ConfigVO.EDIT)
 				{
 					var matrix:Matrix = new Matrix(1,0,0,1,component.T_FloorDetailX,component.T_FloorDetailY);					
 					matrix.scale(imageFloor.floor.T_FloorScale,imageFloor.floor.T_FloorScale);
 					
-					floorBitmapData.draw(component.floorPic.bitmap,matrix);
+					var floorPic:FloorPicVO = floorPicProxy.dict[component.T_FloorPicID];
+					
+					if(floorPic && floorPic.bitmap)
+						floorBitmapData.draw(floorPic.bitmap,matrix);
 				}
 			}
 									

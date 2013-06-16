@@ -28,6 +28,8 @@
 						
 			[Bindable]public var build:BuildVO;
 			
+			[Bindable]public var floors:ArrayCollection;
+			
 			[Bindable]public var floor:FloorVO;
 									
 			protected function XOffset_changeHandler(event:Event):void
@@ -165,8 +167,8 @@
 						
 			protected function listFloor_changingHandler(event:IndexChangeEvent):void
 			{
-				var of:FloorVO = build.floors[event.oldIndex];
-				var nf:FloorVO = build.floors[event.newIndex];
+				var of:FloorVO = floors[event.oldIndex];
+				var nf:FloorVO = floors[event.newIndex];
 				
 				if(!nf.T_FloorPosID && !nf.edit)
 				{
@@ -246,7 +248,7 @@
 		<s:List id="listFloor" selectedIndex="0"
 				labelField="T_FloorName" 
 				width="100%" height="150" 
-				dataProvider="{build.floors}" 
+				dataProvider="{floors}" 
 				changing="listFloor_changingHandler(event)" 
 				change="dispatchEvent(new Event(FLOOR_CHANGE));"/>
 		<s:Button label="保存" buttonDown="dispatchEvent(new Event(FLOOR_SAVE));"/>

@@ -2,7 +2,10 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
+	import app.model.FloorPicProxy;
 	import app.model.vo.ConfigVO;
+	import app.model.vo.FloorDetailVO;
+	import app.model.vo.FloorPicVO;
 	import app.model.vo.MediaVO;
 	import app.view.components.ImageComponent;
 	
@@ -18,11 +21,20 @@ package app.view
 	
 	public class ImageComponentMediator extends Mediator implements IMediator
 	{
-		public function ImageComponentMediator(mediatorName:String=null, viewComponent:Object=null)
+		public static const NAME:String = "ImageComponentMediator";
+		
+		public function ImageComponentMediator(floorDetail:FloorDetailVO)
 		{
-			super(mediatorName, viewComponent);
+			super(NAME + floorDetail.T_FloorDetailID, new ImageComponent);
 			
 			imageComponent.addEventListener(MouseEvent.CLICK,onComponentClick);
+			
+			var floorPicProxy:FloorPicProxy = facade.retrieveProxy(FloorPicProxy.NAME) as FloorPicProxy;
+			var floorPic:FloorPicVO = floorPicProxy.dict[floorDetail.T_FloorPicID];
+			if(floorPic)
+				imageComponent.source = floorPic.bitmap;
+				
+			imageComponent.component = floorDetail;
 		}
 		
 		protected function get imageComponent():ImageComponent
@@ -32,11 +44,12 @@ package app.view
 				
 		private function onComponentClick(event:MouseEvent):void
 		{
-			var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
-			buildProxy.LoadComponentMedia(imageComponent.component,onLoadComponentMedia);
+			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_MEDIA,imageComponent.component.medias);
+			/*var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
+			buildProxy.LoadComponentMedia(imageComponent.component,onLoadComponentMedia);*/
 		}
 		
-		private function onLoadComponentMedia(result:ArrayCollection):void
+		/*private function onLoadComponentMedia(result:ArrayCollection):void
 		{						
 			var video:String;
 			var medias:ArrayCollection = new ArrayCollection;
@@ -55,6 +68,6 @@ package app.view
 			
 			if(medias.length > 0)
 				sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_IMAGE,[video,medias]);
-		}
+		}*/
 	}
 }
