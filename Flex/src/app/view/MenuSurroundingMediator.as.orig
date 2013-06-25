@@ -46,8 +46,6 @@ package app.view
 			menuSurrounding.addEventListener(MenuSurrounding.SAVE,onSave);
 			menuSurrounding.addEventListener(MenuSurrounding.FIREADD,onFireAdd);
 			menuSurrounding.addEventListener(MenuSurrounding.FIREDEL,onFireDel);
-			menuSurrounding.addEventListener(MenuSurrounding.CLOSEADD,onCloseAdd);
-			menuSurrounding.addEventListener(MenuSurrounding.CLOSEDEL,onCloseDel);
 		}
 		
 		protected function get menuSurrounding():MenuSurrounding
@@ -193,6 +191,8 @@ package app.view
 			LayerVO.FIRE.LayerVisible = true;
 		}
 		
+<<<<<<< HEAD
+=======
 		private function onCloseAdd(event:Event):void
 		{
 			PanelSurroundingTool.Tool = PanelSurroundingTool.CLOSE_ADD_START;
@@ -207,6 +207,7 @@ package app.view
 			LayerVO.CLOSEHANDLE.LayerVisible = true;
 		}
 		
+>>>>>>> next
 		override public function listNotificationInterests():Array
 		{
 			return [				
