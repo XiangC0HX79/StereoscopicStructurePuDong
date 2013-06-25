@@ -96,6 +96,7 @@ package app.view
 				case ApplicationFacade.NOTIFY_INIT_ICONS:
 					var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
 					buildProxy.Init(application.parameters.build);
+					//buildProxy.Init("上海世博中心");
 					break;
 				
 				case ApplicationFacade.NOTIFY_INIT_BUILD:

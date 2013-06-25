@@ -35,17 +35,26 @@ package app.view
 		
 		private function onDescription(event:Event):void
 		{
-			flash.net.navigateToURL(new URLRequest(buildProxy.build.TMB_descriptionPath));			
+			if(buildProxy.build.TMB_descriptionPath)
+				flash.net.navigateToURL(new URLRequest(buildProxy.build.TMB_descriptionPath));	
+			else
+				sendNotification(ApplicationFacade.NOTIFY_SHOW_INFO,true);
 		}
 		
 		private function onFuncDivision(event:Event):void
 		{
-			flash.net.navigateToURL(new URLRequest(buildProxy.build.TMB_FuncDivisionPath));			
+			if(buildProxy.build.TMB_FuncDivisionPath)
+				flash.net.navigateToURL(new URLRequest(buildProxy.build.TMB_FuncDivisionPath));	
+			else
+				sendNotification(ApplicationFacade.NOTIFY_SHOW_INFO,true);
 		}
 		
 		private function onSecurityOrg(event:Event):void
 		{
-			flash.net.navigateToURL(new URLRequest(buildProxy.build.TMB_SecurityOrgPath));			
+			if(buildProxy.build.TMB_SecurityOrgPath)
+				flash.net.navigateToURL(new URLRequest(buildProxy.build.TMB_SecurityOrgPath));	
+			else
+				sendNotification(ApplicationFacade.NOTIFY_SHOW_INFO,true);		
 		}
 		
 		private function onTatics(event:Event):void

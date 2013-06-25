@@ -8,12 +8,6 @@ package app.model.vo
 	[Bindable]
 	public class ClosedHandleVO
 	{
-		public static const MOVE:String = "move";
-		public static const ADD:String = "add";
-		public static const DEL:String = "del";
-		
-		public static var Tool:String = MOVE;
-		
 		private var source:Object;
 		
 		public function get T_ClosedhandlesID():Number

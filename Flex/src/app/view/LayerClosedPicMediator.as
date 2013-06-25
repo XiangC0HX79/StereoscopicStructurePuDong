@@ -11,18 +11,20 @@ package app.view
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
 	
+	import spark.components.Image;
+	
 	public class LayerClosedPicMediator extends Mediator implements IMediator
 	{
 		public static const NAME:String = "LayerClosedPicMediator";
 		
-		public function LayerClosedPicMediator()
+		public function LayerClosedPicMediator(viewComponent:Object=null)
 		{
-			super(NAME, new LayerClosedPic);
+			super(NAME, viewComponent);
 		}
 		
-		protected function get layerClosedPic():LayerClosedPic
+		protected function get layerClosedPic():Image
 		{
-			return viewComponent as LayerClosedPic;
+			return viewComponent as Image;
 		}
 		
 		override public function listNotificationInterests():Array

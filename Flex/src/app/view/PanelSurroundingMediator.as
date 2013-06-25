@@ -40,10 +40,9 @@ package app.view
 		{
 			super(NAME, new PanelSurrounding);
 			
-			panelSurrounding.addElement(facade.retrieveMediator(LayerClosedPicMediator.NAME).getViewComponent() as IVisualElement);
-			
-			panelSurrounding.addElement(facade.retrieveMediator(LayerScentingPicMediator.NAME).getViewComponent() as IVisualElement);
-			
+			facade.registerMediator(new LayerClosedPicMediator(panelSurrounding.layerClosedPic));	
+			facade.registerMediator(new LayerScentingPicMediator(panelSurrounding.layerScentingPic));	
+						
 			panelSurrounding.addElement(facade.retrieveMediator(LayerDrawMediator.NAME).getViewComponent() as IVisualElement);			
 
 			panelSurrounding.addElement(facade.retrieveMediator(LayerCommandingHeightMediator.NAME).getViewComponent() as IVisualElement);

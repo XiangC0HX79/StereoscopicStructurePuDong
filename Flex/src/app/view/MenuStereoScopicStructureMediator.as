@@ -2,6 +2,7 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
+	import app.model.FloorPorxy;
 	import app.model.vo.BuildVO;
 	import app.model.vo.ConfigVO;
 	import app.model.vo.FloorVO;
@@ -35,6 +36,15 @@ package app.view
 			event.stopImmediatePropagation();
 			
 			sendNotification(ApplicationFacade.NOTIFY_STEREO_LAYER);
+			
+			sendNotification(ApplicationFacade.NOTIFY_SHOW_INFO,false);	
+			
+			var floorPorxy:FloorPorxy = facade.retrieveProxy(FloorPorxy.NAME) as FloorPorxy;
+			
+			var layer:LayerVO = event.target.data as LayerVO;
+			
+			if(!floorPorxy.hasFloorDetail(layer))
+				sendNotification(ApplicationFacade.NOTIFY_SHOW_INFO,layer.LayerVisible);
 		}
 		
 		override public function listNotificationInterests():Array

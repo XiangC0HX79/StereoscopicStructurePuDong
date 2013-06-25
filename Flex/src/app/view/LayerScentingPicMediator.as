@@ -13,18 +13,20 @@ package app.view
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
 	
+	import spark.components.Image;
+	
 	public class LayerScentingPicMediator extends Mediator implements IMediator
 	{
 		public static const NAME:String = "LayerScentingPicMediator";
 		
-		public function LayerScentingPicMediator()
+		public function LayerScentingPicMediator(viewComponent:Object=null)
 		{
-			super(NAME, new LayerScentingPic);
+			super(NAME, viewComponent);
 		}
 		
-		protected function get layerScentingPic():LayerScentingPic
+		protected function get layerScentingPic():Image
 		{
-			return viewComponent as LayerScentingPic;
+			return viewComponent as Image;
 		}
 		
 		override public function listNotificationInterests():Array
