@@ -40,6 +40,7 @@ package app.controller
 			facade.registerMediator(new MenuStereoScopicStructureMediator);
 			facade.registerMediator(new MenuStereoScopicEditMediator);
 			
+			facade.registerMediator(new LayerClosedPicMediator);		
 			facade.registerMediator(new LayerDrawMediator);		
 			facade.registerMediator(new LayerCommandingHeightMediator);
 			facade.registerMediator(new LayerCloseHandlesMediator);

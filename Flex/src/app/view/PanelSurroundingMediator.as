@@ -14,6 +14,7 @@ package app.view
 	import app.model.vo.TrafficVO;
 	import app.view.components.PanelSurrounding;
 	
+	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -41,9 +42,10 @@ package app.view
 		{
 			super(NAME, new PanelSurrounding);
 			
-			facade.registerMediator(new LayerClosedPicMediator(panelSurrounding.layerClosedPic));	
 			facade.registerMediator(new LayerScentingPicMediator(panelSurrounding.layerScentingPic));	
-						
+			
+			panelSurrounding.addElement(facade.retrieveMediator(LayerClosedPicMediator.NAME).getViewComponent() as IVisualElement);	
+			
 			panelSurrounding.addElement(facade.retrieveMediator(LayerDrawMediator.NAME).getViewComponent() as IVisualElement);			
 
 			panelSurrounding.addElement(facade.retrieveMediator(LayerCommandingHeightMediator.NAME).getViewComponent() as IVisualElement);
@@ -184,15 +186,31 @@ package app.view
 			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_ADD_START)
 			{
 				PanelSurroundingTool.Tool = PanelSurroundingTool.CLOSE_ADD_END;
-				sendNotification(ApplicationFacade.NOTIFY_CLOSE_ADD_START,[event.localX,event.localY]);
+				
+				var pt:Point = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
+				pt = panelSurrounding.globalToLocal(pt);
+				
+				sendNotification(ApplicationFacade.NOTIFY_CLOSE_ADD_START,pt);
+			}
+			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_ADD_END)
+			{
+				PanelSurroundingTool.Tool = PanelSurroundingTool.CLOSE_ADD_START;
+				
+				pt = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
+				pt = panelSurrounding.globalToLocal(pt);
+				
+				sendNotification(ApplicationFacade.NOTIFY_CLOSE_ADD_END,pt);				
 			}
 		}
 		
 		private function onMove(event:MouseEvent):void
 		{
 			if(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_ADD_END)
-			{				
-				sendNotification(ApplicationFacade.NOTIFY_CLOSE_ADD_MOVE,[event.localX,event.localY]);
+			{								
+				var pt:Point = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
+				pt = panelSurrounding.globalToLocal(pt);
+				
+				sendNotification(ApplicationFacade.NOTIFY_CLOSE_ADD_MOVE,pt);
 			}
 		}
 		

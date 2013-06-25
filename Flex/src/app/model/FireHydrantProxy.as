@@ -70,7 +70,6 @@ package app.model
 			fh.TMB_ID = ConfigVO.TMB_ID;
 			fh.T_FireHydrantX = x;
 			fh.T_FireHydrantY = y;				
-			dict[fh.T_FireHydrantID] = fh;
 			
 			var s:String = fh.TMB_ID + " " + fh.T_FireHydrantX + " " + fh.T_FireHydrantY;
 			
@@ -83,6 +82,8 @@ package app.model
 			var fh:FireHydrantVO = event.token.fireHydrant;
 			
 			fh.T_FireHydrantID = Number(event.result);
+			
+			dict[fh.T_FireHydrantID] = fh;
 			
 			sendNotification(ApplicationFacade.NOTIFY_FIRE_ADD,fh);
 		}

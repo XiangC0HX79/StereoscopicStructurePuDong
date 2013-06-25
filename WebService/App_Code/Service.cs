@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Serialization;
 using System.Web.Services;
 
 using System.Data;
@@ -139,6 +141,21 @@ public class Service : WebService
         return _databaseOperator.ExcuteNoQuery(sql);
     }
        
+    [WebMethod]
+    public int AddClosedLine(String json)
+    {
+        var d = FromJsonTo<Dictionary<string, object>>(json);
+
+        var s = (Dictionary<string, object>)d["T_ClosedLineStart"];
+        var e = (Dictionary<string, object>)d["T_ClosedLineEnd"];
+
+        var sql = "INSERT T_ClosedhandlesLine (TMB_ID,T_ClosedLineStartX,T_ClosedLineStartY,T_ClosedLineEndX,T_ClosedLineEndY) VALUES (" + d["TMB_ID"] + "," + s["x"] + "," + s["y"] + "," + e["x"]  + "," + e["y"] +");";
+
+        _databaseOperator.ExcuteNoQuery(sql);
+
+        return Convert.ToInt32(_databaseOperator.GetValue("select IDENT_CURRENT('T_ClosedhandlesLine')"));
+    }
+
     [WebMethod]
     public int AddFireHydrant(String data)
     {
@@ -435,7 +452,7 @@ public class Service : WebService
     {
         try
         {
-            var root = System.Web.HttpContext.Current.Request.Url.AbsoluteUri;
+            var root = HttpContext.Current.Request.Url.AbsoluteUri;
             root = root.Substring(0, root.IndexOf("Service.asmx", StringComparison.Ordinal));
 
             var index = url.IndexOf(root, StringComparison.Ordinal);
@@ -452,5 +469,22 @@ public class Service : WebService
         {
             return "0 0";
         }
+    }
+
+    public T FromJsonTo<T>(string jsonString)
+    {
+        var jss = new JavaScriptSerializer();
+
+        try
+        {
+            //将指定的 JSON 字符串转换为 T 类型的对象
+            return jss.Deserialize<T>(jsonString);
+        }
+
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+
     }
 }

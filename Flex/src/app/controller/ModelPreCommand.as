@@ -17,6 +17,7 @@ package app.controller
 			facade.registerProxy(new BuildProxy);				
 			facade.registerProxy(new CommandHeightProxy);		
 			facade.registerProxy(new ClosedHandleProxy);		
+			facade.registerProxy(new ClosedHandleLineProxy);		
 			facade.registerProxy(new TrafficProxy);					
 			facade.registerProxy(new HazardProxy);					
 			facade.registerProxy(new FireHydrantProxy);				

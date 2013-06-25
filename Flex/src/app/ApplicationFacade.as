@@ -65,6 +65,7 @@ package app
 		public static const NOTIFY_COMMAND_OUT:String		= "CommandOut";
 		
 		public static const NOTIFY_CLOSE_ADD_START:String		= "CloseAddStart";
+		public static const NOTIFY_CLOSE_ADD_END:String			= "CloseAddEnd";
 		public static const NOTIFY_CLOSE_ADD_MOVE:String		= "CloseAddMove";
 		
 		public static const NOTIFY_SURROUNDING_KEYUNIT:String		= "SurroundingKeyUnit";

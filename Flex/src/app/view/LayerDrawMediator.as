@@ -29,8 +29,6 @@ package app.view
 		
 		private var buildProxy:BuildProxy;
 		
-		private var _closePointStart:Point;
-		
 		public function LayerDrawMediator()
 		{
 			super(NAME, new LayerDraw);
@@ -47,10 +45,7 @@ package app.view
 		{
 			return [
 				ApplicationFacade.NOTIFY_COMMAND_OVER,
-				ApplicationFacade.NOTIFY_COMMAND_OUT,
-				
-				ApplicationFacade.NOTIFY_CLOSE_ADD_START,
-				ApplicationFacade.NOTIFY_CLOSE_ADD_MOVE
+				ApplicationFacade.NOTIFY_COMMAND_OUT
 			];
 		}
 		
@@ -65,67 +60,7 @@ package app.view
 				case ApplicationFacade.NOTIFY_COMMAND_OUT:
 					layerDraw.graphics.clear();
 					break;
-				
-				case ApplicationFacade.NOTIFY_CLOSE_ADD_START:
-					_closePointStart = new Point(Number(notification.getBody()[0]),Number(notification.getBody()[1]));
-					break;
-				
-				case ApplicationFacade.NOTIFY_CLOSE_ADD_MOVE:
-					drawCloseHandleAdd(new Point(Number(notification.getBody()[0]),Number(notification.getBody()[1])));
-					break;
 			}
-		}
-		
-		private function drawCloseHandleAdd(pt:Point):void
-		{			
-			layerDraw.graphics.clear();
-			
-			var dx:Number = pt.x - _closePointStart.x;
-			var dy:Number = pt.y - _closePointStart.y;
-			
-			var arrow:Sprite = new Sprite;
-			
-			var coords:Vector.<Number> = new Vector.<Number>;
-			var commands:Vector.<int> = new Vector.<int>;
-			
-			coords.push(0,0);
-			commands.push(GraphicsPathCommand.MOVE_TO);
-			
-			coords.push(ARROW_WIDTH,10);
-			commands.push(GraphicsPathCommand.LINE_TO);
-			
-			coords.push(0,20);
-			commands.push(GraphicsPathCommand.LINE_TO);
-			
-			arrow.graphics.beginFill(0xFF0000);
-			arrow.graphics.drawPath(commands,coords);
-			arrow.graphics.endFill();
-			
-			var len:Number = Math.floor(Math.sqrt(dx * dx + dy * dy));
-			len = (len < ARROW_WIDTH)?ARROW_WIDTH:len;
-			
-			var path:BitmapData = new BitmapData(len,20,true,0x0);
-			
-			if(len > ARROW_WIDTH)
-				path.fillRect(new Rectangle(0,5,len - ARROW_WIDTH,10),0xFFFF0000);
-			
-			var matrix:Matrix = new Matrix(1,0,0,1,len - ARROW_WIDTH,0);
-			path.draw(arrow,matrix);
-									
-			var back:BitmapData = new BitmapData(layerDraw.width,layerDraw.height,true,0x0);
-			
-			var angel:Number = Math.acos(dx / Math.sqrt(dx * dx + dy * dy));	
-			if(pt.y < _closePointStart.y)
-				angel = -angel;
-						
-			matrix = new Matrix(1,0,0,1,0,-10);
-			matrix.rotate(angel);					
-			matrix.concat(new Matrix(1,0,0,1,_closePointStart.x,_closePointStart.y));					
-			back.draw(path,matrix);					
-			
-			layerDraw.graphics.beginBitmapFill(back,null,false);					
-			layerDraw.graphics.drawRect(0,0,layerDraw.width,layerDraw.height); 					
-			layerDraw.graphics.endFill();				
 		}
 		
 		private function drawCommandHight(command:CommandHeightVO):void

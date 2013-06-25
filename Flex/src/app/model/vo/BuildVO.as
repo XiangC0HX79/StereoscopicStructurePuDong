@@ -48,10 +48,10 @@ package app.model.vo
 			return  _source.TMB_videoPath?_source.TMB_videoPath.replace("../",ConfigVO.BASE_URL):_source.TMB_videoPath;	
 		}
 		
-		public function get T_ClosedPicPath():String
+		/*public function get T_ClosedPicPath():String
 		{
 			return  _source.T_ClosedPicPath?_source.T_ClosedPicPath.replace("../",ConfigVO.BASE_URL):_source.T_ClosedPicPath;	
-		}
+		}*/
 		
 		public function get T_RescueimgPath():String
 		{

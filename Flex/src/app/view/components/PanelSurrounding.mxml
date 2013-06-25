@@ -27,8 +27,6 @@
 	<!--周边环境底图-->
 	<s:Image source="{build.TMB_PicPath}" mouseEnabled="false"/>	
 			
-	<s:Image id="layerClosedPic"/>
-	
 	<s:Image id="layerScentingPic"/>
 	
 	<!--建筑物-->
