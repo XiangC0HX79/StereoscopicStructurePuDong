@@ -27,13 +27,16 @@ public class ClassDatabaseOperator
     private static void WriteLog(Exception ex,string sql)
     {
         var path = System.Configuration.ConfigurationManager.AppSettings["LOG"];
-        var file = path + @"\" + DateTime.Today.ToString("yyyy-MM-dd") + ".txt";
 
-        TextWriter tw = File.AppendText(file);
-        var msg = DateTime.Now.ToString("HH:mm:ss") + " SQL:" + sql + " EX:" + ex.Message;
-        tw.WriteLine(msg);
-        tw.Close();
-        tw.Dispose();
+        if (Directory.Exists(path))
+        {
+            var file = path + @"\" + DateTime.Today.ToString("yyyy-MM-dd") + ".txt";
+            TextWriter tw = File.AppendText(file);
+            var msg = DateTime.Now.ToString("HH:mm:ss") + " SQL:" + sql + " EX:" + ex.Message;
+            tw.WriteLine(msg);
+            tw.Close();
+            tw.Dispose();
+        }
     }
        
     public DataTable GetTable(string sql)

@@ -12,6 +12,11 @@ package app.model.vo
 			return source.T_TrafficID;
 		}
 		
+		public function get T_TrafficName():String
+		{
+			return source.T_TrafficName;
+		}
+		
 		public function get T_TrafficX():Number
 		{
 			return source.T_TrafficX;

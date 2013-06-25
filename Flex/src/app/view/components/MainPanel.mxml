@@ -109,6 +109,15 @@
 		<s:Group id="ContentGroup" creationComplete="ContentGroup_creationCompleteHandler(event)">
 		</s:Group>
 	</s:Scroller>
+	
+	<s:Group id="groupNoInfo" x="25" y="95" width="777" height="649" visible="false">
+		<s:Rect left="-5" right="-5" top="-5" bottom="-5" radiusX="5" radiusY="5">
+			<s:fill>
+				<s:SolidColor color="0x0" alpha="0.5"/>
+			</s:fill>
+		</s:Rect>
+		<s:Image horizontalCenter="0" verticalCenter="0" source="@Embed('assets/image/无此类信息.png')"/>
+	</s:Group>
 			
 	<s:VGroup x="830" y="100" id="Menu">
 		<s:Button label="周边环境" buttonMode="true"
@@ -124,7 +133,7 @@
 				  width="175" height="47" 
 				  skinClass="app.skin.skinMenuButton" buttonDown="buttonStereoscopic_buttonDownHandler(event)"/>
 		<s:Button label="应急预案" buttonMode="true" buttonDown="dispatchEvent(new Event(EMERGENCY))"
-				  width="175" height="47" visible="{Boolean(Build.TMB_EmergPath)}"
+				  width="175" height="47"
 				  skinClass="app.skin.skinMenuButton"/>
 	</s:VGroup>
 	

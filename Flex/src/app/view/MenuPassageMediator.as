@@ -47,32 +47,62 @@ package app.view
 		
 		private function onPlan(event:Event):void
 		{
-			sendNotification(ApplicationFacade.NOTIFY_MENU_PASSAGE_PLAN);
+			var b:Boolean = passageProxy.ArrPlan.length <= 0;
+			
+			sendNotification(ApplicationFacade.NOTIFY_SHOW_INFO,b);	
+			
+			if(!b)
+				sendNotification(ApplicationFacade.NOTIFY_MENU_PASSAGE_PLAN);
 		}
 		
 		private function onUnderGround(event:Event):void
 		{
-			sendNotification(ApplicationFacade.NOTIFY_MENU_PASSAGE_UNDERGROUND);
+			var b:Boolean = passageProxy.ArrUnderGround.length <= 0;
+			
+			sendNotification(ApplicationFacade.NOTIFY_SHOW_INFO,b);	
+			
+			if(!b)
+				sendNotification(ApplicationFacade.NOTIFY_MENU_PASSAGE_UNDERGROUND);
 		}
 		
 		private function onGround(event:Event):void
 		{
-			sendNotification(ApplicationFacade.NOTIFY_MENU_PASSAGE_GROUND);
+			var b:Boolean = passageProxy.ArrGround.length <= 0;
+			
+			sendNotification(ApplicationFacade.NOTIFY_SHOW_INFO,b);	
+			
+			if(!b)
+				sendNotification(ApplicationFacade.NOTIFY_MENU_PASSAGE_GROUND);
 		}
 		
 		private function onTopFloor(event:Event):void
 		{
-			sendNotification(ApplicationFacade.NOTIFY_MENU_PASSAGE_TOPFLOOR);
+			var b:Boolean = passageProxy.ArrTopFloor.length <= 0;
+			
+			sendNotification(ApplicationFacade.NOTIFY_SHOW_INFO,b);	
+			
+			if(!b)
+				sendNotification(ApplicationFacade.NOTIFY_MENU_PASSAGE_TOPFLOOR);
 		}
 		
 		private function onFreshAir(event:Event):void
 		{
-			sendNotification(ApplicationFacade.NOTIFY_MENU_PASSAGE_FRESHAIR);
+			var b:Boolean = passageProxy.ArrFreshAir.length <= 0;
+			
+			sendNotification(ApplicationFacade.NOTIFY_SHOW_INFO,b);	
+			
+			if(!b)
+				sendNotification(ApplicationFacade.NOTIFY_MENU_PASSAGE_FRESHAIR);
 		}
 		
 		private function onSpecail(event:Event):void
 		{
-			sendNotification(ApplicationFacade.NOTIFY_MENU_PASSAGE_SPECIAL);
+			var b:Boolean = passageProxy.ArrSpecial.length <= 0;
+			
+			sendNotification(ApplicationFacade.NOTIFY_SHOW_INFO,b);	
+			
+			if(!b)
+				sendNotification(ApplicationFacade.NOTIFY_MENU_PASSAGE_SPECIAL);
 		}
 		
 		private function onDefault(event:Event):void
@@ -117,18 +147,12 @@ package app.view
 						menuPassage.currentState = "Edit";
 					}
 					
-					menuPassage.dp.addItem(MenuPassage.PLAN);
-						
-					if(passageProxy.ArrUnderGround.length > 0)
-						menuPassage.dp.addItem(MenuPassage.UNDERGROUND);
-					if(passageProxy.ArrGround.length > 0)
-						menuPassage.dp.addItem(MenuPassage.GROUND);
-					if(passageProxy.ArrTopFloor.length > 0)
-						menuPassage.dp.addItem(MenuPassage.TOPFLOOR);
-					if(passageProxy.ArrFreshAir.length > 0)
-						menuPassage.dp.addItem(MenuPassage.FRESHAIR);
-					if(passageProxy.ArrSpecial.length > 0)
-						menuPassage.dp.addItem(MenuPassage.SPECIAL);
+					menuPassage.dp.addItem(MenuPassage.PLAN);						
+					menuPassage.dp.addItem(MenuPassage.UNDERGROUND)
+					menuPassage.dp.addItem(MenuPassage.GROUND);
+					menuPassage.dp.addItem(MenuPassage.TOPFLOOR);
+					menuPassage.dp.addItem(MenuPassage.FRESHAIR);
+					menuPassage.dp.addItem(MenuPassage.SPECIAL);
 					
 					sendNotification(ApplicationFacade.NOTIFY_MENU_PASSAGE_PLAN);
 					break;

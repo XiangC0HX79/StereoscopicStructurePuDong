@@ -5,7 +5,9 @@ package app.view
 	import app.model.vo.CommandHeightVO;
 	import app.view.components.LayerDraw;
 	
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.GraphicsPathCommand;
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
@@ -22,6 +24,8 @@ package app.view
 	public class LayerDrawMediator extends Mediator implements IMediator
 	{
 		public static const NAME:String = "LayerDrawMediator";
+		
+		private const ARROW_WIDTH:Number = 30;
 		
 		private var buildProxy:BuildProxy;
 		
@@ -60,17 +64,55 @@ package app.view
 					var dx:Number = command.TCH_X - buildProxy.build.TMB_X;
 					var dy:Number = command.TCH_Y - buildProxy.build.TMB_Y;
 					
+					var arrow:Sprite = new Sprite;
+					//arrow.width = 40;
+					//arrow.height = 20;
+					
+					var coords:Vector.<Number> = new Vector.<Number>;
+					var commands:Vector.<int> = new Vector.<int>;
+					
+					coords.push(0,10);
+					commands.push(GraphicsPathCommand.MOVE_TO);
+					
+					coords.push(ARROW_WIDTH,0);
+					commands.push(GraphicsPathCommand.LINE_TO);
+					
+					coords.push(ARROW_WIDTH,20);
+					commands.push(GraphicsPathCommand.LINE_TO);
+					
+					arrow.graphics.beginFill(0xFF0000);
+					arrow.graphics.drawPath(commands,coords);
+					arrow.graphics.endFill();
+					
 					var part:BitmapData = new BitmapData(20,10,true,0x0);
 					part.fillRect(new Rectangle(0,0,10,10),0xFFFF0000);
 					
 					var len:Number = Math.floor(Math.sqrt(dx * dx + dy * dy));
+					len = (len < ARROW_WIDTH)?ARROW_WIDTH:len;
 					
-					var path:BitmapData = new BitmapData(len,40,true,0x0);
-					
-					for(var i:Number = 0;i<Math.ceil(len / part.width);i++)
+					var path:BitmapData = new BitmapData(len,50,true,0x0);
+					//画箭头
+					if(command.TCH_X < buildProxy.build.TMB_X)
 					{
-						var matrix:Matrix = new Matrix(1,0,0,1,i * part.width,0);
-						path.draw(part,matrix);
+						var matrix:Matrix = new Matrix(-1,0,0,1,len,0);
+						path.draw(arrow,matrix);
+											
+						for(var i:Number = 0;i<Math.ceil((len - ARROW_WIDTH) / part.width);i++)
+						{
+							matrix =new Matrix(1,0,0,1,i * part.width,5);	
+							path.draw(part,matrix);
+						}
+					}
+					else
+					{
+						matrix = new Matrix(1,0,0,1,0,0);
+						path.draw(arrow,matrix);
+						
+						for(i = 0;i<Math.ceil((len - ARROW_WIDTH) / part.width);i++)
+						{
+							matrix =new Matrix(1,0,0,1,ARROW_WIDTH + i * part.width,5);	
+							path.draw(part,matrix);
+						}
 					}
 																			
 					var textFmt:TextFormat = new TextFormat;					
@@ -83,7 +125,7 @@ package app.view
 					text.setTextFormat(textFmt);
 					text.width = text.getLineMetrics(0).width;
 					
-					path.draw(text,new Matrix(1,0,0,1,len / 2 - text.width / 2,15));
+					path.draw(text,new Matrix(1,0,0,1,len / 2 - text.width / 2,25));
 					
 					var back:BitmapData = new BitmapData(layerDraw.width,layerDraw.height,true,0x0);
 					var angel:Number = Math.atan(dy / dx);					

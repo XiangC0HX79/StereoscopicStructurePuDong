@@ -5,8 +5,10 @@ package app.model
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.GraphicsPathCommand;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.net.URLLoader;
@@ -116,33 +118,48 @@ package app.model
 									
 			function onError(event:IOErrorEvent):void
 			{					
-				var text:TextField = new TextField;
-				text.text = "未找到图片";
+				var sprite:Sprite = new Sprite;
 				
-				var url2:String = url;
-				while(url2.length > 30)
-				{
-					var trim:String = url.substr(0,30);
-					text.appendText("\n" + trim);
-					url2 = url2.substring(30);
-				}
-				text.appendText("\n" + url2);				
-				text.width = 500;
-				text.multiline = true;
-				text.height = 400;
+				var coords:Vector.<Number> = new Vector.<Number>;
+				var commands:Vector.<int> = new Vector.<int>;
 				
-				var textFmt:TextFormat = new TextFormat;
-				textFmt.size = 30;
-				textFmt.bold = true;
-				textFmt.color = 0x0;	
+				coords.push(0,0);
+				commands.push(GraphicsPathCommand.MOVE_TO);
 				
-				text.setTextFormat(textFmt);
+				coords.push(0,18);
+				commands.push(GraphicsPathCommand.LINE_TO);
 				
-				var bitmapData:BitmapData = new BitmapData(500,400);
-				bitmapData.draw(text);
+				coords.push(18,18);
+				commands.push(GraphicsPathCommand.LINE_TO);
+				
+				coords.push(18,0);
+				commands.push(GraphicsPathCommand.LINE_TO);
+				
+				coords.push(0,0);
+				commands.push(GraphicsPathCommand.LINE_TO);
+				
+				coords.push(20,20);
+				commands.push(GraphicsPathCommand.LINE_TO);
+				
+				coords.push(20,0);
+				commands.push(GraphicsPathCommand.MOVE_TO);
+				
+				coords.push(0,20);
+				commands.push(GraphicsPathCommand.LINE_TO);
+				
+				sprite.graphics.lineStyle(3,0xFF0000);
+				sprite.graphics.drawPath(commands,coords);
+				
+				var bitmapData:BitmapData = new BitmapData(20,20,false,0xFFFFFF);
+				bitmapData.draw(sprite);
 				
 				var bitmap:Bitmap = new Bitmap(bitmapData);  
-				listener(bitmap,token);
+				listener(bitmap,token);	
+				
+				if(ConfigVO.EDIT)
+				{
+					sendNotification(ApplicationFacade.NOTIFY_APP_ALERTERROR,"图片未找到。\n" + url);
+				}
 			}
 		}
 	}

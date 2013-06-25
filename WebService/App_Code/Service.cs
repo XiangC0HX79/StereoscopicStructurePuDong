@@ -318,7 +318,7 @@ public class Service : WebService
                 row["T_BitmapWidth"] = img.Width;
                 row["T_BitmapHeight"] = img.Height;
             }
-            finally
+            catch
             {
             }
         }
@@ -443,7 +443,7 @@ public class Service : WebService
             {
                 return "0 0";
             }
-           
+            
             var u = url.Substring(root.Length);
             var img = Image.FromFile(Server.MapPath(u));
             return img.Width + " " + img.Height;

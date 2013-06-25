@@ -29,31 +29,25 @@ package app
 		public static const NOTIFY_INIT_FIREHYDRANT:String		= "InitFireHydrant";
 		public static const NOTIFY_INIT_KEYUNIT:String		= "IniKeyUnit";
 		public static const NOTIFY_INIT_SCENTING:String		= "InitScenting";
-		
 		public static const NOTIFY_INIT_TATICS:String		= "InitTatics";
-		
 		public static const NOTIFY_INIT_PASSAGE:String		= "InitPassage";
-		
 		public static const NOTIFY_INIT_FLOORPIC:String		= "InitFloorPic";
 		public static const NOTIFY_INIT_FLOOR:String		= "InitFloor";
 		
 		public static const NOTIFY_INIT_APP:String			= "InitApp";
 		
+		public static const NOTIFY_SHOW_INFO:String			= "ShowInfo";
+				
 		public static const NOTIFY_TITLEWINDOW_MEDIA:String	= "TitleWindowMedia";
 		public static const NOTIFY_TITLEWINDOW_FLOOR:String	= "titlewindow_floor";
-		//public static const NOTIFY_TITLEWINDOW_IMAGE:String	= "titlewindow_image";
 		public static const NOTIFY_TITLEWINDOW_MOVIE:String	= "titlewindow_movie";
 		public static const NOTIFY_TITLEWINDOW_COMMAND:String	= "titlewindow_command";
-		//public static const NOTIFY_TITLEWINDOW_COMMAND_IMGLST:String	= "titlewindow_command_imglst";
-		//public static const NOTIFY_TITLEWINDOW_CLOSED_IMGLST:String	= "titlewindow_closed_imglst";
-		//public static const NOTIFY_TITLEWINDOW_TRAFFIC:String	= "TitleWindowTraffic";
 		public static const NOTIFY_TITLEWINDOW_HAZARD:String	= "TitleWindowHazard";
 		public static const NOTIFY_TITLEWINDOW_RESCUE:String	= "TitlewindowRescue";
 		public static const NOTIFY_TITLEWINDOW_KEYUNIT:String	= "TitleWindowKeyUnit";
 		public static const NOTIFY_TITLEWINDOW_SCENTING:String	= "TitleWindowScenting";
 		public static const NOTIFY_TITLEWINDOW_TATICS:String	= "TitleWindowTatics";
 		public static const NOTIFY_TITLEWINDOW_TATICALPOINT:String	= "TitleWindowTaticalPoint";
-		//public static const NOTIFY_TITLEWINDOW_IMPORTEXPORTPIC:String	= "TitleWindowImportExportPic";
 		
 		public static const NOTIFY_MOVIE_POPUP:String		= "movie_popup";
 		

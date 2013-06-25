@@ -52,5 +52,5 @@
 		]]>
 	</fx:Script>
 	
-	<s:Image source="{Build.TMB_PicPath}" mouseEnabled="false" />
+	<s:Image source="{Build.TMB_StereoPicPath}" mouseEnabled="false" />
 </s:Group>

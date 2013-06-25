@@ -46,6 +46,8 @@ package app.view
 		
 		private function onSurrounding(event:Event):void
 		{
+			sendNotification(ApplicationFacade.NOTIFY_SHOW_INFO,false);
+			
 			mainPanel.Menu.addElementAt(facade.retrieveMediator(MenuSurroundingMediator.NAME).getViewComponent() as IVisualElement,mainPanel.ButtonIndex + 1);
 			
 			contentGroupAddElement(PanelSurroundingMediator.NAME);
@@ -53,11 +55,15 @@ package app.view
 		
 		private function onInfo(event:Event):void
 		{
+			sendNotification(ApplicationFacade.NOTIFY_SHOW_INFO,false);
+			
 			mainPanel.Menu.addElementAt(facade.retrieveMediator(MenuInfoMediator.NAME).getViewComponent() as IVisualElement,mainPanel.ButtonIndex + 1);
 		}
 		
 		private function onPassage(event:Event):void
 		{
+			sendNotification(ApplicationFacade.NOTIFY_SHOW_INFO,false);
+			
 			mainPanel.Menu.addElementAt(facade.retrieveMediator(MenuPassageMediator.NAME).getViewComponent() as IVisualElement,mainPanel.ButtonIndex + 1);
 			
 			contentGroupAddElement(PanelPassageMediator.NAME);
@@ -65,6 +71,8 @@ package app.view
 		
 		private function onStereoScopic(event:Event):void
 		{
+			sendNotification(ApplicationFacade.NOTIFY_SHOW_INFO,false);
+			
 			if(ConfigVO.EDIT)
 			{
 				mainPanel.Menu.addElementAt(facade.retrieveMediator(MenuStereoScopicEditMediator.NAME).getViewComponent() as IVisualElement,mainPanel.ButtonIndex + 1);
@@ -79,13 +87,18 @@ package app.view
 		
 		private function onEmergency(event:Event):void
 		{			
-			flash.net.navigateToURL(new URLRequest(mainPanel.Build.TMB_EmergPath));	
+			if(mainPanel.Build.TMB_EmergPath)
+				flash.net.navigateToURL(new URLRequest(mainPanel.Build.TMB_EmergPath));
+			else
+				sendNotification(ApplicationFacade.NOTIFY_SHOW_INFO,true);
 		}
 		
 		override public function listNotificationInterests():Array
 		{
 			return [
-				ApplicationFacade.NOTIFY_INIT_BUILD
+				ApplicationFacade.NOTIFY_INIT_BUILD,
+				
+				ApplicationFacade.NOTIFY_SHOW_INFO
 			];
 		}
 		
@@ -97,6 +110,11 @@ package app.view
 					mainPanel.Build = notification.getBody() as BuildVO;
 										
 					contentGroupAddElement(PanelSurroundingMediator.NAME);
+					break;
+				
+				case ApplicationFacade.NOTIFY_SHOW_INFO:
+					var visible:Boolean = notification.getBody() as Boolean;
+					mainPanel.groupNoInfo.visible = visible;
 					break;
 			}
 		}

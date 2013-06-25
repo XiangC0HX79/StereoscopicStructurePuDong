@@ -25,8 +25,12 @@
 	</fx:Script>
 	
 	<!--周边环境底图-->
-	<s:Image source="{build.TMB_StereoPicPath}" mouseEnabled="false"/>	
+	<s:Image source="{build.TMB_PicPath}" mouseEnabled="false"/>	
 			
+	<s:Image id="layerClosedPic"/>
+	
+	<s:Image id="layerScentingPic"/>
+	
 	<!--建筑物-->
 	<s:Group buttonMode="true" width="50" height="50" x="{build.TMB_X - 25}" y="{build.TMB_Y - 25}"
 			 click="dispatchEvent(new Event(BUILDCLICK));">

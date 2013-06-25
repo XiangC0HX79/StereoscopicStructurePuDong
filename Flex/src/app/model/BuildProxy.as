@@ -66,7 +66,7 @@ package app.model
 			
 			ConfigVO.TMB_ID = build.TMB_ID;
 			
-			send("GetBitmapSize",onGetBuildBitmapSize,build.TMB_PicPath);
+			send("GetBitmapSize",onGetBuildBitmapSize,build.TMB_StereoPicPath);
 		}
 				
 		private function onGetBuildBitmapSize(event:ResultEvent):void

@@ -5,6 +5,7 @@ package app.model
 	import app.model.vo.ConfigVO;
 	import app.model.vo.FloorDetailVO;
 	import app.model.vo.FloorVO;
+	import app.model.vo.LayerVO;
 	import app.model.vo.MediaVO;
 	
 	import flash.display.Bitmap;
@@ -30,6 +31,20 @@ package app.model
 		public function get dict():Dictionary
 		{
 			return data as Dictionary
+		}
+		
+		public function hasFloorDetail(layer:LayerVO):Boolean
+		{
+			for each(var floor:FloorVO in dict)
+			{
+				for each(var fd:FloorDetailVO in floor.floorDetails)
+				{
+					if(fd.layer == layer)
+						return true;
+				}
+			}
+			
+			return false;
 		}
 		
 		public function Init(build:BuildVO):void
