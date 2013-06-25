@@ -59,91 +59,7 @@ package app.view
 			switch(notification.getName())
 			{
 				case ApplicationFacade.NOTIFY_COMMAND_OVER:		
-					var command:CommandHeightVO = notification.getBody() as CommandHeightVO;
-					
-					var dx:Number = command.TCH_X - buildProxy.build.TMB_X;
-					var dy:Number = command.TCH_Y - buildProxy.build.TMB_Y;
-					
-					var arrow:Sprite = new Sprite;
-					//arrow.width = 40;
-					//arrow.height = 20;
-					
-					var coords:Vector.<Number> = new Vector.<Number>;
-					var commands:Vector.<int> = new Vector.<int>;
-					
-					coords.push(0,10);
-					commands.push(GraphicsPathCommand.MOVE_TO);
-					
-					coords.push(ARROW_WIDTH,0);
-					commands.push(GraphicsPathCommand.LINE_TO);
-					
-					coords.push(ARROW_WIDTH,20);
-					commands.push(GraphicsPathCommand.LINE_TO);
-					
-					arrow.graphics.beginFill(0xFF0000);
-					arrow.graphics.drawPath(commands,coords);
-					arrow.graphics.endFill();
-					
-					var part:BitmapData = new BitmapData(20,10,true,0x0);
-					part.fillRect(new Rectangle(0,0,10,10),0xFFFF0000);
-					
-					var len:Number = Math.floor(Math.sqrt(dx * dx + dy * dy));
-					len = (len < ARROW_WIDTH)?ARROW_WIDTH:len;
-					
-					var path:BitmapData = new BitmapData(len,50,true,0x0);
-					//画箭头
-					if(command.TCH_X < buildProxy.build.TMB_X)
-					{
-						var matrix:Matrix = new Matrix(-1,0,0,1,len,0);
-						path.draw(arrow,matrix);
-											
-						for(var i:Number = 0;i<Math.ceil((len - ARROW_WIDTH) / part.width);i++)
-						{
-							matrix =new Matrix(1,0,0,1,i * part.width,5);	
-							path.draw(part,matrix);
-						}
-					}
-					else
-					{
-						matrix = new Matrix(1,0,0,1,0,0);
-						path.draw(arrow,matrix);
-						
-						for(i = 0;i<Math.ceil((len - ARROW_WIDTH) / part.width);i++)
-						{
-							matrix =new Matrix(1,0,0,1,ARROW_WIDTH + i * part.width,5);	
-							path.draw(part,matrix);
-						}
-					}
-																			
-					var textFmt:TextFormat = new TextFormat;					
-					textFmt.size = 20;
-					textFmt.bold = true;
-					textFmt.color = 0xFF0000;	
-					
-					var text:TextField = new TextField;
-					text.text = command.TCH_LineLength + "米";
-					text.setTextFormat(textFmt);
-					text.width = text.getLineMetrics(0).width;
-					
-					path.draw(text,new Matrix(1,0,0,1,len / 2 - text.width / 2,25));
-					
-					var back:BitmapData = new BitmapData(layerDraw.width,layerDraw.height,true,0x0);
-					var angel:Number = Math.atan(dy / dx);					
-					if(command.TCH_X < buildProxy.build.TMB_X)
-					{
-						matrix = new Matrix(1,0,0,1,0,-5);
-					}
-					else
-					{
-						matrix = new Matrix(1,0,0,1,-len,-5);	
-					}					
-					matrix.rotate(angel);					
-					matrix.concat(new Matrix(1,0,0,1,command.TCH_X,command.TCH_Y));					
-					back.draw(path,matrix);					
-					
-					layerDraw.graphics.beginBitmapFill(back,null,false);					
-					layerDraw.graphics.drawRect(0,0,layerDraw.width,layerDraw.height); 					
-					layerDraw.graphics.endFill();					
+					drawCommandHight(notification.getBody() as CommandHeightVO);
 					break;
 				
 				case ApplicationFacade.NOTIFY_COMMAND_OUT:
@@ -155,42 +71,146 @@ package app.view
 					break;
 				
 				case ApplicationFacade.NOTIFY_CLOSE_ADD_MOVE:
-					var pt:Point = new Point(Number(notification.getBody()[0]),Number(notification.getBody()[1]));
-					dx = pt.x - _closePointStart.x;
-					dy = pt.y - _closePointStart.y;
-					
-					part = new BitmapData(20,10,true,0x0);
-					part.fillRect(new Rectangle(0,0,10,10),0xFFFF0000);
-					
-					len = Math.floor(Math.sqrt(dx * dx + dy * dy));
-					
-					path = new BitmapData(len,20,true,0x0);
-					
-					for(i = 0;i<Math.ceil(len / part.width);i++)
-					{
-						matrix = new Matrix(1,0,0,1,i * part.width,0);
-						path.draw(part,matrix);
-					}
-															
-					back = new BitmapData(layerDraw.width,layerDraw.height,true,0x0);
-					angel = Math.atan(dy / dx);					
-					if(pt.x < _closePointStart.x)
-					{
-						matrix = new Matrix(1,0,0,1,0,-5);
-					}
-					else
-					{
-						matrix = new Matrix(1,0,0,1,-len,-5);	
-					}					
-					matrix.rotate(angel);					
-					matrix.concat(new Matrix(1,0,0,1,pt.x,pt.y));					
-					back.draw(path,matrix);					
-					
-					layerDraw.graphics.beginBitmapFill(back,null,false);					
-					layerDraw.graphics.drawRect(0,0,layerDraw.width,layerDraw.height); 					
-					layerDraw.graphics.endFill();					
+					drawCloseHandleAdd(new Point(Number(notification.getBody()[0]),Number(notification.getBody()[1])));
 					break;
 			}
+		}
+		
+		private function drawCloseHandleAdd(pt:Point):void
+		{			
+			layerDraw.graphics.clear();
+			
+			var dx:Number = pt.x - _closePointStart.x;
+			var dy:Number = pt.y - _closePointStart.y;
+			
+			var arrow:Sprite = new Sprite;
+			
+			var coords:Vector.<Number> = new Vector.<Number>;
+			var commands:Vector.<int> = new Vector.<int>;
+			
+			coords.push(0,0);
+			commands.push(GraphicsPathCommand.MOVE_TO);
+			
+			coords.push(ARROW_WIDTH,10);
+			commands.push(GraphicsPathCommand.LINE_TO);
+			
+			coords.push(0,20);
+			commands.push(GraphicsPathCommand.LINE_TO);
+			
+			arrow.graphics.beginFill(0xFF0000);
+			arrow.graphics.drawPath(commands,coords);
+			arrow.graphics.endFill();
+			
+			var len:Number = Math.floor(Math.sqrt(dx * dx + dy * dy));
+			len = (len < ARROW_WIDTH)?ARROW_WIDTH:len;
+			
+			var path:BitmapData = new BitmapData(len,20,true,0x0);
+			
+			if(len > ARROW_WIDTH)
+				path.fillRect(new Rectangle(0,5,len - ARROW_WIDTH,10),0xFFFF0000);
+			
+			var matrix:Matrix = new Matrix(1,0,0,1,len - ARROW_WIDTH,0);
+			path.draw(arrow,matrix);
+									
+			var back:BitmapData = new BitmapData(layerDraw.width,layerDraw.height,true,0x0);
+			
+			var angel:Number = Math.acos(dx / Math.sqrt(dx * dx + dy * dy));	
+			if(pt.y < _closePointStart.y)
+				angel = -angel;
+						
+			matrix = new Matrix(1,0,0,1,0,-10);
+			matrix.rotate(angel);					
+			matrix.concat(new Matrix(1,0,0,1,_closePointStart.x,_closePointStart.y));					
+			back.draw(path,matrix);					
+			
+			layerDraw.graphics.beginBitmapFill(back,null,false);					
+			layerDraw.graphics.drawRect(0,0,layerDraw.width,layerDraw.height); 					
+			layerDraw.graphics.endFill();				
+		}
+		
+		private function drawCommandHight(command:CommandHeightVO):void
+		{			
+			var dx:Number = command.TCH_X - buildProxy.build.TMB_X;
+			var dy:Number = command.TCH_Y - buildProxy.build.TMB_Y;
+			
+			var arrow:Sprite = new Sprite;
+			
+			var coords:Vector.<Number> = new Vector.<Number>;
+			var commands:Vector.<int> = new Vector.<int>;
+			
+			coords.push(0,10);
+			commands.push(GraphicsPathCommand.MOVE_TO);
+			
+			coords.push(ARROW_WIDTH,0);
+			commands.push(GraphicsPathCommand.LINE_TO);
+			
+			coords.push(ARROW_WIDTH,20);
+			commands.push(GraphicsPathCommand.LINE_TO);
+			
+			arrow.graphics.beginFill(0xFF0000);
+			arrow.graphics.drawPath(commands,coords);
+			arrow.graphics.endFill();
+			
+			var part:BitmapData = new BitmapData(20,10,true,0x0);
+			part.fillRect(new Rectangle(0,0,10,10),0xFFFF0000);
+			
+			var len:Number = Math.floor(Math.sqrt(dx * dx + dy * dy));
+			len = (len < ARROW_WIDTH)?ARROW_WIDTH:len;
+			
+			var path:BitmapData = new BitmapData(len,50,true,0x0);
+			//画箭头
+			if(command.TCH_X < buildProxy.build.TMB_X)
+			{
+				var matrix:Matrix = new Matrix(-1,0,0,1,len,0);
+				path.draw(arrow,matrix);
+				
+				for(var i:Number = 0;i<Math.ceil((len - ARROW_WIDTH) / part.width);i++)
+				{
+					matrix =new Matrix(1,0,0,1,i * part.width,5);	
+					path.draw(part,matrix);
+				}
+			}
+			else
+			{
+				matrix = new Matrix(1,0,0,1,0,0);
+				path.draw(arrow,matrix);
+				
+				for(i = 0;i<Math.ceil((len - ARROW_WIDTH) / part.width);i++)
+				{
+					matrix =new Matrix(1,0,0,1,ARROW_WIDTH + i * part.width,5);	
+					path.draw(part,matrix);
+				}
+			}
+			
+			var textFmt:TextFormat = new TextFormat;					
+			textFmt.size = 20;
+			textFmt.bold = true;
+			textFmt.color = 0xFF0000;	
+			
+			var text:TextField = new TextField;
+			text.text = command.TCH_LineLength + "米";
+			text.setTextFormat(textFmt);
+			text.width = text.getLineMetrics(0).width;
+			
+			path.draw(text,new Matrix(1,0,0,1,len / 2 - text.width / 2,25));
+			
+			var back:BitmapData = new BitmapData(layerDraw.width,layerDraw.height,true,0x0);
+			var angel:Number = Math.atan(dy / dx);					
+			if(command.TCH_X < buildProxy.build.TMB_X)
+			{
+				matrix = new Matrix(1,0,0,1,0,-5);
+			}
+			else
+			{
+				matrix = new Matrix(1,0,0,1,-len,-5);	
+			}					
+			matrix.rotate(angel);					
+			matrix.concat(new Matrix(1,0,0,1,command.TCH_X,command.TCH_Y));					
+			back.draw(path,matrix);					
+			
+			layerDraw.graphics.beginBitmapFill(back,null,false);					
+			layerDraw.graphics.drawRect(0,0,layerDraw.width,layerDraw.height); 					
+			layerDraw.graphics.endFill();					
 		}
 	}
 }

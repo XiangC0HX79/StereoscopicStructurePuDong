@@ -183,7 +183,7 @@ package app.view
 			}
 			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_ADD_START)
 			{
-				PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_ADD_END;
+				PanelSurroundingTool.Tool = PanelSurroundingTool.CLOSE_ADD_END;
 				sendNotification(ApplicationFacade.NOTIFY_CLOSE_ADD_START,[event.localX,event.localY]);
 			}
 		}

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx">
+		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:mx="library://ns.adobe.com/flex/mx">
 	<s:states>
 		<s:State name="Normal"/>
 		<s:State name="Edit"/>
@@ -17,6 +17,8 @@
 			public static const DEFAULT:String = "Default";
 			public static const FIREADD:String = "FireAdd";
 			public static const FIREDEL:String = "FireDel";
+			public static const CLOSEADD:String = "CloseAdd";
+			public static const CLOSEDEL:String = "CloseDel";
 			public static const SAVE:String = "Save";
 			
 			[Bindable]public var dp:ArrayCollection = new ArrayCollection;
@@ -31,8 +33,13 @@
 	
 	<s:HGroup horizontalAlign="center" includeIn="Edit" width="100%">
 		<s:Image source="@Embed('assets/image/default.png')" buttonMode="true" click="dispatchEvent(new Event(DEFAULT))"/>
+		<s:Image source="@Embed('assets/image/btnSave.png')" toolTip="保存数据" buttonMode="true" click="dispatchEvent(new Event(SAVE))"/>
+	</s:HGroup>
+	
+	<s:HGroup horizontalAlign="center" includeIn="Edit" width="100%">
 		<s:Image source="@Embed('assets/image/fire_add.png')" toolTip="添加消防栓" buttonMode="true" click="dispatchEvent(new Event(FIREADD))"/>
 		<s:Image source="@Embed('assets/image/fire_del.png')" toolTip="删除消防栓" buttonMode="true" click="dispatchEvent(new Event(FIREDEL))"/>
-		<s:Image source="@Embed('assets/image/btnSave.png')" toolTip="保存数据" buttonMode="true" click="dispatchEvent(new Event(SAVE))"/>
+		<s:Image source="@Embed('assets/image/fire_add.png')" toolTip="添加消防栓" buttonMode="true" click="dispatchEvent(new Event(CLOSEADD))"/>
+		<s:Image source="@Embed('assets/image/fire_del.png')" toolTip="删除消防栓" buttonMode="true" click="dispatchEvent(new Event(CLOSEDEL))"/>
 	</s:HGroup>
 </s:VGroup>

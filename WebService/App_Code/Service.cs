@@ -270,7 +270,7 @@ public class Service : WebService
         foreach (DataRow k in img.Rows)
         {
             var s = k["T_ScentingimgOwen"].ToString().Split(',');
-            foreach (var j in s.SelectMany(i => scenting.Select("T_ScentingID = " + i)))
+            foreach (var j in from i in s where i != "" from j in scenting.Select("T_ScentingID = " + i) select j)
             {
                 j["T_ScentingImgName"] = k["T_ScentingImgName"];
                 j["T_ScentingimgPath"] = k["T_ScentingimgPath"];
