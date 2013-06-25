@@ -10,6 +10,7 @@ package app.view
 	import app.model.ScentingProxy;
 	import app.model.TrafficProxy;
 	import app.model.vo.BuildVO;
+	import app.model.vo.ClosedHandleVO;
 	import app.model.vo.ConfigVO;
 	import app.model.vo.FireHydrantVO;
 	import app.model.vo.KeyUnitVO;
@@ -45,6 +46,8 @@ package app.view
 			menuSurrounding.addEventListener(MenuSurrounding.SAVE,onSave);
 			menuSurrounding.addEventListener(MenuSurrounding.FIREADD,onFireAdd);
 			menuSurrounding.addEventListener(MenuSurrounding.FIREDEL,onFireDel);
+			menuSurrounding.addEventListener(MenuSurrounding.CLOSEADD,onCloseAdd);
+			menuSurrounding.addEventListener(MenuSurrounding.CLOSEDEL,onCloseDel);
 		}
 		
 		protected function get menuSurrounding():MenuSurrounding
@@ -138,6 +141,20 @@ package app.view
 			FireHydrantVO.Tool = FireHydrantVO.DEL;
 			
 			LayerVO.FIRE.LayerVisible = true;
+		}
+		
+		private function onCloseAdd(event:Event):void
+		{
+			ClosedHandleVO.Tool = ClosedHandleVO.ADD;
+			
+			LayerVO.CLOSEHANDLE.LayerVisible = true;
+		}
+		
+		private function onCloseDel(event:Event):void
+		{
+			ClosedHandleVO.Tool = ClosedHandleVO.DEL;
+			
+			LayerVO.CLOSEHANDLE.LayerVisible = true;
 		}
 		
 		override public function listNotificationInterests():Array
