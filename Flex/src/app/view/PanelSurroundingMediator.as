@@ -3,6 +3,7 @@ package app.view
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
 	import app.model.FireHydrantProxy;
+	import app.model.cosnt.PanelSurroundingTool;
 	import app.model.vo.BuildVO;
 	import app.model.vo.ClosedHandleVO;
 	import app.model.vo.CommandHeightVO;
@@ -67,6 +68,7 @@ package app.view
 			panelSurrounding.addEventListener(MouseEvent.ROLL_OVER,onRollOver);	
 			panelSurrounding.addEventListener(MouseEvent.ROLL_OUT,onRollOut);	
 			panelSurrounding.addEventListener(MouseEvent.CLICK,onClick);			
+			panelSurrounding.addEventListener(MouseEvent.MOUSE_MOVE,onMove);			
 		}
 		
 		protected function get panelSurrounding():PanelSurrounding
@@ -145,11 +147,23 @@ package app.view
 				
 		private function onRollOver(event:Event):void
 		{
-			if(FireHydrantVO.Tool == FireHydrantVO.ADD)
+			if(PanelSurroundingTool.Tool == PanelSurroundingTool.FIRE_ADD)
 			{
 				CursorManager.setCursor(CURSOR_FIRE_ADD,2,-12,-12);
 			}
-			else if(FireHydrantVO.Tool == FireHydrantVO.DEL)
+			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.FIRE_DEL)
+			{
+				CursorManager.setCursor(CURSOR_FIRE_DEL,2,-12,-12);
+			}
+			else if(
+				(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_ADD_START)
+				||
+				(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_ADD_END)
+				)
+			{
+				CursorManager.setCursor(CURSOR_FIRE_ADD,2,-12,-12);
+			}
+			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_DEL)
 			{
 				CursorManager.setCursor(CURSOR_FIRE_DEL,2,-12,-12);
 			}
@@ -162,10 +176,23 @@ package app.view
 		
 		private function onClick(event:MouseEvent):void
 		{			
-			if(FireHydrantVO.Tool == FireHydrantVO.ADD)
+			if(PanelSurroundingTool.Tool == PanelSurroundingTool.FIRE_ADD)
 			{				
 				var fireHydrantProxy:FireHydrantProxy = facade.retrieveProxy(FireHydrantProxy.NAME) as FireHydrantProxy;
 				fireHydrantProxy.AddFireHydrant(event.localX,event.localY);
+			}
+			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_ADD_START)
+			{
+				PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_ADD_END;
+				sendNotification(ApplicationFacade.NOTIFY_CLOSE_ADD_START,[event.localX,event.localY]);
+			}
+		}
+		
+		private function onMove(event:MouseEvent):void
+		{
+			if(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_ADD_END)
+			{				
+				sendNotification(ApplicationFacade.NOTIFY_CLOSE_ADD_MOVE,[event.localX,event.localY]);
 			}
 		}
 		

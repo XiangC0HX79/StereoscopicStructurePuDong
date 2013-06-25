@@ -7,7 +7,7 @@ package app.model.vo
 
 	[Bindable]
 	public class ClosedHandleVO
-	{
+	{		
 		private var source:Object;
 		
 		public function get T_ClosedhandlesID():Number

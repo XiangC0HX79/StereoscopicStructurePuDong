@@ -9,6 +9,7 @@ package app.view
 	import app.model.KeyUnitProxy;
 	import app.model.ScentingProxy;
 	import app.model.TrafficProxy;
+	import app.model.cosnt.PanelSurroundingTool;
 	import app.model.vo.BuildVO;
 	import app.model.vo.ConfigVO;
 	import app.model.vo.FireHydrantVO;
@@ -45,6 +46,8 @@ package app.view
 			menuSurrounding.addEventListener(MenuSurrounding.SAVE,onSave);
 			menuSurrounding.addEventListener(MenuSurrounding.FIREADD,onFireAdd);
 			menuSurrounding.addEventListener(MenuSurrounding.FIREDEL,onFireDel);
+			menuSurrounding.addEventListener(MenuSurrounding.CLOSEADD,onCloseAdd);
+			menuSurrounding.addEventListener(MenuSurrounding.CLOSEDEL,onCloseDel);
 		}
 		
 		protected function get menuSurrounding():MenuSurrounding
@@ -115,7 +118,7 @@ package app.view
 				
 		private function onDefault(event:Event):void
 		{
-			FireHydrantVO.Tool = FireHydrantVO.MOVE;
+			PanelSurroundingTool.Tool = PanelSurroundingTool.MOVE;
 			CursorManager.removeAllCursors();
 		}
 		
@@ -173,21 +176,35 @@ package app.view
 					return;
 			}
 			
-			sendNotification(ApplicationFacade.NOTIFY_APP_ALERTINFO,"周边环境信息保存成功。");
+			sendNotification(ApplicationFacade.NOTIFY_APP_ALERTINFO,"周边环境信息保存成功�);
 		}
 		
 		private function onFireAdd(event:Event):void
 		{
-			FireHydrantVO.Tool = FireHydrantVO.ADD;
+			PanelSurroundingTool.Tool = PanelSurroundingTool.FIRE_ADD;
 			
 			LayerVO.FIRE.LayerVisible = true;
 		}
 		
 		private function onFireDel(event:Event):void
 		{
-			FireHydrantVO.Tool = FireHydrantVO.DEL;
+			PanelSurroundingTool.Tool = PanelSurroundingTool.FIRE_DEL;
 			
 			LayerVO.FIRE.LayerVisible = true;
+		}
+		
+		private function onCloseAdd(event:Event):void
+		{
+			PanelSurroundingTool.Tool = PanelSurroundingTool.CLOSE_ADD_START;
+			
+			LayerVO.CLOSEHANDLE.LayerVisible = true;
+		}
+		
+		private function onCloseDel(event:Event):void
+		{
+			PanelSurroundingTool.Tool = PanelSurroundingTool.CLOSE_DEL;
+			
+			LayerVO.CLOSEHANDLE.LayerVisible = true;
 		}
 		
 		override public function listNotificationInterests():Array

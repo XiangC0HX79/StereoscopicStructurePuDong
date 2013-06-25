@@ -10,6 +10,7 @@ package app.view
 	import flash.display.GraphicsPathCommand;
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
@@ -28,6 +29,8 @@ package app.view
 		
 		private var buildProxy:BuildProxy;
 		
+		private var _closePointStart:Point;
+		
 		public function LayerDrawMediator()
 		{
 			super(NAME, new LayerDraw);
@@ -44,7 +47,10 @@ package app.view
 		{
 			return [
 				ApplicationFacade.NOTIFY_COMMAND_OVER,
-				ApplicationFacade.NOTIFY_COMMAND_OUT
+				ApplicationFacade.NOTIFY_COMMAND_OUT,
+				
+				ApplicationFacade.NOTIFY_CLOSE_ADD_START,
+				ApplicationFacade.NOTIFY_CLOSE_ADD_MOVE
 			];
 		}
 		
@@ -142,6 +148,47 @@ package app.view
 				
 				case ApplicationFacade.NOTIFY_COMMAND_OUT:
 					layerDraw.graphics.clear();
+					break;
+				
+				case ApplicationFacade.NOTIFY_CLOSE_ADD_START:
+					_closePointStart = new Point(Number(notification.getBody()[0]),Number(notification.getBody()[1]));
+					break;
+				
+				case ApplicationFacade.NOTIFY_CLOSE_ADD_MOVE:
+					var pt:Point = new Point(Number(notification.getBody()[0]),Number(notification.getBody()[1]));
+					dx = pt.x - _closePointStart.x;
+					dy = pt.y - _closePointStart.y;
+					
+					part = new BitmapData(20,10,true,0x0);
+					part.fillRect(new Rectangle(0,0,10,10),0xFFFF0000);
+					
+					len = Math.floor(Math.sqrt(dx * dx + dy * dy));
+					
+					path = new BitmapData(len,20,true,0x0);
+					
+					for(i = 0;i<Math.ceil(len / part.width);i++)
+					{
+						matrix = new Matrix(1,0,0,1,i * part.width,0);
+						path.draw(part,matrix);
+					}
+															
+					back = new BitmapData(layerDraw.width,layerDraw.height,true,0x0);
+					angel = Math.atan(dy / dx);					
+					if(pt.x < _closePointStart.x)
+					{
+						matrix = new Matrix(1,0,0,1,0,-5);
+					}
+					else
+					{
+						matrix = new Matrix(1,0,0,1,-len,-5);	
+					}					
+					matrix.rotate(angel);					
+					matrix.concat(new Matrix(1,0,0,1,pt.x,pt.y));					
+					back.draw(path,matrix);					
+					
+					layerDraw.graphics.beginBitmapFill(back,null,false);					
+					layerDraw.graphics.drawRect(0,0,layerDraw.width,layerDraw.height); 					
+					layerDraw.graphics.endFill();					
 					break;
 			}
 		}
