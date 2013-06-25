@@ -9,6 +9,7 @@ package app.view
 	import app.model.KeyUnitProxy;
 	import app.model.ScentingProxy;
 	import app.model.TrafficProxy;
+	import app.model.cosnt.PanelSurroundingTool;
 	import app.model.vo.BuildVO;
 	import app.model.vo.ClosedHandleVO;
 	import app.model.vo.ConfigVO;
@@ -68,7 +69,7 @@ package app.view
 				
 		private function onDefault(event:Event):void
 		{
-			FireHydrantVO.Tool = FireHydrantVO.MOVE;
+			PanelSurroundingTool.Tool = PanelSurroundingTool.MOVE;
 			CursorManager.removeAllCursors();
 		}
 		
@@ -131,28 +132,28 @@ package app.view
 		
 		private function onFireAdd(event:Event):void
 		{
-			FireHydrantVO.Tool = FireHydrantVO.ADD;
+			PanelSurroundingTool.Tool = PanelSurroundingTool.FIRE_ADD;
 			
 			LayerVO.FIRE.LayerVisible = true;
 		}
 		
 		private function onFireDel(event:Event):void
 		{
-			FireHydrantVO.Tool = FireHydrantVO.DEL;
+			PanelSurroundingTool.Tool = PanelSurroundingTool.FIRE_DEL;
 			
 			LayerVO.FIRE.LayerVisible = true;
 		}
 		
 		private function onCloseAdd(event:Event):void
 		{
-			ClosedHandleVO.Tool = ClosedHandleVO.ADD;
+			PanelSurroundingTool.Tool = PanelSurroundingTool.CLOSE_ADD_START;
 			
 			LayerVO.CLOSEHANDLE.LayerVisible = true;
 		}
 		
 		private function onCloseDel(event:Event):void
 		{
-			ClosedHandleVO.Tool = ClosedHandleVO.DEL;
+			PanelSurroundingTool.Tool = PanelSurroundingTool.CLOSE_DEL;
 			
 			LayerVO.CLOSEHANDLE.LayerVisible = true;
 		}

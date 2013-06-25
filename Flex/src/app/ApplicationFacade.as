@@ -70,6 +70,9 @@ package app
 		public static const NOTIFY_COMMAND_OVER:String		= "CommandOver";
 		public static const NOTIFY_COMMAND_OUT:String		= "CommandOut";
 		
+		public static const NOTIFY_CLOSE_ADD_START:String		= "CloseAddStart";
+		public static const NOTIFY_CLOSE_ADD_MOVE:String		= "CloseAddMove";
+		
 		public static const NOTIFY_SURROUNDING_KEYUNIT:String		= "SurroundingKeyUnit";
 		
 		public static const NOTIFY_STEREO_LAYER:String		= "StereoLayer";

@@ -4,13 +4,7 @@ package app.model.vo
 
 	[Bindable]
 	public class FireHydrantVO
-	{
-		public static const MOVE:String = "move";
-		public static const ADD:String = "add";
-		public static const DEL:String = "del";
-		
-		public static var Tool:String = MOVE;
-		
+	{		
 		private var _source:*;
 				
 		public function get T_FireHydrantID():Number

@@ -3,6 +3,7 @@ package app.view
 	import app.model.BuildProxy;
 	import app.model.FireHydrantProxy;
 	import app.model.IconsProxy;
+	import app.model.cosnt.PanelSurroundingTool;
 	import app.model.vo.ConfigVO;
 	import app.model.vo.FireHydrantVO;
 	import app.view.components.ImageFireHydrant;
@@ -47,7 +48,7 @@ package app.view
 		
 		private function onClick(event:Event):void
 		{
-			if(FireHydrantVO.Tool == FireHydrantVO.DEL)
+			if(PanelSurroundingTool.Tool == PanelSurroundingTool.FIRE_DEL)
 			{
 				var fireHydrantProxy:FireHydrantProxy = facade.retrieveProxy(FireHydrantProxy.NAME) as FireHydrantProxy;
 				fireHydrantProxy.DelFireHydrant(imageFireHydrant.FireHydrant);
