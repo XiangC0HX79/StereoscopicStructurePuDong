@@ -1,0 +1,13 @@
+22:43:39 SQL:INSERT T_ScentingLine (TMB_ID,T_ScentingLinePath) VALUES (1,381 187;237 375;476 430;577 236;426 91;426 91); EX:'187' 附近有语法错误。
+22:44:06 SQL:INSERT T_ScentingLine (TMB_ID,T_ScentingLinePath) VALUES (1,'429 281;364 412;186 290;253 134;253 134'); EX:字符串 '429 281' 后的引号不完整。
+'429 281' 附近有语法错误。
+22:45:21 SQL:INSERT T_ScentingLine (TMB_ID,T_ScentingLinePath) VALUES (1,'492 310;288 206;210 431;424 448;424 448'); EX:字符串 '492 310' 后的引号不完整。
+'492 310' 附近有语法错误。
+22:45:52 SQL:INSERT T_ScentingLine (TMB_ID,T_ScentingLinePath) VALUES (1,'310 325;513 266;505 429;183 456;183 456'); EX:字符串 '310 325' 后的引号不完整。
+'310 325' 附近有语法错误。
+22:46:24 SQL:INSERT T_ScentingLine (TMB_ID,T_ScentingLinePath) VALUES (1,'354 347;571 304;375 159;375 159'); EX:字符串 '354 347' 后的引号不完整。
+'354 347' 附近有语法错误。
+22:47:01 SQL:INSERT T_ScentingLine (TMB_ID,T_ScentingLinePath) VALUES (1,'483 250;387 367;621 425;599 221;599 221'); EX:字符串 '483 250' 后的引号不完整。
+'483 250' 附近有语法错误。
+22:47:50 SQL:INSERT T_ScentingLine (TMB_ID,T_ScentingLinePath) VALUES (1,'301 370;459 228;265 116;265 116'); EX:字符串 '301 370' 后的引号不完整。
+'301 370' 附近有语法错误。

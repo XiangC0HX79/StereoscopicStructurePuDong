@@ -49,7 +49,7 @@ package app.model.vo
 				
 		public function toString():String
 		{
-			return JSON.encode(this);
+			return JSON.encode(_source);
 		}
 		
 		public function CloseHandleLineVO(value:*)

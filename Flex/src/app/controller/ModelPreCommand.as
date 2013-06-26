@@ -22,6 +22,7 @@ package app.controller
 			facade.registerProxy(new HazardProxy);					
 			facade.registerProxy(new FireHydrantProxy);				
 			facade.registerProxy(new KeyUnitProxy);			
+			facade.registerProxy(new ScentingLineProxy);		
 			facade.registerProxy(new ScentingProxy);	
 			
 			facade.registerProxy(new TaticsProxy);	

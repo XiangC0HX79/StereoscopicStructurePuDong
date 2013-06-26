@@ -2,7 +2,9 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
+	import app.model.ClosedHandleLineProxy;
 	import app.model.FireHydrantProxy;
+	import app.model.ScentingLineProxy;
 	import app.model.cosnt.PanelSurroundingTool;
 	import app.model.vo.BuildVO;
 	import app.model.vo.ClosedHandleVO;
@@ -41,8 +43,8 @@ package app.view
 		public function PanelSurroundingMediator()
 		{
 			super(NAME, new PanelSurrounding);
-			
-			facade.registerMediator(new LayerScentingPicMediator(panelSurrounding.layerScentingPic));	
+						
+			panelSurrounding.addElement(facade.retrieveMediator(LayerScentingPicMediator.NAME).getViewComponent() as IVisualElement);	
 			
 			panelSurrounding.addElement(facade.retrieveMediator(LayerClosedPicMediator.NAME).getViewComponent() as IVisualElement);	
 			
@@ -69,7 +71,8 @@ package app.view
 			
 			panelSurrounding.addEventListener(MouseEvent.ROLL_OVER,onRollOver);	
 			panelSurrounding.addEventListener(MouseEvent.ROLL_OUT,onRollOut);	
-			panelSurrounding.addEventListener(MouseEvent.CLICK,onClick);			
+			panelSurrounding.addEventListener(MouseEvent.CLICK,onClick);		
+			panelSurrounding.addEventListener(MouseEvent.DOUBLE_CLICK,onDoubleClick);			
 			panelSurrounding.addEventListener(MouseEvent.MOUSE_MOVE,onMove);			
 		}
 		
@@ -201,6 +204,40 @@ package app.view
 				
 				sendNotification(ApplicationFacade.NOTIFY_CLOSE_ADD_END,pt);				
 			}
+			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_DEL)
+			{				
+				pt = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
+				pt = panelSurrounding.globalToLocal(pt);
+				
+				var closedHandleLineProxy:ClosedHandleLineProxy = facade.retrieveProxy(ClosedHandleLineProxy.NAME) as ClosedHandleLineProxy;
+				closedHandleLineProxy.DelFireHydrant(pt);
+			}
+			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.SCENTING_ADD)
+			{				
+				pt = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
+				pt = panelSurrounding.globalToLocal(pt);
+				
+				sendNotification(ApplicationFacade.NOTIFY_SCENTING_ADD_START,pt);	
+			}
+			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.SCENTING_DEL)
+			{				
+				pt = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
+				pt = panelSurrounding.globalToLocal(pt);
+								
+				var scentingLineProxy:ScentingLineProxy = facade.retrieveProxy(ScentingLineProxy.NAME) as ScentingLineProxy;
+				scentingLineProxy.DelScentingLine(pt);
+			}
+		}
+		
+		private function onDoubleClick(event:MouseEvent):void
+		{			
+			if(PanelSurroundingTool.Tool == PanelSurroundingTool.SCENTING_ADD)
+			{				
+				var pt:Point = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
+				pt = panelSurrounding.globalToLocal(pt);
+				
+				sendNotification(ApplicationFacade.NOTIFY_SCENTING_ADD_END,pt);	
+			}
 		}
 		
 		private function onMove(event:MouseEvent):void
@@ -211,6 +248,13 @@ package app.view
 				pt = panelSurrounding.globalToLocal(pt);
 				
 				sendNotification(ApplicationFacade.NOTIFY_CLOSE_ADD_MOVE,pt);
+			}
+			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.SCENTING_ADD)
+			{				
+				pt = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
+				pt = panelSurrounding.globalToLocal(pt);
+				
+				sendNotification(ApplicationFacade.NOTIFY_SCENTING_ADD_MOVE,pt);	
 			}
 		}
 		

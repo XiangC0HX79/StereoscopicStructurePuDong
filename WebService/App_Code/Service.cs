@@ -146,14 +146,20 @@ public class Service : WebService
     {
         var d = FromJsonTo<Dictionary<string, object>>(json);
 
-        var s = (Dictionary<string, object>)d["T_ClosedLineStart"];
-        var e = (Dictionary<string, object>)d["T_ClosedLineEnd"];
-
-        var sql = "INSERT T_ClosedhandlesLine (TMB_ID,T_ClosedLineStartX,T_ClosedLineStartY,T_ClosedLineEndX,T_ClosedLineEndY) VALUES (" + d["TMB_ID"] + "," + s["x"] + "," + s["y"] + "," + e["x"]  + "," + e["y"] +");";
+        var sql = "INSERT T_ClosedhandlesLine (TMB_ID,T_ClosedLineStartX,T_ClosedLineStartY,T_ClosedLineEndX,T_ClosedLineEndY) VALUES ("
+            + d["TMB_ID"] + "," + d["T_ClosedLineStartX"] + "," + d["T_ClosedLineStartY"] + "," + d["T_ClosedLineEndX"] + "," + d["T_ClosedLineEndY"] + ");";
 
         _databaseOperator.ExcuteNoQuery(sql);
 
         return Convert.ToInt32(_databaseOperator.GetValue("select IDENT_CURRENT('T_ClosedhandlesLine')"));
+    }
+
+    [WebMethod]
+    public int DelClosedLine(String id)
+    {
+        var sql = "DELETE FROM T_ClosedhandlesLine WHERE T_ClosedhandlesLineID = " + id;
+
+        return _databaseOperator.ExcuteNoQuery(sql);
     }
 
     [WebMethod]
@@ -172,6 +178,28 @@ public class Service : WebService
     public int DelFireHydrant(String id)
     {
         var sql = "DELETE FROM T_FireHydrant WHERE T_FireHydrantID = " + id;
+
+        return _databaseOperator.ExcuteNoQuery(sql);
+    }
+
+
+    [WebMethod]
+    public int AddScentingLine(String json)
+    {
+        var d = FromJsonTo<Dictionary<string, object>>(json);
+
+        var sql = "INSERT T_ScentingLine (TMB_ID,T_ScentingLinePath) VALUES ("
+            + d["TMB_ID"] + ",'" + d["T_ScentingLinePath"] + "');";
+
+        _databaseOperator.ExcuteNoQuery(sql);
+
+        return Convert.ToInt32(_databaseOperator.GetValue("select IDENT_CURRENT('T_ScentingLine')"));
+    }
+
+    [WebMethod]
+    public int DelSentingLine(String id)
+    {
+        var sql = "DELETE FROM T_ScentingLine WHERE T_ScentingLineID = " + id;
 
         return _databaseOperator.ExcuteNoQuery(sql);
     }
@@ -203,6 +231,14 @@ public class Service : WebService
     public DataTable InitCommandingHeightsPic(String tmbId)
     {
         var sql = "Select * FROM T_CommandingHeightsPIC WHERE TMB_ID = " + tmbId + " AND T_ComType = 2";
+
+        return _databaseOperator.GetTable(sql);
+    }
+
+    [WebMethod]
+    public DataTable InitClosedLine(String tmbId)
+    {
+        var sql = "Select * FROM T_ClosedhandlesLine WHERE TMB_ID =" + tmbId;
 
         return _databaseOperator.GetTable(sql);
     }
@@ -269,7 +305,15 @@ public class Service : WebService
 
         return _databaseOperator.GetTable(sql);
     }
-    
+       
+    [WebMethod]
+    public DataTable InitScentingLine(String tmbId)
+    {
+        var sql = "Select * FROM T_ScentingLine WHERE TMB_ID =" + tmbId;
+
+        return _databaseOperator.GetTable(sql);
+    }
+
     [WebMethod]
     public DataTable InitScenting(String tmbId)
     {

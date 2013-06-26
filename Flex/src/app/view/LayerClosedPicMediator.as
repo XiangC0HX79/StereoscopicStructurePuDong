@@ -3,10 +3,13 @@ package app.view
 	import app.ApplicationFacade;
 	import app.model.ClosedHandleLineProxy;
 	import app.model.vo.BuildVO;
+	import app.model.vo.CloseHandleLineVO;
+	import app.model.vo.ClosedHandlePicVO;
 	import app.model.vo.LayerVO;
 	import app.view.components.LayerClosedPic;
 	
 	import flash.display.BitmapData;
+	import flash.display.Graphics;
 	import flash.display.GraphicsPathCommand;
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
@@ -20,6 +23,8 @@ package app.view
 	import org.puremvc.as3.patterns.mediator.Mediator;
 	
 	import spark.components.Group;
+	import spark.primitives.Graphic;
+	import spark.primitives.Line;
 	
 	public class LayerClosedPicMediator extends Mediator implements IMediator
 	{
@@ -31,19 +36,12 @@ package app.view
 		
 		public function LayerClosedPicMediator()
 		{
-			super(NAME, new Group);
-			
-			layerClosedPic.top = 0;
-			layerClosedPic.bottom = 0;
-			layerClosedPic.left = 0;
-			layerClosedPic.right = 0;
-			
-			layerClosedPic.visible = false;
+			super(NAME, new LayerClosedPic);
 		}
 		
-		protected function get layerClosedPic():Group
+		protected function get layerClosedPic():LayerClosedPic
 		{
-			return viewComponent as Group;
+			return viewComponent as LayerClosedPic;
 		}
 		
 		override public function listNotificationInterests():Array
@@ -53,7 +51,11 @@ package app.view
 				
 				ApplicationFacade.NOTIFY_CLOSE_ADD_START,
 				ApplicationFacade.NOTIFY_CLOSE_ADD_MOVE,
-				ApplicationFacade.NOTIFY_CLOSE_ADD_END
+				ApplicationFacade.NOTIFY_CLOSE_ADD_END,
+				
+				ApplicationFacade.NOTIFY_INIT_CLOSEDHANDLE_LINE,
+				ApplicationFacade.NOTIFY_CLOSELINE_ADD,
+				ApplicationFacade.NOTIFY_CLOSELINE_DEL
 			];
 		}
 		
@@ -73,22 +75,44 @@ package app.view
 					break;
 				
 				case ApplicationFacade.NOTIFY_CLOSE_ADD_MOVE:
-					drawCloseHandleAdd(notification.getBody() as Point);
+					layerClosedPic.graphics.clear();
+					addCloseHandle(_closePointStart,notification.getBody() as Point,layerClosedPic.graphics);
 					break;
 				
 				case ApplicationFacade.NOTIFY_CLOSE_ADD_END:
 					var proxy:ClosedHandleLineProxy = facade.retrieveProxy(ClosedHandleLineProxy.NAME) as ClosedHandleLineProxy;
 					proxy.AddFireHydrant(_closePointStart,notification.getBody() as Point);
 					break;
+				
+				case ApplicationFacade.NOTIFY_INIT_CLOSEDHANDLE_LINE:
+					for each(var cl:CloseHandleLineVO in notification.getBody())
+					{
+						addCloseHandle(cl.T_ClosedLineStart,cl.T_ClosedLineEnd,layerClosedPic.sprite.graphics);
+					}
+					break;
+				
+				case ApplicationFacade.NOTIFY_CLOSELINE_ADD:
+					cl = notification.getBody() as CloseHandleLineVO;
+					
+					layerClosedPic.graphics.clear();
+					
+					addCloseHandle(cl.T_ClosedLineStart,cl.T_ClosedLineEnd,layerClosedPic.sprite.graphics);
+					break;
+				
+				case ApplicationFacade.NOTIFY_CLOSELINE_DEL:
+					layerClosedPic.sprite.graphics.clear();
+					for each(cl in notification.getBody())
+					{
+						addCloseHandle(cl.T_ClosedLineStart,cl.T_ClosedLineEnd,layerClosedPic.sprite.graphics);
+					}
+					break;
 			}
 		}
 		
-		private function drawCloseHandleAdd(pt:Point):void
+		private function addCloseHandle(pts:Point,pte:Point,gr:Graphics):void
 		{			
-			layerClosedPic.graphics.clear();
-			
-			var dx:Number = pt.x - _closePointStart.x;
-			var dy:Number = pt.y - _closePointStart.y;
+			var dx:Number = pte.x - pts.x;
+			var dy:Number = pte.y - pts.y;
 			
 			var arrow:Sprite = new Sprite;
 			
@@ -122,18 +146,17 @@ package app.view
 			var back:BitmapData = new BitmapData(layerClosedPic.width,layerClosedPic.height,true,0x0);
 			
 			var angel:Number = Math.acos(dx / Math.sqrt(dx * dx + dy * dy));	
-			if(pt.y < _closePointStart.y)
+			if(pte.y < pts.y)
 				angel = -angel;
 			
 			matrix = new Matrix(1,0,0,1,0,-10);
 			matrix.rotate(angel);					
-			matrix.concat(new Matrix(1,0,0,1,_closePointStart.x,_closePointStart.y));					
+			matrix.concat(new Matrix(1,0,0,1,pts.x,pts.y));					
 			back.draw(path,matrix);					
 			
-			layerClosedPic.graphics.beginBitmapFill(back,null,false);					
-			layerClosedPic.graphics.drawRect(0,0,layerClosedPic.width,layerClosedPic.height); 					
-			layerClosedPic.graphics.endFill();				
+			gr.beginBitmapFill(back,null,false);					
+			gr.drawRect(0,0,layerClosedPic.width,layerClosedPic.height); 					
+			gr.endFill();				
 		}
-		
 	}
 }

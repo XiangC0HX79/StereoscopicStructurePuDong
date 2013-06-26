@@ -63,10 +63,10 @@ package app.model.vo
 			return  _source.T_FirePath?_source.T_FirePath.replace("../",ConfigVO.BASE_URL):_source.T_FirePath;	
 		}
 		
-		public function get T_ScentingPicPath():String
+		/*public function get T_ScentingPicPath():String
 		{
 			return  _source.T_ScentingPicPath?_source.T_ScentingPicPath.replace("../",ConfigVO.BASE_URL):_source.T_ScentingPicPath;	
-		}		
+		}		*/
 		
 		public function get TMB_descriptionPath():String
 		{

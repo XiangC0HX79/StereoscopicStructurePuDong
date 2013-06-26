@@ -8,7 +8,9 @@ package app.model.cosnt
 		public static const FIRE_DEL:String = "FireDel";		
 		public static const CLOSE_ADD_START:String = "CloseAddStart";
 		public static const CLOSE_ADD_END:String = "CloseAddEnd";
-		public static const CLOSE_DEL:String = "CloseDel";
+		public static const CLOSE_DEL:String = "CloseDel";		
+		public static const SCENTING_ADD:String = "ScentingAdd";
+		public static const SCENTING_DEL:String = "ScentingDel";
 		
 		public static var Tool:String = MOVE;
 	}

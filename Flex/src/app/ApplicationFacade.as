@@ -24,11 +24,13 @@ package app
 		public static const NOTIFY_INIT_BUILD:String		= "InitBuild";
 		public static const NOTIFY_INIT_COMMANDHEIGHT:String		= "InitCommandHeight";
 		public static const NOTIFY_INIT_CLOSEDHANDLE:String		= "InitClosedHandle";
+		public static const NOTIFY_INIT_CLOSEDHANDLE_LINE:String		= "InitClosedHandleLine";
 		public static const NOTIFY_INIT_TRAFFIC:String		= "InitTraffic";
 		public static const NOTIFY_INIT_HAZZARD:String		= "InitHazzard";
 		public static const NOTIFY_INIT_FIREHYDRANT:String		= "InitFireHydrant";
 		public static const NOTIFY_INIT_KEYUNIT:String		= "IniKeyUnit";
 		public static const NOTIFY_INIT_SCENTING:String		= "InitScenting";
+		public static const NOTIFY_INIT_SCENTING_LINE:String		= "InitScentingLine";
 		public static const NOTIFY_INIT_TATICS:String		= "InitTatics";
 		public static const NOTIFY_INIT_PASSAGE:String		= "InitPassage";
 		public static const NOTIFY_INIT_FLOORPIC:String		= "InitFloorPic";
@@ -68,9 +70,19 @@ package app
 		public static const NOTIFY_CLOSE_ADD_END:String			= "CloseAddEnd";
 		public static const NOTIFY_CLOSE_ADD_MOVE:String		= "CloseAddMove";
 		
+		public static const NOTIFY_SCENTING_ADD_START:String		= "ScentingAddStart";
+		public static const NOTIFY_SCENTING_ADD_END:String			= "ScentingAddEnd";
+		public static const NOTIFY_SCENTING_ADD_MOVE:String			= "ScentingAddMove";
+		
 		public static const NOTIFY_SURROUNDING_KEYUNIT:String		= "SurroundingKeyUnit";
 		
 		public static const NOTIFY_STEREO_LAYER:String		= "StereoLayer";
+		
+		public static const NOTIFY_CLOSELINE_ADD:String			= "CloseLineAdd";
+		public static const NOTIFY_CLOSELINE_DEL:String			= "CloseLineDel";
+		
+		public static const NOTIFY_SCENTING_LINE_ADD:String		= "ScentingLineAdd";
+		public static const NOTIFY_SCENTING_LINE_DEL:String		= "ScentingLineDel";
 		
 		public static const NOTIFY_FIRE_ADD:String			= "FireAdd";
 		public static const NOTIFY_FIRE_DEL:String			= "FireDel";

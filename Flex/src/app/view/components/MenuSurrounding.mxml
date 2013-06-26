@@ -19,6 +19,8 @@
 			public static const FIREDEL:String = "FireDel";
 			public static const CLOSEADD:String = "CloseAdd";
 			public static const CLOSEDEL:String = "CloseDel";
+			public static const SCENTING_ADD:String = "ScentingAdd";
+			public static const SCENTING_DEL:String = "ScentingDel";
 			public static const SAVE:String = "Save";
 			
 			[Bindable]public var dp:ArrayCollection = new ArrayCollection;
@@ -34,12 +36,14 @@
 	<s:HGroup horizontalAlign="center" includeIn="Edit" width="100%">
 		<s:Image source="@Embed('assets/image/default.png')" buttonMode="true" click="dispatchEvent(new Event(DEFAULT))"/>
 		<s:Image source="@Embed('assets/image/btnSave.png')" toolTip="保存数据" buttonMode="true" click="dispatchEvent(new Event(SAVE))"/>
+		<s:Image source="@Embed('assets/image/fire_add.png')" toolTip="添加消防栓" buttonMode="true" click="dispatchEvent(new Event(FIREADD))"/>
+		<s:Image source="@Embed('assets/image/fire_del.png')" toolTip="删除消防栓" buttonMode="true" click="dispatchEvent(new Event(FIREDEL))"/>
 	</s:HGroup>
 	
 	<s:HGroup horizontalAlign="center" includeIn="Edit" width="100%">
-		<s:Image source="@Embed('assets/image/fire_add.png')" toolTip="添加消防栓" buttonMode="true" click="dispatchEvent(new Event(FIREADD))"/>
-		<s:Image source="@Embed('assets/image/fire_del.png')" toolTip="删除消防栓" buttonMode="true" click="dispatchEvent(new Event(FIREDEL))"/>
-		<s:Image source="@Embed('assets/image/fire_add.png')" toolTip="添加消防栓" buttonMode="true" click="dispatchEvent(new Event(CLOSEADD))"/>
-		<s:Image source="@Embed('assets/image/fire_del.png')" toolTip="删除消防栓" buttonMode="true" click="dispatchEvent(new Event(CLOSEDEL))"/>
+		<s:Image source="@Embed('assets/image/fire_add.png')" toolTip="添加分控线" buttonMode="true" click="dispatchEvent(new Event(CLOSEADD))"/>
+		<s:Image source="@Embed('assets/image/fire_del.png')" toolTip="删除分控线" buttonMode="true" click="dispatchEvent(new Event(CLOSEDEL))"/>
+		<s:Image source="@Embed('assets/image/fire_add.png')" toolTip="添加窨井线" buttonMode="true" click="dispatchEvent(new Event(SCENTING_ADD))"/>
+		<s:Image source="@Embed('assets/image/fire_del.png')" toolTip="删除窨井线" buttonMode="true" click="dispatchEvent(new Event(SCENTING_DEL))"/>
 	</s:HGroup>
 </s:VGroup>
