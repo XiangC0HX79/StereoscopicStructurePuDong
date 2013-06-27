@@ -40,6 +40,12 @@ package app.view
 		[Embed('assets/image/cursor_fire_del.png')]		
 		private static const CURSOR_FIRE_DEL:Class;
 		
+		[Embed('assets/image/cursor_add.png')]		
+		private static const CURSOR_ADD:Class;
+		
+		[Embed('assets/image/cursor_del.png')]		
+		private static const CURSOR_DEL:Class;
+		
 		public function PanelSurroundingMediator()
 		{
 			super(NAME, new PanelSurrounding);
@@ -164,13 +170,19 @@ package app.view
 				(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_ADD_START)
 				||
 				(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_ADD_END)
+				||
+				(PanelSurroundingTool.Tool == PanelSurroundingTool.SCENTING_ADD)
 				)
 			{
-				CursorManager.setCursor(CURSOR_FIRE_ADD,2,-12,-12);
+				CursorManager.setCursor(CURSOR_ADD,2,-5,0);
 			}
-			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_DEL)
+			else if(
+				(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_DEL)
+				||
+				(PanelSurroundingTool.Tool == PanelSurroundingTool.SCENTING_DEL)
+				)
 			{
-				CursorManager.setCursor(CURSOR_FIRE_DEL,2,-12,-12);
+				CursorManager.setCursor(CURSOR_DEL,2,-5,0);
 			}
 		}
 				
