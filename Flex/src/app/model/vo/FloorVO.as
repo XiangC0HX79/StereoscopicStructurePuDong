@@ -104,7 +104,16 @@ package app.model.vo
 		{
 			_source.T_FloorZRotation = value;	
 		}
-				
+		
+		public function get T_Floorsque():Number
+		{
+			return  isNaN(_source.T_Floorsque)?0:_source.T_Floorsque;	
+		}
+		public function set T_Floorsque(value:Number):void
+		{
+			_source.T_Floorsque = value;	
+		}
+		
 		public var floorDetails:Dictionary;
 		
 		public var edit:Boolean = false;

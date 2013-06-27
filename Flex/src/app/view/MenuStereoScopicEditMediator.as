@@ -104,7 +104,10 @@ package app.view
 					break;
 				
 				case ApplicationFacade.NOTIFY_INIT_FLOOR:
-					menuStereoScopicEdit.floors = new ArrayCollection(DictionaryUtil.getValues((notification.getBody() as Dictionary)));
+					var a:Array = DictionaryUtil.getValues((notification.getBody() as Dictionary));
+					a.sortOn("T_Floorsque",Array.DESCENDING | Array.NUMERIC);
+					
+					menuStereoScopicEdit.floors = new ArrayCollection(a);
 					break;
 			}
 		}

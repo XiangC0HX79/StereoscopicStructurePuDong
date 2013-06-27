@@ -5,6 +5,7 @@ package app.model.vo
 	
 	import mx.collections.ArrayCollection;
 
+	
 	[Bindable]
 	public class ClosedHandleVO
 	{		

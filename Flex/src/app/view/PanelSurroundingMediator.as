@@ -2,7 +2,9 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
+	import app.model.ClosedHandleLineProxy;
 	import app.model.FireHydrantProxy;
+	import app.model.ScentingLineProxy;
 	import app.model.cosnt.PanelSurroundingTool;
 	import app.model.vo.BuildVO;
 	import app.model.vo.ClosedHandleVO;
@@ -14,6 +16,7 @@ package app.view
 	import app.model.vo.TrafficVO;
 	import app.view.components.PanelSurrounding;
 	
+	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -37,13 +40,20 @@ package app.view
 		[Embed('assets/image/cursor_fire_del.png')]		
 		private static const CURSOR_FIRE_DEL:Class;
 		
+		[Embed('assets/image/cursor_add.png')]		
+		private static const CURSOR_ADD:Class;
+		
+		[Embed('assets/image/cursor_del.png')]		
+		private static const CURSOR_DEL:Class;
+		
 		public function PanelSurroundingMediator()
 		{
 			super(NAME, new PanelSurrounding);
-			
-			facade.registerMediator(new LayerClosedPicMediator(panelSurrounding.layerClosedPic));	
-			facade.registerMediator(new LayerScentingPicMediator(panelSurrounding.layerScentingPic));	
 						
+			panelSurrounding.addElement(facade.retrieveMediator(LayerScentingPicMediator.NAME).getViewComponent() as IVisualElement);	
+			
+			panelSurrounding.addElement(facade.retrieveMediator(LayerClosedPicMediator.NAME).getViewComponent() as IVisualElement);	
+			
 			panelSurrounding.addElement(facade.retrieveMediator(LayerDrawMediator.NAME).getViewComponent() as IVisualElement);			
 
 			panelSurrounding.addElement(facade.retrieveMediator(LayerCommandingHeightMediator.NAME).getViewComponent() as IVisualElement);
@@ -67,7 +77,8 @@ package app.view
 			
 			panelSurrounding.addEventListener(MouseEvent.ROLL_OVER,onRollOver);	
 			panelSurrounding.addEventListener(MouseEvent.ROLL_OUT,onRollOut);	
-			panelSurrounding.addEventListener(MouseEvent.CLICK,onClick);			
+			panelSurrounding.addEventListener(MouseEvent.CLICK,onClick);		
+			panelSurrounding.addEventListener(MouseEvent.DOUBLE_CLICK,onDoubleClick);			
 			panelSurrounding.addEventListener(MouseEvent.MOUSE_MOVE,onMove);			
 		}
 		
@@ -140,8 +151,8 @@ package app.view
 			else if(e.dragSource.hasFormat("ScentingVO"))
 			{
 				var sc:ScentingVO = e.dragSource.dataForFormat("ScentingVO") as ScentingVO;
-				sc.T_ScentingX = e.localX - sp.x + e.dragInitiator.width / 2;
-				sc.T_ScentingY = e.localY - sp.y + e.dragInitiator.height / 2;				
+				sc.T_ScentingX = e.localX - sp.x;
+				sc.T_ScentingY = e.localY - sp.y;				
 			}		
 		}
 				
@@ -159,13 +170,19 @@ package app.view
 				(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_ADD_START)
 				||
 				(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_ADD_END)
+				||
+				(PanelSurroundingTool.Tool == PanelSurroundingTool.SCENTING_ADD)
 				)
 			{
-				CursorManager.setCursor(CURSOR_FIRE_ADD,2,-12,-12);
+				CursorManager.setCursor(CURSOR_ADD,2,-5,0);
 			}
-			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_DEL)
+			else if(
+				(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_DEL)
+				||
+				(PanelSurroundingTool.Tool == PanelSurroundingTool.SCENTING_DEL)
+				)
 			{
-				CursorManager.setCursor(CURSOR_FIRE_DEL,2,-12,-12);
+				CursorManager.setCursor(CURSOR_DEL,2,-5,0);
 			}
 		}
 				
@@ -183,16 +200,73 @@ package app.view
 			}
 			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_ADD_START)
 			{
-				PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_ADD_END;
-				sendNotification(ApplicationFacade.NOTIFY_CLOSE_ADD_START,[event.localX,event.localY]);
+				PanelSurroundingTool.Tool = PanelSurroundingTool.CLOSE_ADD_END;
+				
+				var pt:Point = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
+				pt = panelSurrounding.globalToLocal(pt);
+				
+				sendNotification(ApplicationFacade.NOTIFY_CLOSE_ADD_START,pt);
+			}
+			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_ADD_END)
+			{
+				PanelSurroundingTool.Tool = PanelSurroundingTool.CLOSE_ADD_START;
+				
+				pt = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
+				pt = panelSurrounding.globalToLocal(pt);
+				
+				sendNotification(ApplicationFacade.NOTIFY_CLOSE_ADD_END,pt);				
+			}
+			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_DEL)
+			{				
+				pt = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
+				pt = panelSurrounding.globalToLocal(pt);
+				
+				var closedHandleLineProxy:ClosedHandleLineProxy = facade.retrieveProxy(ClosedHandleLineProxy.NAME) as ClosedHandleLineProxy;
+				closedHandleLineProxy.DelFireHydrant(pt);
+			}
+			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.SCENTING_ADD)
+			{				
+				pt = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
+				pt = panelSurrounding.globalToLocal(pt);
+				
+				sendNotification(ApplicationFacade.NOTIFY_SCENTING_ADD_START,pt);	
+			}
+			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.SCENTING_DEL)
+			{				
+				pt = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
+				pt = panelSurrounding.globalToLocal(pt);
+								
+				var scentingLineProxy:ScentingLineProxy = facade.retrieveProxy(ScentingLineProxy.NAME) as ScentingLineProxy;
+				scentingLineProxy.DelScentingLine(pt);
+			}
+		}
+		
+		private function onDoubleClick(event:MouseEvent):void
+		{			
+			if(PanelSurroundingTool.Tool == PanelSurroundingTool.SCENTING_ADD)
+			{				
+				var pt:Point = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
+				pt = panelSurrounding.globalToLocal(pt);
+				
+				sendNotification(ApplicationFacade.NOTIFY_SCENTING_ADD_END,pt);	
 			}
 		}
 		
 		private function onMove(event:MouseEvent):void
 		{
 			if(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_ADD_END)
+			{								
+				var pt:Point = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
+				pt = panelSurrounding.globalToLocal(pt);
+				
+				sendNotification(ApplicationFacade.NOTIFY_CLOSE_ADD_MOVE,pt);
+			}
+			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.SCENTING_ADD)
 			{				
-				sendNotification(ApplicationFacade.NOTIFY_CLOSE_ADD_MOVE,[event.localX,event.localY]);
+				pt = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
+				pt = panelSurrounding.globalToLocal(pt);
+				
+				sendNotification(ApplicationFacade.NOTIFY_SCENTING_ADD_MOVE,pt);	
 			}
 		}
 		

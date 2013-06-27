@@ -3,6 +3,8 @@ package app.controller
 	import app.view.*;
 	import app.view.components.PanelPassage;
 	
+	import mx.controls.Label;
+	
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.command.SimpleCommand;
 	
@@ -40,6 +42,8 @@ package app.controller
 			facade.registerMediator(new MenuStereoScopicStructureMediator);
 			facade.registerMediator(new MenuStereoScopicEditMediator);
 			
+			facade.registerMediator(new LayerScentingPicMediator);	
+			facade.registerMediator(new LayerClosedPicMediator);		
 			facade.registerMediator(new LayerDrawMediator);		
 			facade.registerMediator(new LayerCommandingHeightMediator);
 			facade.registerMediator(new LayerCloseHandlesMediator);

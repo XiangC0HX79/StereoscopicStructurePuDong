@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Serialization;
 using System.Web.Services;
 
 using System.Data;
@@ -140,6 +142,27 @@ public class Service : WebService
     }
        
     [WebMethod]
+    public int AddClosedLine(String json)
+    {
+        var d = FromJsonTo<Dictionary<string, object>>(json);
+
+        var sql = "INSERT T_ClosedhandlesLine (TMB_ID,T_ClosedLineStartX,T_ClosedLineStartY,T_ClosedLineEndX,T_ClosedLineEndY) VALUES ("
+            + d["TMB_ID"] + "," + d["T_ClosedLineStartX"] + "," + d["T_ClosedLineStartY"] + "," + d["T_ClosedLineEndX"] + "," + d["T_ClosedLineEndY"] + ");";
+
+        _databaseOperator.ExcuteNoQuery(sql);
+
+        return Convert.ToInt32(_databaseOperator.GetValue("select IDENT_CURRENT('T_ClosedhandlesLine')"));
+    }
+
+    [WebMethod]
+    public int DelClosedLine(String id)
+    {
+        var sql = "DELETE FROM T_ClosedhandlesLine WHERE T_ClosedhandlesLineID = " + id;
+
+        return _databaseOperator.ExcuteNoQuery(sql);
+    }
+
+    [WebMethod]
     public int AddFireHydrant(String data)
     {
         var s = data.Split(' ');
@@ -155,6 +178,28 @@ public class Service : WebService
     public int DelFireHydrant(String id)
     {
         var sql = "DELETE FROM T_FireHydrant WHERE T_FireHydrantID = " + id;
+
+        return _databaseOperator.ExcuteNoQuery(sql);
+    }
+
+
+    [WebMethod]
+    public int AddScentingLine(String json)
+    {
+        var d = FromJsonTo<Dictionary<string, object>>(json);
+
+        var sql = "INSERT T_ScentingLine (TMB_ID,T_ScentingLinePath) VALUES ("
+            + d["TMB_ID"] + ",'" + d["T_ScentingLinePath"] + "');";
+
+        _databaseOperator.ExcuteNoQuery(sql);
+
+        return Convert.ToInt32(_databaseOperator.GetValue("select IDENT_CURRENT('T_ScentingLine')"));
+    }
+
+    [WebMethod]
+    public int DelSentingLine(String id)
+    {
+        var sql = "DELETE FROM T_ScentingLine WHERE T_ScentingLineID = " + id;
 
         return _databaseOperator.ExcuteNoQuery(sql);
     }
@@ -186,6 +231,14 @@ public class Service : WebService
     public DataTable InitCommandingHeightsPic(String tmbId)
     {
         var sql = "Select * FROM T_CommandingHeightsPIC WHERE TMB_ID = " + tmbId + " AND T_ComType = 2";
+
+        return _databaseOperator.GetTable(sql);
+    }
+
+    [WebMethod]
+    public DataTable InitClosedLine(String tmbId)
+    {
+        var sql = "Select * FROM T_ClosedhandlesLine WHERE TMB_ID =" + tmbId;
 
         return _databaseOperator.GetTable(sql);
     }
@@ -252,7 +305,15 @@ public class Service : WebService
 
         return _databaseOperator.GetTable(sql);
     }
-    
+       
+    [WebMethod]
+    public DataTable InitScentingLine(String tmbId)
+    {
+        var sql = "Select * FROM T_ScentingLine WHERE TMB_ID =" + tmbId;
+
+        return _databaseOperator.GetTable(sql);
+    }
+
     [WebMethod]
     public DataTable InitScenting(String tmbId)
     {
@@ -270,7 +331,7 @@ public class Service : WebService
         foreach (DataRow k in img.Rows)
         {
             var s = k["T_ScentingimgOwen"].ToString().Split(',');
-            foreach (var j in s.SelectMany(i => scenting.Select("T_ScentingID = " + i)))
+            foreach (var j in from i in s where i != "" from j in scenting.Select("T_ScentingID = " + i) select j)
             {
                 j["T_ScentingImgName"] = k["T_ScentingImgName"];
                 j["T_ScentingimgPath"] = k["T_ScentingimgPath"];
@@ -435,7 +496,7 @@ public class Service : WebService
     {
         try
         {
-            var root = System.Web.HttpContext.Current.Request.Url.AbsoluteUri;
+            var root = HttpContext.Current.Request.Url.AbsoluteUri;
             root = root.Substring(0, root.IndexOf("Service.asmx", StringComparison.Ordinal));
 
             var index = url.IndexOf(root, StringComparison.Ordinal);
@@ -452,5 +513,22 @@ public class Service : WebService
         {
             return "0 0";
         }
+    }
+
+    public T FromJsonTo<T>(string jsonString)
+    {
+        var jss = new JavaScriptSerializer();
+
+        try
+        {
+            //将指定的 JSON 字符串转换为 T 类型的对象
+            return jss.Deserialize<T>(jsonString);
+        }
+
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+
     }
 }

@@ -2,6 +2,7 @@ package app.view
 {		
 	import app.ApplicationFacade;
 	import app.model.BuildProxy;
+	import app.model.ClosedHandleLineProxy;
 	import app.model.ClosedHandleProxy;
 	import app.model.CommandHeightProxy;
 	import app.model.FireHydrantProxy;
@@ -11,6 +12,7 @@ package app.view
 	import app.model.IconsProxy;
 	import app.model.KeyUnitProxy;
 	import app.model.PassageProxy;
+	import app.model.ScentingLineProxy;
 	import app.model.ScentingProxy;
 	import app.model.TaticsProxy;
 	import app.model.TrafficProxy;
@@ -59,10 +61,12 @@ package app.view
 				ApplicationFacade.NOTIFY_INIT_BUILD,
 				ApplicationFacade.NOTIFY_INIT_COMMANDHEIGHT,
 				ApplicationFacade.NOTIFY_INIT_CLOSEDHANDLE,
+				ApplicationFacade.NOTIFY_INIT_CLOSEDHANDLE_LINE,
 				ApplicationFacade.NOTIFY_INIT_TRAFFIC,
 				ApplicationFacade.NOTIFY_INIT_HAZZARD,
 				ApplicationFacade.NOTIFY_INIT_FIREHYDRANT,
 				ApplicationFacade.NOTIFY_INIT_KEYUNIT,
+				ApplicationFacade.NOTIFY_INIT_SCENTING_LINE,
 				ApplicationFacade.NOTIFY_INIT_SCENTING,
 				ApplicationFacade.NOTIFY_INIT_TATICS,
 				ApplicationFacade.NOTIFY_INIT_PASSAGE,
@@ -115,6 +119,11 @@ package app.view
 					break;
 				
 				case ApplicationFacade.NOTIFY_INIT_CLOSEDHANDLE:
+					var closedHandleLineProxy:ClosedHandleLineProxy = facade.retrieveProxy(ClosedHandleLineProxy.NAME) as ClosedHandleLineProxy;
+					closedHandleLineProxy.Init();	
+					break;
+				
+				case ApplicationFacade.NOTIFY_INIT_CLOSEDHANDLE_LINE:
 					var trafficProxy:TrafficProxy = facade.retrieveProxy(TrafficProxy.NAME) as TrafficProxy;
 					trafficProxy.Init();	
 					break;
@@ -135,6 +144,11 @@ package app.view
 					break;
 				
 				case ApplicationFacade.NOTIFY_INIT_KEYUNIT:
+					var scentingLineProxy:ScentingLineProxy = facade.retrieveProxy(ScentingLineProxy.NAME) as ScentingLineProxy;
+					scentingLineProxy.Init();
+					break;
+				
+				case ApplicationFacade.NOTIFY_INIT_SCENTING_LINE:
 					var scentingProxy:ScentingProxy = facade.retrieveProxy(ScentingProxy.NAME) as ScentingProxy;
 					scentingProxy.Init();
 					break;

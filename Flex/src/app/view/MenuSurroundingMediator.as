@@ -48,6 +48,8 @@ package app.view
 			menuSurrounding.addEventListener(MenuSurrounding.FIREDEL,onFireDel);
 			menuSurrounding.addEventListener(MenuSurrounding.CLOSEADD,onCloseAdd);
 			menuSurrounding.addEventListener(MenuSurrounding.CLOSEDEL,onCloseDel);
+			menuSurrounding.addEventListener(MenuSurrounding.SCENTING_ADD,onScentingAdd);
+			menuSurrounding.addEventListener(MenuSurrounding.SCENTING_DEL,onScentingDel);
 		}
 		
 		protected function get menuSurrounding():MenuSurrounding
@@ -176,7 +178,7 @@ package app.view
 					return;
 			}
 			
-			sendNotification(ApplicationFacade.NOTIFY_APP_ALERTINFO,"周边环境信息保存成功�);
+			sendNotification(ApplicationFacade.NOTIFY_APP_ALERTINFO,"周边环境信息保存成功。");
 		}
 		
 		private function onFireAdd(event:Event):void
@@ -205,6 +207,20 @@ package app.view
 			PanelSurroundingTool.Tool = PanelSurroundingTool.CLOSE_DEL;
 			
 			LayerVO.CLOSEHANDLE.LayerVisible = true;
+		}
+		
+		private function onScentingAdd(event:Event):void
+		{
+			PanelSurroundingTool.Tool = PanelSurroundingTool.SCENTING_ADD;
+			
+			LayerVO.SCENTING.LayerVisible = true;
+		}
+		
+		private function onScentingDel(event:Event):void
+		{
+			PanelSurroundingTool.Tool = PanelSurroundingTool.SCENTING_DEL;
+			
+			LayerVO.SCENTING.LayerVisible = true;
 		}
 		
 		override public function listNotificationInterests():Array
