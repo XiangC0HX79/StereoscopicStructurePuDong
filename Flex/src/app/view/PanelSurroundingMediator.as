@@ -151,8 +151,8 @@ package app.view
 			else if(e.dragSource.hasFormat("ScentingVO"))
 			{
 				var sc:ScentingVO = e.dragSource.dataForFormat("ScentingVO") as ScentingVO;
-				sc.T_ScentingX = e.localX - sp.x + e.dragInitiator.width / 2;
-				sc.T_ScentingY = e.localY - sp.y + e.dragInitiator.height / 2;				
+				sc.T_ScentingX = e.localX - sp.x;
+				sc.T_ScentingY = e.localY - sp.y;				
 			}		
 		}
 				
