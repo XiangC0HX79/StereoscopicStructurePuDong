@@ -2,6 +2,7 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.IconsProxy;
+	import app.model.cosnt.PanelSurroundingTool;
 	import app.model.vo.ConfigVO;
 	import app.model.vo.KeyUnitVO;
 	import app.view.components.ImageKeyUnit;
@@ -46,7 +47,10 @@ package app.view
 		
 		private function onClick(event:Event):void
 		{				
-			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_KEYUNIT,imageKeyUnit.keyUnit);
+			if(PanelSurroundingTool.Tool == PanelSurroundingTool.MOVE)
+			{
+				sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_KEYUNIT,imageKeyUnit.keyUnit);
+			}
 		}
 		
 		private function onDragStart(e:MouseEvent):void

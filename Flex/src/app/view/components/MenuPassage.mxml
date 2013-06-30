@@ -14,6 +14,7 @@
 	
 	<fx:Script>
 		<![CDATA[		
+			import app.model.vo.IconsVO;
 			import app.renderer.RendererMenuPassage;
 			
 			import mx.collections.ArrayCollection;
@@ -36,6 +37,8 @@
 			public static const SPECIAL:String = "特殊通道";
 			
 			[Bindable]public var dp:ArrayCollection = new ArrayCollection;
+			
+			[Bindable]public var icons:IconsVO;
 			
 			protected function datagroup_rendererAddHandler(event:RendererExistenceEvent):void
 			{
@@ -70,9 +73,9 @@
 	</s:DataGroup>
 	
 	<s:HGroup horizontalAlign="center" includeIn="Edit" width="100%">
-		<s:Image source="@Embed('assets/image/default.png')" buttonMode="true" click="dispatchEvent(new Event(DEFAULT))"/>
-		<s:Image source="@Embed('assets/image/cam_add.png')" toolTip="添加摄像头" buttonMode="true" click="dispatchEvent(new Event(VIDEOADD))"/>
-		<s:Image source="@Embed('assets/image/cam_del.png')" toolTip="删除摄像头" buttonMode="true" click="dispatchEvent(new Event(VIDEODEL))"/>
-		<s:Image source="@Embed('assets/image/btnSave.png')" toolTip="保存数据" buttonMode="true" click="dispatchEvent(new Event(SAVE))"/>
+		<s:Image source="{icons.MenuDefault}" buttonMode="true" click="dispatchEvent(new Event(DEFAULT))"/>
+		<s:Image source="{icons.MenuSave}" toolTip="保存数据" buttonMode="true" click="dispatchEvent(new Event(SAVE))"/>
+		<s:Image source="{icons.MenuVideoAdd}" toolTip="添加摄像头" buttonMode="true" click="dispatchEvent(new Event(VIDEOADD))"/>
+		<s:Image source="{icons.MenuVideoDel}" toolTip="删除摄像头" buttonMode="true" click="dispatchEvent(new Event(VIDEODEL))"/>
 	</s:HGroup>
 </s:VGroup>

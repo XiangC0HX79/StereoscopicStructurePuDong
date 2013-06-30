@@ -2,7 +2,7 @@
 <s:Image xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" 
-		 buttonMode="true" width="15" height="15"
+		 buttonMode="true"
 		 x="{scenting.T_ScentingX}" y="{scenting.T_ScentingY}">
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->

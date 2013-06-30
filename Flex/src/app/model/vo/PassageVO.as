@@ -21,12 +21,17 @@ package app.model.vo
 		{
 			return _source.T_PassageType;
 		}
+				
+		public function get T_Passagesque():Number
+		{
+			return _source.T_Passagesque;
+		}
 		
 		public function get T_PassagePicPath():String
 		{
 			return  _source.T_PassagePicPath?_source.T_PassagePicPath.replace("../",ConfigVO.BASE_URL):"";
 		}
-		
+				
 		public var dictImportExport:Dictionary;
 		
 		public var dictVideo:Dictionary;

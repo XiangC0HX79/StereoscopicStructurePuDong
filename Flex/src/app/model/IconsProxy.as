@@ -2,6 +2,7 @@ package app.model
 {
 	import app.ApplicationFacade;
 	import app.model.vo.ConfigVO;
+	import app.model.vo.CursorVO;
 	import app.model.vo.IconsVO;
 	
 	import flash.display.Bitmap;
@@ -15,11 +16,12 @@ package app.model
 	import flash.text.TextFormat;
 	
 	import mx.collections.ArrayCollection;
+	import mx.core.BitmapAsset;
 	import mx.rpc.events.ResultEvent;
 	
 	import org.puremvc.as3.interfaces.IProxy;
 	import org.puremvc.as3.patterns.proxy.Proxy;
-	
+		
 	public class IconsProxy extends WebServiceProxy implements IProxy
 	{		
 		public static const NAME:String = "IconsProxy";
@@ -96,6 +98,62 @@ package app.model
 				case "10":
 					icons.IconVideo = bitmap;
 					break;
+				
+				case "c2":
+					icons.CursorVideoAdd = bitmap;
+					break;
+				
+				case "c3":
+					icons.CursorVideoDel = bitmap;
+					break;
+				
+				case "c4":
+					icons.CursorFireAdd = bitmap;
+					break;
+				
+				case "c5":
+					icons.CursorFireDel = bitmap;
+					break;
+				
+				case "m0":
+					icons.MenuDefault = bitmap;
+					break;
+				
+				case "m1":
+					icons.MenuSave = bitmap;
+					break;
+				
+				case "m2":
+					icons.MenuFireAdd = bitmap;
+					break;
+				
+				case "m3":
+					icons.MenuFireDel = bitmap;
+					break;
+				
+				case "m4":
+					icons.MenuClosedAdd = bitmap;
+					break;
+				
+				case "m5":
+					icons.MenuClosedDel = bitmap;
+					break;
+				
+				case "m6":
+					icons.MenuScentingAdd = bitmap;
+					break;
+				
+				case "m7":
+					icons.MenuScentingDel = bitmap;
+					break;
+				
+				case "m8":
+					icons.MenuVideoAdd = bitmap;
+					break;
+				
+				case "m9":
+					icons.MenuVideoDel = bitmap;
+					break;
 			}
 			
 			if(
@@ -110,12 +168,28 @@ package app.model
 				&& icons.IconScenting
 				&& icons.IconImportExport
 				&& icons.IconVideo
+				
+				&& icons.CursorFireAdd
+				&& icons.CursorFireDel
+				&& icons.CursorVideoAdd
+				&& icons.CursorVideoDel
+				
+				&& icons.MenuClosedAdd
+				&& icons.MenuClosedDel
+				&& icons.MenuDefault
+				&& icons.MenuFireAdd
+				&& icons.MenuFireDel
+				&& icons.MenuSave
+				&& icons.MenuScentingAdd
+				&& icons.MenuScentingDel
+				&& icons.MenuVideoAdd
+				&& icons.MenuVideoDel
 			)
 			{
 				sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：图标加载完成...");	
 				
-				sendNotification(ApplicationFacade.NOTIFY_INIT_ICONS);
+				sendNotification(ApplicationFacade.NOTIFY_INIT_ICONS,icons);
 			}			
-		}
+		}	
 	}
 }

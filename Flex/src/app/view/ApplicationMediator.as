@@ -17,11 +17,21 @@ package app.view
 	import app.model.TaticsProxy;
 	import app.model.TrafficProxy;
 	import app.model.vo.BuildVO;
+	import app.model.vo.ClosedHandleVO;
+	import app.model.vo.CommandHeightVO;
 	import app.model.vo.ConfigVO;
+	import app.model.vo.FireHydrantVO;
+	import app.model.vo.HazardVO;
+	import app.model.vo.ImportExportVO;
+	import app.model.vo.KeyUnitVO;
+	import app.model.vo.ScentingVO;
+	import app.model.vo.TrafficVO;
+	import app.model.vo.VideoVO;
 	import app.view.components.TitleWindowFloor;
 	import app.view.components.TitleWindowMovie;
 	
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.utils.Timer;
 	
@@ -82,7 +92,9 @@ package app.view
 				ApplicationFacade.NOTIFY_TITLEWINDOW_SCENTING,
 				ApplicationFacade.NOTIFY_TITLEWINDOW_HAZARD,
 				ApplicationFacade.NOTIFY_TITLEWINDOW_TATICS,
-				ApplicationFacade.NOTIFY_TITLEWINDOW_TATICALPOINT
+				ApplicationFacade.NOTIFY_TITLEWINDOW_TATICALPOINT,
+				
+				ApplicationFacade.NOTIFY_SELECT_MOVE
 			];
 		}
 		
@@ -100,7 +112,7 @@ package app.view
 				case ApplicationFacade.NOTIFY_INIT_ICONS:
 					var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;
 					buildProxy.Init(application.parameters.build);
-					//buildProxy.Init("上海世博中心");
+					//buildProxy.Init("上海东方体育中心");
 					break;
 				
 				case ApplicationFacade.NOTIFY_INIT_BUILD:
@@ -223,6 +235,10 @@ package app.view
 					popup = facade.retrieveMediator(TitleWindowTaticalPointMediator.NAME).getViewComponent() as IFlexDisplayObject;
 					PopUpManager.addPopUp(popup,this.application,true);
 					PopUpManager.centerPopUp(popup);
+					break;
+				
+				case ApplicationFacade.NOTIFY_SELECT_MOVE:
+					application._selectedComponents = notification.getBody();
 					break;
 			}
 		}	

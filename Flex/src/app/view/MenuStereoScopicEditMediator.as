@@ -39,6 +39,8 @@ package app.view
 						
 			menuStereoScopicEdit.addEventListener(MenuStereoScopicEdit.FLOOR_SAVE,onFloorSave);
 			
+			menuStereoScopicEdit.addEventListener(MenuStereoScopicEdit.LAYER_CHANGE,onLayerChange);
+			
 			floorPorxy = facade.retrieveProxy(FloorPorxy.NAME) as FloorPorxy;
 		}
 		
@@ -87,11 +89,18 @@ package app.view
 			sendNotification(ApplicationFacade.NOTIFY_FLOOR_UPDATE,menuStereoScopicEdit.floor);
 		}
 		
+		private function onLayerChange(event:Event):void
+		{			
+			sendNotification(ApplicationFacade.NOTIFY_STEREO_LAYER);
+		}
+		
 		override public function listNotificationInterests():Array
 		{
 			return [
 				ApplicationFacade.NOTIFY_INIT_BUILD,
-				ApplicationFacade.NOTIFY_INIT_FLOOR
+				ApplicationFacade.NOTIFY_INIT_FLOOR,
+				
+				ApplicationFacade.NOTIFY_INIT_APP
 			];
 		}
 		
@@ -108,6 +117,14 @@ package app.view
 					a.sortOn("T_Floorsque",Array.DESCENDING | Array.NUMERIC);
 					
 					menuStereoScopicEdit.floors = new ArrayCollection(a);
+					break;
+				
+				case ApplicationFacade.NOTIFY_INIT_APP:						
+					menuStereoScopicEdit.dpLayer.addItem(LayerVO.EMERGENCYROUTE);
+					menuStereoScopicEdit.dpLayer.addItem(LayerVO.CONTROLROOM);
+					menuStereoScopicEdit.dpLayer.addItem(LayerVO.MONITOR);
+					menuStereoScopicEdit.dpLayer.addItem(LayerVO.ELEVATOR);
+					menuStereoScopicEdit.dpLayer.addItem(LayerVO.OTHERKEY);
 					break;
 			}
 		}

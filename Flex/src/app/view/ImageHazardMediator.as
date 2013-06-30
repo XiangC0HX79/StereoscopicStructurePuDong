@@ -2,6 +2,7 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.IconsProxy;
+	import app.model.cosnt.PanelSurroundingTool;
 	import app.model.vo.ConfigVO;
 	import app.model.vo.HazardVO;
 	import app.model.vo.IconsVO;
@@ -58,7 +59,10 @@ package app.view
 		
 		private function onClick(event:Event):void
 		{				
-			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_HAZARD,imageHazard.hazard);
+			if(PanelSurroundingTool.Tool == PanelSurroundingTool.MOVE)
+			{
+				sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_HAZARD,imageHazard.hazard);
+			}
 		}
 		
 		private function onDragStart(e:MouseEvent):void

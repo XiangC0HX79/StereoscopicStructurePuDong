@@ -2,6 +2,7 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.IconsProxy;
+	import app.model.cosnt.PanelSurroundingTool;
 	import app.model.vo.ConfigVO;
 	import app.model.vo.ScentingVO;
 	import app.view.components.ImageScenting;
@@ -47,7 +48,10 @@ package app.view
 		
 		private function onClick(event:Event):void
 		{				
-			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_SCENTING,imageScenting.scenting);
+			if(PanelSurroundingTool.Tool == PanelSurroundingTool.MOVE)
+			{
+				sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_SCENTING,imageScenting.scenting);
+			}
 		}
 		
 		private function onDragStart(e:MouseEvent):void

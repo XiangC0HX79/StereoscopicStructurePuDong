@@ -26,9 +26,9 @@
 			
 			public static const IMAGE_READY:String 	= "ImageReady";
 			
-			public static const ROLLOVER:String 	= "RollOver";
-			public static const ROLLOUT:String 		= "RollOut";
-			public static const MOUSECLICK:String 	= "MouseClick";
+			public static const ROLLOVER:String 		= "PanelRollOver";
+			public static const ROLLOUT:String 		= "PanelRollOut";
+			public static const MOUSECLICK:String 	= "PanelMouseClick";
 			
 			[Bindable]private var dp:ArrayCollection;
 			public function set Datapro(value:ArrayCollection):void
@@ -112,7 +112,7 @@
 			
 			protected function groupPassage_dragDropHandler(e:DragEvent):void
 			{
-				var sp:Point = e.dragSource.dataForFormat("StartPoint") as Point;
+			/* 	var sp:Point = e.dragSource.dataForFormat("StartPoint") as Point;
 				
 				if(e.dragSource.hasFormat("VideoVO"))
 				{  
@@ -125,8 +125,10 @@
 					var ie:ImportExportVO = e.dragSource.dataForFormat("ImportExportVO") as ImportExportVO;
 					ie.T_ImportExportX = e.localX - sp.x;
 					ie.T_ImportExportY = e.localY - sp.y;
-				}
-			}		
+				} */
+				
+				dispatchEvent(e.clone());
+			}				
 		]]>
 	</fx:Script>
 	
@@ -152,7 +154,7 @@
 	
 	<s:Scroller id="scrollPassage" left="130" right="22" top="15" bottom="23">	
 		<s:Group minWidth="625" minHeight="611">			
-			<s:Group id="groupPassage" 
+			<s:Group id="groupPassage"
 					 dragEnter="groupPassage_dragEnterHandler(event)" 
 					 dragDrop="groupPassage_dragDropHandler(event)" 
 					 rollOut="dispatchEvent(new Event(ROLLOUT))" 

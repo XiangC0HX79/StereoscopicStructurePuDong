@@ -11,6 +11,7 @@
 		<![CDATA[
 			import app.model.vo.BuildVO;
 			import app.model.vo.FloorVO;
+			import app.model.vo.LayerVO;
 			
 			import mx.collections.ArrayCollection;
 			import mx.events.FlexEvent;
@@ -25,13 +26,17 @@
 			public static const FLOOR_ROTATION:String = "FloorRotation";	
 								
 			public static const FLOOR_SAVE:String = "FloorSave";	
+			
+			public static const LAYER_CHANGE:String = "LayerChange";	
 						
 			[Bindable]public var build:BuildVO;
 			
 			[Bindable]public var floors:ArrayCollection;
 			
 			[Bindable]public var floor:FloorVO;
-									
+			
+			[Bindable]public var dpLayer:ArrayCollection = new ArrayCollection;
+						
 			protected function XOffset_changeHandler(event:Event):void
 			{
 				if(floor)
@@ -182,6 +187,17 @@
 				}
 			}
 			
+			protected function comboLayer_changeHandler(event:IndexChangeEvent):void
+			{
+				for each(var layer:LayerVO in dpLayer)
+					layer.LayerVisible = false;
+					
+				layer = dpLayer[event.newIndex];
+				layer.LayerVisible = true;
+				
+				dispatchEvent(new Event(LAYER_CHANGE));
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -189,6 +205,7 @@
 		
 	<s:VGroup width="175"
 			  horizontalAlign="center">
+		<s:DropDownList labelField="LayerName" dataProvider="{dpLayer}" change="comboLayer_changeHandler(event)" width="100%"/>
 		<s:HGroup verticalAlign="middle" width="100%">
 			<s:Label text="X偏移：" width="{labelScale.width}" color="0xFFFFFF"/>
 			<s:HSlider width="100%" minimum="{int(-build.BitmapWidth / 2)}" maximum="{int(build.BitmapWidth / 2)}" stepSize="1" dataTipPrecision="0" value="{floor.T_FloorX}"

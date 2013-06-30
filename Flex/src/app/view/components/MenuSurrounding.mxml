@@ -12,6 +12,8 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import app.model.vo.IconsVO;
+			
 			import mx.collections.ArrayCollection;
 			
 			public static const DEFAULT:String = "Default";
@@ -24,6 +26,8 @@
 			public static const SAVE:String = "Save";
 			
 			[Bindable]public var dp:ArrayCollection = new ArrayCollection;
+			
+			[Bindable]public var icons:IconsVO;
 		]]>
 	</fx:Script>
 	
@@ -34,16 +38,16 @@
 	</s:DataGroup>
 	
 	<s:HGroup horizontalAlign="center" includeIn="Edit" width="100%">
-		<s:Image source="@Embed('assets/image/default.png')" buttonMode="true" click="dispatchEvent(new Event(DEFAULT))"/>
-		<s:Image source="@Embed('assets/image/btnSave.png')" toolTip="保存数据" buttonMode="true" click="dispatchEvent(new Event(SAVE))"/>
-		<s:Image source="@Embed('assets/image/fire_add.png')" toolTip="添加消防栓" buttonMode="true" click="dispatchEvent(new Event(FIREADD))"/>
-		<s:Image source="@Embed('assets/image/fire_del.png')" toolTip="删除消防栓" buttonMode="true" click="dispatchEvent(new Event(FIREDEL))"/>
+		<s:Image source="{icons.MenuDefault}" buttonMode="true" click="dispatchEvent(new Event(DEFAULT))"/>
+		<s:Image source="{icons.MenuSave}" toolTip="保存数据" buttonMode="true" click="dispatchEvent(new Event(SAVE))"/>
+		<s:Image source="{icons.MenuFireAdd}" toolTip="添加消防栓" buttonMode="true" click="dispatchEvent(new Event(FIREADD))"/>
+		<s:Image source="{icons.MenuFireDel}" toolTip="删除消防栓" buttonMode="true" click="dispatchEvent(new Event(FIREDEL))"/>
 	</s:HGroup>
 	
 	<s:HGroup horizontalAlign="center" includeIn="Edit" width="100%">
-		<s:Image source="@Embed('assets/image/closed_add.png')" toolTip="添加分控线" buttonMode="true" click="dispatchEvent(new Event(CLOSEADD))"/>
-		<s:Image source="@Embed('assets/image/closed_del.png')" toolTip="删除分控线" buttonMode="true" click="dispatchEvent(new Event(CLOSEDEL))"/>
-		<s:Image source="@Embed('assets/image/scenting_add.png')" toolTip="添加窨井线" buttonMode="true" click="dispatchEvent(new Event(SCENTING_ADD))"/>
-		<s:Image source="@Embed('assets/image/scenting_del.png')" toolTip="删除窨井线" buttonMode="true" click="dispatchEvent(new Event(SCENTING_DEL))"/>
+		<s:Image source="{icons.MenuClosedAdd}" toolTip="添加分控线" buttonMode="true" click="dispatchEvent(new Event(CLOSEADD))"/>
+		<s:Image source="{icons.MenuClosedDel}" toolTip="删除分控线" buttonMode="true" click="dispatchEvent(new Event(CLOSEDEL))"/>
+		<s:Image source="{icons.MenuScentingAdd}" toolTip="添加窨井线" buttonMode="true" click="dispatchEvent(new Event(SCENTING_ADD))"/>
+		<s:Image source="{icons.MenuScentingDel}" toolTip="删除窨井线" buttonMode="true" click="dispatchEvent(new Event(SCENTING_DEL))"/>
 	</s:HGroup>
 </s:VGroup>

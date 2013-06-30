@@ -89,6 +89,8 @@ package app
 		
 		public static const NOTIFY_VIDEO_ADD:String			= "VideoAdd";
 		public static const NOTIFY_VIDEO_DEL:String			= "VideoDel";
+		
+		public static const NOTIFY_SELECT_MOVE:String			= "SelectMove";
 				
 		/**
 		 * Singleton ApplicationFacade Factory Method

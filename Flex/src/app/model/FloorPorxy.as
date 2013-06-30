@@ -75,6 +75,8 @@ package app.model
 			var floor:FloorVO = token.floor;
 			
 			floor.floorBitmap = bitmap;
+			if(!floor.T_FloorScale)
+				floor.T_FloorScale = floor.floorBitmap.width / _buildWidth
 						
 			sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：楼层图片" + floor.T_FloorID + "加载完成...");
 			

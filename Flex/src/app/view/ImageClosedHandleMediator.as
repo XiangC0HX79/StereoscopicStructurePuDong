@@ -2,6 +2,7 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.IconsProxy;
+	import app.model.cosnt.PanelSurroundingTool;
 	import app.model.vo.BuildVO;
 	import app.model.vo.ClosedHandleVO;
 	import app.model.vo.ConfigVO;
@@ -53,7 +54,10 @@ package app.view
 		
 		private function onClick(event:Event):void
 		{				
-			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_MEDIA,imageClosedHandle.closedhandle.pics);
+			if(PanelSurroundingTool.Tool == PanelSurroundingTool.MOVE)
+			{
+				sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_MEDIA,imageClosedHandle.closedhandle.pics);
+			}
 		}
 		
 		private function onDragStart(e:MouseEvent):void

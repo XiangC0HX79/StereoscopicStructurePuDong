@@ -48,6 +48,8 @@ package app.view
 		{
 			sendNotification(ApplicationFacade.NOTIFY_SHOW_INFO,false);
 			
+			sendNotification(ApplicationFacade.NOTIFY_SELECT_MOVE);	
+			
 			mainPanel.Menu.addElementAt(facade.retrieveMediator(MenuSurroundingMediator.NAME).getViewComponent() as IVisualElement,mainPanel.ButtonIndex + 1);
 			
 			contentGroupAddElement(PanelSurroundingMediator.NAME);
@@ -57,12 +59,16 @@ package app.view
 		{
 			sendNotification(ApplicationFacade.NOTIFY_SHOW_INFO,false);
 			
+			sendNotification(ApplicationFacade.NOTIFY_SELECT_MOVE);	
+			
 			mainPanel.Menu.addElementAt(facade.retrieveMediator(MenuInfoMediator.NAME).getViewComponent() as IVisualElement,mainPanel.ButtonIndex + 1);
 		}
 		
 		private function onPassage(event:Event):void
 		{
 			sendNotification(ApplicationFacade.NOTIFY_SHOW_INFO,false);
+			
+			sendNotification(ApplicationFacade.NOTIFY_SELECT_MOVE);	
 			
 			mainPanel.Menu.addElementAt(facade.retrieveMediator(MenuPassageMediator.NAME).getViewComponent() as IVisualElement,mainPanel.ButtonIndex + 1);
 			
@@ -72,6 +78,8 @@ package app.view
 		private function onStereoScopic(event:Event):void
 		{
 			sendNotification(ApplicationFacade.NOTIFY_SHOW_INFO,false);
+			
+			sendNotification(ApplicationFacade.NOTIFY_SELECT_MOVE);	
 			
 			if(ConfigVO.EDIT)
 			{
@@ -106,7 +114,10 @@ package app.view
 		{
 			switch(notification.getName())
 			{
-				case ApplicationFacade.NOTIFY_INIT_BUILD:
+				case ApplicationFacade.NOTIFY_INIT_BUILD:					
+					if(ConfigVO.EDIT)
+						mainPanel.currentState = "Edit";
+					
 					mainPanel.Build = notification.getBody() as BuildVO;
 										
 					contentGroupAddElement(PanelSurroundingMediator.NAME);

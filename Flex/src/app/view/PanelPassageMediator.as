@@ -1,36 +1,42 @@
 package app.view
 {
 	import app.ApplicationFacade;
+	import app.model.IconsProxy;
 	import app.model.PassageProxy;
+	import app.model.vo.CursorVO;
 	import app.model.vo.ImportExportVO;
 	import app.model.vo.VideoVO;
 	import app.view.components.ImageImportExport;
 	import app.view.components.ImageVideo;
 	import app.view.components.PanelPassage;
 	
+	import flash.display.Bitmap;
+	import flash.display.DisplayObject;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	import flash.media.Video;
+	import flash.ui.Mouse;
 	
 	import mx.core.IVisualElement;
+	import mx.events.DragEvent;
 	import mx.managers.CursorManager;
 	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
 	
+	import spark.components.Image;
+	
 	public class PanelPassageMediator extends Mediator implements IMediator
 	{
 		public static const NAME:String = "PanelPassageMediator";
-		
-		[Embed('assets/image/cursor_cam_add.png')]		
-		private static const CURSOR_VIDEO_ADD:Class;
-		
-		[Embed('assets/image/cursor_cam_del.png')]		
-		private static const CURSOR_VIDEO_DEL:Class;
-		
+				
 		private var passageProxy:PassageProxy;
 		
+		private var iconsProxy:IconsProxy; 
+				
 		public function PanelPassageMediator()
 		{
 			super(NAME, new PanelPassage);
@@ -39,30 +45,37 @@ package app.view
 			
 			panelPassage.addEventListener(PanelPassage.ROLLOVER,onRollOver);	
 			panelPassage.addEventListener(PanelPassage.ROLLOUT,onRollOut);	
-			panelPassage.addEventListener(PanelPassage.MOUSECLICK,onClick);		
-			
+			panelPassage.addEventListener(PanelPassage.MOUSECLICK,onClick);	
+			panelPassage.addEventListener(DragEvent.DRAG_DROP,onDragDrop);
+						
 			passageProxy = facade.retrieveProxy(PassageProxy.NAME) as PassageProxy;
+			
+			iconsProxy = facade.retrieveProxy(IconsProxy.NAME) as IconsProxy;
 		}
 		
 		protected function get panelPassage():PanelPassage
 		{
 			return viewComponent as PanelPassage
 		}
-				
+		
 		protected function onRollOut(event:Event):void
 		{
-			CursorManager.removeAllCursors();
+			CursorManager.removeAllCursors();	
 		}
 		
 		protected function onRollOver(event:Event):void
-		{
+		{			
 			if(VideoVO.Tool == VideoVO.ADD)
 			{
-				CursorManager.setCursor(CURSOR_VIDEO_ADD,2,-12,-12);
+				var bitmap:Bitmap = iconsProxy.icons.CursorVideoAdd;
+				CursorVO.customBitmapData = bitmap.bitmapData;
+				CursorManager.setCursor(CursorVO,2,-bitmap.width / 2 ,-bitmap.height / 2);
 			}
 			else if(VideoVO.Tool == VideoVO.DEL)
 			{
-				CursorManager.setCursor(CURSOR_VIDEO_DEL,2,-12,-12);
+				bitmap = iconsProxy.icons.CursorVideoDel;
+				CursorVO.customBitmapData = bitmap.bitmapData;
+				CursorManager.setCursor(CursorVO,2,-bitmap.width / 2 ,-bitmap.height / 2);
 			}
 		}
 		
@@ -72,6 +85,28 @@ package app.view
 			{				
 				var passageProxy:PassageProxy = facade.retrieveProxy(PassageProxy.NAME) as PassageProxy;
 				passageProxy.AddVideo(panelPassage.psg,panelPassage.groupPassage.mouseX,panelPassage.groupPassage.mouseY);
+			}
+		}
+		
+		private function onDragDrop(e:DragEvent):void
+		{			
+			var sp:Point = e.dragSource.dataForFormat("StartPoint") as Point;
+			
+			if(e.dragSource.hasFormat("VideoVO"))
+			{  
+				var v:VideoVO = e.dragSource.dataForFormat("VideoVO") as VideoVO;
+				v.T_VideoX = e.localX - sp.x + e.dragInitiator.width / 2;
+				v.T_VideoY = e.localY - sp.y + e.dragInitiator.height / 2;
+				
+				sendNotification(ApplicationFacade.NOTIFY_SELECT_MOVE,v);			
+			}
+			else if(e.dragSource.hasFormat("ImportExportVO"))
+			{  
+				var ie:ImportExportVO = e.dragSource.dataForFormat("ImportExportVO") as ImportExportVO;
+				ie.T_ImportExportX = e.localX - sp.x;
+				ie.T_ImportExportY = e.localY - sp.y;
+				
+				sendNotification(ApplicationFacade.NOTIFY_SELECT_MOVE,ie);	
 			}
 		}
 		

@@ -2,6 +2,7 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.IconsProxy;
+	import app.model.cosnt.PanelSurroundingTool;
 	import app.model.vo.ConfigVO;
 	import app.model.vo.TrafficVO;
 	import app.view.components.ImageTraffic;
@@ -52,7 +53,10 @@ package app.view
 		
 		private function onClick(event:Event):void
 		{				
-			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_MEDIA,imageTraffic.trafficInfo.pics);
+			if(PanelSurroundingTool.Tool == PanelSurroundingTool.MOVE)
+			{
+				sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_MEDIA,imageTraffic.trafficInfo.pics);
+			}
 		}
 		
 		private function onDragStart(e:MouseEvent):void

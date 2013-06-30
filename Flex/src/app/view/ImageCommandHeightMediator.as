@@ -2,6 +2,7 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.IconsProxy;
+	import app.model.cosnt.PanelSurroundingTool;
 	import app.model.vo.BuildVO;
 	import app.model.vo.CommandHeightVO;
 	import app.model.vo.ConfigVO;
@@ -53,17 +54,26 @@ package app.view
 		
 		private function onOver(event:Event):void
 		{
-			sendNotification(ApplicationFacade.NOTIFY_COMMAND_OVER,imageCommandingHeight.commandingHeight);
+			if(PanelSurroundingTool.Tool == PanelSurroundingTool.MOVE)
+			{
+				sendNotification(ApplicationFacade.NOTIFY_COMMAND_OVER,imageCommandingHeight.commandingHeight);
+			}
 		}
 		
 		private function onOut(event:Event):void
 		{
-			sendNotification(ApplicationFacade.NOTIFY_COMMAND_OUT);
+			if(PanelSurroundingTool.Tool == PanelSurroundingTool.MOVE)
+			{
+				sendNotification(ApplicationFacade.NOTIFY_COMMAND_OUT);
+			}
 		}
 		
 		private function onClick(event:Event):void
-		{				
-			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_COMMAND,imageCommandingHeight.commandingHeight);
+		{					
+			if(PanelSurroundingTool.Tool == PanelSurroundingTool.MOVE)
+			{
+				sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_COMMAND,imageCommandingHeight.commandingHeight);
+			}
 		}
 		
 		private function onDragStart(e:MouseEvent):void

@@ -103,6 +103,11 @@
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
 	
+	<s:states>
+		<s:State name="Normal"/>
+		<s:State name="Edit"/>
+	</s:states>
+	
 	<s:Image source="@Embed('assets/image/背景.jpg')" mouseEnabled="false"/>
 	
 	<s:Scroller x="25" y="95" width="777" height="649">
@@ -133,7 +138,7 @@
 				  width="175" height="47" 
 				  skinClass="app.skin.skinMenuButton" buttonDown="buttonStereoscopic_buttonDownHandler(event)"/>
 		<s:Button label="应急预案" buttonMode="true" buttonDown="dispatchEvent(new Event(EMERGENCY))"
-				  width="175" height="47"
+				  width="175" height="47" excludeFrom="Edit"
 				  skinClass="app.skin.skinMenuButton"/>
 	</s:VGroup>
 	

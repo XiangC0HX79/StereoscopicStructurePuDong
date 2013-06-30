@@ -84,8 +84,11 @@ package app.model
 		}
 		
 		private function onFault(event:FaultEvent):void
-		{				
-			sendNotification(ApplicationFacade.NOTIFY_APP_ALERTERROR,event.fault.faultString + "\n" + event.fault.faultDetail);
+		{			
+			if(ConfigVO.EDIT)
+			{
+				sendNotification(ApplicationFacade.NOTIFY_APP_ALERTERROR,event.fault.faultString + "\n" + event.fault.faultDetail);
+			}
 		}
 		
 		protected function load(url:String,listener:Function):Object

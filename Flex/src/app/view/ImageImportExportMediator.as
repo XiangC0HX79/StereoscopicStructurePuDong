@@ -2,6 +2,7 @@ package app.view
 {
 	import app.ApplicationFacade;
 	import app.model.IconsProxy;
+	import app.model.cosnt.PanelSurroundingTool;
 	import app.model.vo.ConfigVO;
 	import app.model.vo.ImportExportPicVO;
 	import app.model.vo.ImportExportVO;
@@ -55,7 +56,10 @@ package app.view
 				
 		private function onComponentClick(event:MouseEvent):void
 		{						
-			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_MEDIA,imageImportExport.ImportExport.DictImportExportPic);
+			if(PanelSurroundingTool.Tool == PanelSurroundingTool.MOVE)
+			{
+				sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_MEDIA,imageImportExport.ImportExport.DictImportExportPic);
+			}
 		}
 		
 		private function onDragStart(e:MouseEvent):void

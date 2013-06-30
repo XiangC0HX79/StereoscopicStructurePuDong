@@ -31,6 +31,7 @@ package app.view
 		public static const NAME:String = "LayerClosedPicMediator";
 		
 		private const ARROW_WIDTH:Number = 30;
+		private const ARROW_HEIGHT:Number = 12;
 		
 		private var _closePointStart:Point;
 		
@@ -122,10 +123,10 @@ package app.view
 			coords.push(0,0);
 			commands.push(GraphicsPathCommand.MOVE_TO);
 			
-			coords.push(ARROW_WIDTH,10);
+			coords.push(ARROW_WIDTH,ARROW_HEIGHT / 2);
 			commands.push(GraphicsPathCommand.LINE_TO);
 			
-			coords.push(0,20);
+			coords.push(0,ARROW_HEIGHT);
 			commands.push(GraphicsPathCommand.LINE_TO);
 			
 			arrow.graphics.beginFill(0xFF0000);
@@ -135,10 +136,10 @@ package app.view
 			var len:Number = Math.floor(Math.sqrt(dx * dx + dy * dy));
 			len = (len < ARROW_WIDTH)?ARROW_WIDTH:len;
 			
-			var path:BitmapData = new BitmapData(len,20,true,0x0);
+			var path:BitmapData = new BitmapData(len,ARROW_HEIGHT,true,0x0);
 			
 			if(len > ARROW_WIDTH)
-				path.fillRect(new Rectangle(0,5,len - ARROW_WIDTH,10),0xFFFF0000);
+				path.fillRect(new Rectangle(0,ARROW_HEIGHT / 4,len - ARROW_WIDTH,ARROW_HEIGHT / 2),0xFFFF0000);
 			
 			var matrix:Matrix = new Matrix(1,0,0,1,len - ARROW_WIDTH,0);
 			path.draw(arrow,matrix);
@@ -149,7 +150,7 @@ package app.view
 			if(pte.y < pts.y)
 				angel = -angel;
 			
-			matrix = new Matrix(1,0,0,1,0,-10);
+			matrix = new Matrix(1,0,0,1,0,-(ARROW_HEIGHT / 2));
 			matrix.rotate(angel);					
 			matrix.concat(new Matrix(1,0,0,1,pts.x,pts.y));					
 			back.draw(path,matrix);					

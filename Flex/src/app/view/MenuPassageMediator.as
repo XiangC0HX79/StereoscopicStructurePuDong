@@ -3,6 +3,7 @@ package app.view
 	import app.ApplicationFacade;
 	import app.model.PassageProxy;
 	import app.model.vo.ConfigVO;
+	import app.model.vo.IconsVO;
 	import app.model.vo.LayerVO;
 	import app.model.vo.VideoVO;
 	import app.view.components.MenuPassage;
@@ -133,6 +134,8 @@ package app.view
 		override public function listNotificationInterests():Array
 		{
 			return [
+				ApplicationFacade.NOTIFY_INIT_ICONS,
+				
 				ApplicationFacade.NOTIFY_INIT_PASSAGE
 			];
 		}
@@ -140,7 +143,11 @@ package app.view
 		override public function handleNotification(notification:INotification):void
 		{
 			switch(notification.getName())
-			{
+			{				
+				case ApplicationFacade.NOTIFY_INIT_ICONS:
+					menuPassage.icons = notification.getBody() as IconsVO;
+					break;
+					
 				case ApplicationFacade.NOTIFY_INIT_PASSAGE:
 					if(ConfigVO.EDIT)
 					{

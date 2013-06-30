@@ -13,6 +13,7 @@ package app.view
 	import app.model.vo.BuildVO;
 	import app.model.vo.ConfigVO;
 	import app.model.vo.FireHydrantVO;
+	import app.model.vo.IconsVO;
 	import app.model.vo.KeyUnitVO;
 	import app.model.vo.LayerVO;
 	import app.view.components.MenuSurrounding;
@@ -226,6 +227,7 @@ package app.view
 		override public function listNotificationInterests():Array
 		{
 			return [				
+				ApplicationFacade.NOTIFY_INIT_ICONS,
 				ApplicationFacade.NOTIFY_INIT_APP
 			];
 		}
@@ -234,6 +236,10 @@ package app.view
 		{
 			switch(notification.getName())
 			{				
+				case ApplicationFacade.NOTIFY_INIT_ICONS:
+					menuSurrounding.icons = notification.getBody() as IconsVO;
+					break;
+				
 				case ApplicationFacade.NOTIFY_INIT_APP:
 					if(ConfigVO.EDIT)
 					{

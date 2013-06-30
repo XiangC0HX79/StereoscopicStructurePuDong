@@ -3,9 +3,10 @@
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
 			   xmlns:mx="library://ns.adobe.com/flex/mx"	   
 			   xmlns:components="app.view.components.*"
-			   creationComplete="facade.startup(this)" 
 			   preloader="app.view.components.subComponents.AppDownloadProgressBar" 
-			   width="1024" height="768" fontFamily="微软雅黑">
+			   width="1024" height="768" fontFamily="微软雅黑" 
+			   applicationComplete="application_applicationCompleteHandler(event)"
+			   creationComplete="facade.startup(this)">
 	
 	<fx:Style source="Main.css"/>
 	
@@ -16,8 +17,100 @@
 	<fx:Script>
 		<![CDATA[
 			import app.ApplicationFacade;
+			import app.model.vo.*;
+			
+			import mx.events.FlexEvent;
+			
+			public var _selectedComponents:Object;
 			
 			private var facade:ApplicationFacade = ApplicationFacade.getInstance();			
+			
+			protected function application_creationCompleteHandler(event:FlexEvent):void
+			{
+				stage.addEventListener(KeyboardEvent.KEY_DOWN,onKeyDown);
+			}
+			
+			
+			private function onKeyDown(event:KeyboardEvent):void
+			{
+				if(_selectedComponents)
+				{
+					switch(event.keyCode)
+					{
+						case 37:
+							moveCom(_selectedComponents,1,0);
+							break;		
+						
+						case 40:
+							moveCom(_selectedComponents,0,-1);
+							break;			
+						
+						case 39:
+							moveCom(_selectedComponents,-1,0);
+							break;				
+						
+						case 38:
+							moveCom(_selectedComponents,0,1);
+							break;		
+					}
+				}
+			}
+			
+			private function moveCom(ob:Object,dx:Number,dy:Number):void
+			{
+				if(ob is CommandHeightVO)
+				{
+					(ob as CommandHeightVO).TCH_X -= dx;
+					(ob as CommandHeightVO).TCH_Y -= dy;
+				}
+				else if(ob is ClosedHandleVO)
+				{
+					(ob as ClosedHandleVO).T_ClosedX -= dx;
+					(ob as ClosedHandleVO).T_ClosedY -= dy;
+				}
+				else if(ob is TrafficVO)
+				{
+					(ob as TrafficVO).T_TrafficX -= dx;
+					(ob as TrafficVO).T_TrafficY -= dy;
+				}
+				else if(ob is HazardVO)
+				{
+					(ob as HazardVO).T_HazardX -= dx;
+					(ob as HazardVO).T_HazardY -= dy;
+				}
+				else if(ob is FireHydrantVO)
+				{
+					(ob as FireHydrantVO).T_FireHydrantX -= dx;
+					(ob as FireHydrantVO).T_FireHydrantY -= dy;
+				}
+				else if(ob is KeyUnitVO)
+				{
+					(ob as KeyUnitVO).T_KeyUnitsX -= dx;
+					(ob as KeyUnitVO).T_KeyUnitsY -= dy;
+				}
+				else if(ob is ScentingVO)
+				{
+					(ob as ScentingVO).T_ScentingX -= dx;
+					(ob as ScentingVO).T_ScentingY -= dy;
+				}
+				else if(ob is VideoVO)
+				{
+					(ob as VideoVO).T_VideoX -= dx;
+					(ob as VideoVO).T_VideoY -= dy;
+				}
+				else if(ob is ImportExportVO)
+				{
+					(ob as ImportExportVO).T_ImportExportX -= dx;
+					(ob as ImportExportVO).T_ImportExportY -= dy;
+				}
+			}
+			
+			protected function application_applicationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
 		]]>
 	</fx:Script>
 	

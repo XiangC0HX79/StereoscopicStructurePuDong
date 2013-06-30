@@ -8,6 +8,9 @@ package app.model.vo
 	[Bindable]
 	public class IconsVO
 	{
+		/**
+		 * 显示样式
+		 * */
 		public var IconCommandHeight:Bitmap;
 		
 		public var IconCloseHandle:Bitmap;
@@ -29,6 +32,41 @@ package app.model.vo
 		public var IconCan:Bitmap;
 		
 		public var IconVideo:Bitmap;
+				
+		/**
+		 * 鼠标样式
+		 * */		
+		
+		public var CursorFireAdd:Bitmap;
+		
+		public var CursorFireDel:Bitmap;
+		
+		public var CursorVideoAdd:Bitmap;
+		
+		public var CursorVideoDel:Bitmap;
+		
+		/**
+		 * 菜单样式
+		 * */
+		public var MenuDefault:Bitmap;
+		
+		public var MenuSave:Bitmap;
+		
+		public var MenuFireAdd:Bitmap;
+		
+		public var MenuFireDel:Bitmap;
+		
+		public var MenuClosedAdd:Bitmap;
+		
+		public var MenuClosedDel:Bitmap;
+		
+		public var MenuScentingAdd:Bitmap;
+		
+		public var MenuScentingDel:Bitmap;
+		
+		public var MenuVideoAdd:Bitmap;
+		
+		public var MenuVideoDel:Bitmap;
 		
 		public function IconsVO()
 		{

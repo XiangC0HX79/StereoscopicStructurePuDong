@@ -7,6 +7,7 @@ package app.model
 	import app.model.vo.PassageVO;
 	import app.model.vo.VideoVO;
 	
+	import flash.media.Video;
 	import flash.utils.Dictionary;
 	
 	import mx.collections.ArrayCollection;
@@ -38,6 +39,8 @@ package app.model
 				if(psg.T_PassageType == 1)
 					arr.push(psg);
 			}
+			
+			arr.sortOn("T_Passagesque",Array.NUMERIC,"T_PassageID",Array.NUMERIC | Array.DESCENDING);
 			
 			return new ArrayCollection(arr);
 		}
@@ -225,19 +228,22 @@ package app.model
 			v.T_PassageID = psg.T_PassageID;
 			v.T_VideoX = x;
 			v.T_VideoY = y;				
-			psg.dictVideo[v.T_VideoID] = v;
 			
 			var s:String = v.TMB_ID + " " + v.T_PassageID + " " + v.T_VideoX + " " + v.T_VideoY;
 			
 			var token:AsyncToken = send("AddVideo",onAddVideo,s);
+			token.passage = psg;
 			token.video = v;
 		}
 		
 		private function onAddVideo(event:ResultEvent):void
 		{
+			var psg:PassageVO = event.token.passage;
 			var v:VideoVO = event.token.video;
 			
 			v.T_VideoID = Number(event.result);
+			
+			psg.dictVideo[v.T_VideoID] = v;
 				
 			sendNotification(ApplicationFacade.NOTIFY_VIDEO_ADD,v);
 		}

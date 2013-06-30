@@ -49,57 +49,127 @@ public class Service : WebService
 
         var row = table.NewRow();
         row["IconID"] = "1";
-        row["IconPath"] = "../Icon/CommandingHeight.png";
+        row["IconPath"] = "../Icon/Map/CommandingHeight.png";
         table.Rows.Add(row);
 
         row = table.NewRow();
         row["IconID"] = "2";
-        row["IconPath"] = "../Icon/CloseHandle.png";
+        row["IconPath"] = "../Icon/Map/CloseHandle.png";
         table.Rows.Add(row);
 
         row = table.NewRow();
         row["IconID"] = "3";
-        row["IconPath"] = "../Icon/Traffic.png";
+        row["IconPath"] = "../Icon/Map/Traffic.png";
         table.Rows.Add(row);
 
         row = table.NewRow();
         row["IconID"] = "41";
-        row["IconPath"] = "../Icon/eletric.png";
+        row["IconPath"] = "../Icon/Map/Eletric.png";
         table.Rows.Add(row);
 
         row = table.NewRow();
         row["IconID"] = "42";
-        row["IconPath"] = "../Icon/gas.png";
+        row["IconPath"] = "../Icon/Map/Gas.png";
         table.Rows.Add(row);
 
         row = table.NewRow();
         row["IconID"] = "43";
-        row["IconPath"] = "../Icon/can.png";
+        row["IconPath"] = "../Icon/Map/Can.png";
         table.Rows.Add(row);
 
         row = table.NewRow();
         row["IconID"] = "6";
-        row["IconPath"] = "../Icon/FireHydrant.png";
+        row["IconPath"] = "../Icon/Map/FireHydrant.png";
         table.Rows.Add(row);
 
         row = table.NewRow();
         row["IconID"] = "7";
-        row["IconPath"] = "../Icon/KeyUnit.png";
+        row["IconPath"] = "../Icon/Map/KeyUnit.png";
         table.Rows.Add(row);
 
         row = table.NewRow();
         row["IconID"] = "8";
-        row["IconPath"] = "../Icon/Scenting.png";
+        row["IconPath"] = "../Icon/Map/Scenting.png";
         table.Rows.Add(row);
 
         row = table.NewRow();
         row["IconID"] = "9";
-        row["IconPath"] = "../Icon/ImportExport.png";
+        row["IconPath"] = "../Icon/Map/ImportExport.png";
         table.Rows.Add(row);
 
         row = table.NewRow();
         row["IconID"] = "10";
-        row["IconPath"] = "../Icon/Video.png";
+        row["IconPath"] = "../Icon/Map/Video.png";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
+        row["IconID"] = "c2";
+        row["IconPath"] = "../Icon/Cursor/CursorVideoAdd.png";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
+        row["IconID"] = "c3";
+        row["IconPath"] = "../Icon/Cursor/CursorVideoDel.png";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
+        row["IconID"] = "c4";
+        row["IconPath"] = "../Icon/Cursor/CursorFireAdd.png";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
+        row["IconID"] = "c5";
+        row["IconPath"] = "../Icon/Cursor/CursorFireDel.png";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
+        row["IconID"] = "m0";
+        row["IconPath"] = "../Icon/Menu/Default.png";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
+        row["IconID"] = "m1";
+        row["IconPath"] = "../Icon/Menu/Save.png";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
+        row["IconID"] = "m2";
+        row["IconPath"] = "../Icon/Menu/FireAdd.png";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
+        row["IconID"] = "m3";
+        row["IconPath"] = "../Icon/Menu/FireDel.png";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
+        row["IconID"] = "m4";
+        row["IconPath"] = "../Icon/Menu/ClosedAdd.png";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
+        row["IconID"] = "m5";
+        row["IconPath"] = "../Icon/Menu/ClosedDel.png";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
+        row["IconID"] = "m6";
+        row["IconPath"] = "../Icon/Menu/ScentingAdd.png";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
+        row["IconID"] = "m7";
+        row["IconPath"] = "../Icon/Menu/ScentingDel.png";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
+        row["IconID"] = "m8";
+        row["IconPath"] = "../Icon/Menu/VideoAdd.png";
+        table.Rows.Add(row);
+
+        row = table.NewRow();
+        row["IconID"] = "m9";
+        row["IconPath"] = "../Icon/Menu/VideoDel.png";
         table.Rows.Add(row);
 
         return table;
