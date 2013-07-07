@@ -52,6 +52,11 @@
 				}
 				
 				_toggleVisible = ((images.length > 0) && (videos.length > 0));
+				if(_toggleVisible)
+				{					
+					imageVideo.enabled = true;
+					imageImage.enabled = false;
+				}
 				
 				_viewIndex = (images.length > 0)?0:1;
 								

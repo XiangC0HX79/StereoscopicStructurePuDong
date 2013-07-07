@@ -33,9 +33,9 @@
 	<!--建筑物-->
 	<s:Group buttonMode="true" width="50" height="50" x="{build.TMB_X - 25}" y="{build.TMB_Y - 25}"
 			 click="dispatchEvent(new Event(BUILDCLICK));">
-		<s:Ellipse left="0" right="0" bottom="0" top="0">
+		<s:Ellipse verticalCenter="0" horizontalCenter="0" width="20" height="20">
 			<s:fill>
-				<s:SolidColor color="0" alpha="0.01"/>
+				<s:SolidColor color="red"/>
 			</s:fill>
 		</s:Ellipse>
 	</s:Group>

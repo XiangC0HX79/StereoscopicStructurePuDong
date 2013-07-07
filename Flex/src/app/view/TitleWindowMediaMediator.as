@@ -16,6 +16,8 @@ package app.view
 		public function TitleWindowMediaMediator()
 		{
 			super(NAME, new TitleWindowMedia);
+			
+			titleWindowMedia.createDeferredContent();
 		}
 		
 		protected function get titleWindowMedia():TitleWindowMedia

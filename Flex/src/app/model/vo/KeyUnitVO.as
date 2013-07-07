@@ -22,7 +22,7 @@ package app.model.vo
 		
 		public function get T_KeyUnitsLineLength():String
 		{
-			return source.T_KeyUnitsAddress?source.T_KeyUnitsAddress:"";
+			return source.T_KeyUnitsLineLength?source.T_KeyUnitsLineLength:"";
 		}
 		
 		public function get T_KeyUnitsX():Number
