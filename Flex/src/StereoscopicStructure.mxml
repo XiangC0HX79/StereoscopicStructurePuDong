@@ -24,15 +24,17 @@
 			public var _selectedComponents:Object;
 			
 			private var facade:ApplicationFacade = ApplicationFacade.getInstance();			
-			
-			protected function application_creationCompleteHandler(event:FlexEvent):void
+						
+			protected function application_applicationCompleteHandler(event:FlexEvent):void
 			{
-				stage.addEventListener(KeyboardEvent.KEY_DOWN,onKeyDown);
+				this.stage.addEventListener(KeyboardEvent.KEY_DOWN,onKeyDown);
 			}
-			
 			
 			private function onKeyDown(event:KeyboardEvent):void
 			{
+				if(maskInput()) 
+					return;
+				
 				if(_selectedComponents)
 				{
 					switch(event.keyCode)
@@ -103,14 +105,26 @@
 					(ob as ImportExportVO).T_ImportExportX -= dx;
 					(ob as ImportExportVO).T_ImportExportY -= dy;
 				}
-			}
+			}		
 			
-			protected function application_applicationCompleteHandler(event:FlexEvent):void
-			{
-				// TODO Auto-generated method stub
+			/** 
+			 * 屏蔽所有的输入焦点 
+			 * 防止在输入框中输入内容时会触发相应的快捷键操作 
+			 */ 
+			private function maskInput():Boolean 
+			{ 
+				var focusObj:Object = Object(focusManager.getFocus()); 
+				var focusName:String = focusObj.className; 
+				if(focusName=="NumericStepper"||focusName=="TextInput") 
+				{ 
+					if(focusObj.editable==true) 
+					{ 
+						return true; 
+					} 
+				} 
+				return false; 
 				
-			}
-			
+			} 	
 		]]>
 	</fx:Script>
 	
