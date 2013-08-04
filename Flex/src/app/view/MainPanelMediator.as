@@ -15,6 +15,8 @@ package app.view
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
 	
+	import spark.components.Group;
+	
 	public class MainPanelMediator extends Mediator implements IMediator
 	{
 		public static const NAME:String = "MainPanelMediator";

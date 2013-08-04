@@ -43,7 +43,7 @@ package app.model
 		{			
 			for each(var tr:TrafficVO in dict)
 			{
-				tr.edit = true;
+				tr.edit = false;
 			}
 		}
 		

@@ -105,6 +105,11 @@
 					(ob as ImportExportVO).T_ImportExportX -= dx;
 					(ob as ImportExportVO).T_ImportExportY -= dy;
 				}
+				else if(ob is BuildVO)
+				{
+					(ob as BuildVO).TMB_X -= dx;
+					(ob as BuildVO).TMB_Y -= dy;
+				}
 			}		
 			
 			/** 
@@ -117,10 +122,7 @@
 				var focusName:String = focusObj.className; 
 				if(focusName=="NumericStepper"||focusName=="TextInput") 
 				{ 
-					if(focusObj.editable==true) 
-					{ 
-						return true; 
-					} 
+					return true; 
 				} 
 				return false; 
 				

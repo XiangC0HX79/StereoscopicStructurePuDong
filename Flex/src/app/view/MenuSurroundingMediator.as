@@ -167,6 +167,14 @@ package app.view
 			token = scentingProxy.save();			
 			token.addResponder(responder);			
 			_dictSave[token] = false;
+			
+			var buildProxy:BuildProxy = facade.retrieveProxy(BuildProxy.NAME) as BuildProxy;		
+			if(buildProxy.build.edit)
+			{
+				token = buildProxy.Save();			
+				token.addResponder(responder);			
+				_dictSave[token] = false;
+			}
 		}
 		
 		private function onSaveListener(event:ResultEvent):void

@@ -2,7 +2,8 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" 
-		 doubleClickEnabled="true">
+		 clipAndEnableScrolling="true" 
+		 left="0" right="0" bottom="0" top="0">
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
@@ -10,8 +11,15 @@
 	<fx:Script>
 		<![CDATA[		
 			import app.model.vo.BuildVO;
-						
-			public static const BUILDCLICK:String = "BuildClick";
+			
+			import mx.events.FlexEvent;
+			
+			private static const W:Number = 777;
+			private static const H:Number = 649;
+			
+			private var indexScale:Number;
+			
+			private var listScale:Array;
 			
 			[Bindable]private var build:BuildVO;
 			public function set Build(value:BuildVO):void
@@ -21,22 +29,172 @@
 			public function get Build():BuildVO
 			{
 				return build;
-			}			
+			}				
+			
+			protected function image_readyHandler(event:FlexEvent):void
+			{
+				listScale = [];
+				
+				var scale:Number = Math.max(W / imgTMB.bitmapData.width,H / imgTMB.bitmapData.width);
+				if(scale <= 1)
+				{
+					listScale.push(scale);
+					listScale.push((1+scale)/2);
+					listScale.push(1);
+					
+					indexScale = 2;
+				}
+				else
+				{
+					listScale.push(1);
+					listScale.push((1+scale)/2);
+					listScale.push(scale);				
+					
+					indexScale = 0;
+				}
+				
+				contentGroup.x = (W - imgTMB.bitmapData.width) / 2;
+				contentGroup.y = (H - imgTMB.bitmapData.height) / 2;
+			}
+			
+			protected function contentGroup_mouseWheelHandler(event:MouseEvent):void
+			{
+				if(event.delta > 0)
+				{
+					zoomin();
+				}
+				else if(event.delta < 0)
+				{				
+					zoomout();
+				}
+			}
+			
+			private var srcPoint:Point;
+			protected function image_mouseDownHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				srcPoint = new Point(event.stageX,event.stageY);
+			}
+			
+			protected function image_mouseMoveHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				if(event.buttonDown && srcPoint)
+				{					
+					var desPoint:Point = new Point(event.stageX,event.stageY);
+					
+					var tempPoint:Point = new Point(contentGroup.x + (desPoint.x - srcPoint.x)*contentGroup.scaleX
+						,contentGroup.y + (desPoint.y - srcPoint.y)*contentGroup.scaleY);
+					
+					var imageW:Number = contentGroup.width * contentGroup.scaleX;
+					var imageH:Number = contentGroup.height * contentGroup.scaleY;
+					
+					if(W < imageW)
+					{
+						if(tempPoint.x > 0)
+						{
+							contentGroup.x = 0;
+						}
+						else if(tempPoint.x < W - imageW)
+						{
+							contentGroup.x = W - imageW;
+						}
+						else
+						{
+							contentGroup.x = tempPoint.x;
+						}		
+					}
+					
+					if(H < imageH)
+					{
+						if(tempPoint.y > 0)
+						{
+							contentGroup.y = 0;
+						}
+						else if(tempPoint.y < H - imageH)
+						{
+							contentGroup.y = H - imageH;
+						}
+						else
+						{
+							contentGroup.y = tempPoint.y;
+						}	
+					}
+					
+					srcPoint.x = desPoint.x;
+					srcPoint.y = desPoint.y; 
+				}
+			}
+			
+			protected function contentGroup_mouseUpHandler(event:MouseEvent):void
+			{
+				srcPoint = null;
+			}
+			
+			private function zoomin():void
+			{				
+				if(indexScale > 0)
+				{
+					indexScale--;
+					contentGroup.scaleX = listScale[indexScale];
+					contentGroup.scaleY = listScale[indexScale];
+				}
+				
+				ajustPosition();
+			}
+			
+			private function zoomout():void
+			{				
+				if(indexScale < 2)
+				{
+					indexScale++;
+					contentGroup.scaleX = listScale[indexScale];
+					contentGroup.scaleY = listScale[indexScale];
+				}
+				
+				ajustPosition();
+			}
+			
+			private function ajustPosition():void
+			{				
+				var w:int = int(listScale[indexScale] * imgTMB.bitmapData.width);
+				var h:int = int(listScale[indexScale] * imgTMB.bitmapData.height);
+				if(w <= W)
+					contentGroup.x = (W - w) / 2;
+				else if(contentGroup.x > 0)
+					contentGroup.x = 0;
+				else if(contentGroup.x + w < W)
+					contentGroup.x = W - w;
+				
+				if(h <= H)
+					contentGroup.y = (H - h) / 2;
+				else if(contentGroup.y > 0)
+					contentGroup.y = 0;
+				else if(contentGroup.y + h < H)
+					contentGroup.y = H - h;
+			}
 		]]>
 	</fx:Script>
 	
-	<!--周边环境底图-->
-	<s:Image source="{build.TMB_PicPath}" mouseEnabled="false"/>	
-			
-	<s:Image id="layerScentingPic"/>
+	<s:Group id="contentGroup" doubleClickEnabled="true"
+			 mouseWheel="contentGroup_mouseWheelHandler(event)">
+		<s:Image id="imgTMB" source="{build.TMB_PicPath}" ready="image_readyHandler(event)"
+				 mouseMove="image_mouseMoveHandler(event)"
+				 mouseDown="image_mouseDownHandler(event)" 
+				 mouseUp="contentGroup_mouseUpHandler(event)"/>
+	</s:Group>
+	
+	<s:Image top="10" right="10" buttonMode="true" source="@Embed('assets/image/放大.png')" click="zoomout();"/>
+	<s:Image top="60" right="10" buttonMode="true" source="@Embed('assets/image/缩小.png')" click="zoomin();"/>
+	<!--<s:Image id="layerScentingPic"/>-->
 	
 	<!--建筑物-->
-	<s:Group buttonMode="true" width="50" height="50" x="{build.TMB_X - 25}" y="{build.TMB_Y - 25}"
+<!--	<s:Group buttonMode="true" width="50" height="50" x="{build.TMB_X - 25}" y="{build.TMB_Y - 25}"
 			 click="dispatchEvent(new Event(BUILDCLICK));">
 		<s:Ellipse verticalCenter="0" horizontalCenter="0" width="20" height="20">
 			<s:fill>
 				<s:SolidColor color="red"/>
 			</s:fill>
 		</s:Ellipse>
-	</s:Group>
+	</s:Group>-->
 </s:Group>

@@ -45,7 +45,7 @@ package app.model
 		{			
 			for each(var ch:CommandHeightVO in dict)
 			{
-				ch.edit = true;
+				ch.edit = false;
 			}
 		}
 		

@@ -43,7 +43,7 @@ package app.model
 		{			
 			for each(var ch:ClosedHandleVO in dict)
 			{
-				ch.edit = true;
+				ch.edit = false;
 			}
 		}
 		

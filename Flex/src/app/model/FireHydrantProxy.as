@@ -42,7 +42,7 @@ package app.model
 		{			
 			for each(var fh:FireHydrantVO in dict)
 			{
-				fh.edit = true;
+				fh.edit = false;
 			}
 		}
 		

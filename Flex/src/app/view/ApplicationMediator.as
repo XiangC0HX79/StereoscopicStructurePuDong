@@ -103,7 +103,7 @@ package app.view
 			switch(notification.getName())
 			{
 				case ApplicationFacade.NOTIFY_INIT_CONFIG:
-					ConfigVO.EDIT = (application.parameters.edit == "1");
+					ConfigVO.EDIT = true;//(application.parameters.edit == "1");
 					
 					var iconsProxy:IconsProxy = facade.retrieveProxy(IconsProxy.NAME) as IconsProxy;
 					iconsProxy.Init();

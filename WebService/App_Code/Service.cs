@@ -184,6 +184,9 @@ public class Service : WebService
         {
             switch (s2[0])
             {
+                case "0":
+                    sql += "UPDATE T_MainBulid SET TMB_X = " + s2[2] + ",TMB_Y = " + s2[3] + " WHERE TMB_ID = " + s2[1] + ";";
+                    break;
                 case "1":
                     sql += "UPDATE T_CommandingHeights SET TCH_X = " + s2[2] + ",TCH_Y = " + s2[3] + " WHERE TCH_ID = " + s2[1] + ";";
                     break;

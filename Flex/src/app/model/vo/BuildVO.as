@@ -37,10 +37,20 @@ package app.model.vo
 		{
 			return _source.TMB_X?_source.TMB_X:0;
 		}
+		public function set TMB_X(value:Number):void
+		{
+			edit = true;
+			_source.TMB_X = value;
+		}
 		
 		public function get TMB_Y():Number
 		{
 			return _source.TMB_Y?_source.TMB_Y:0;
+		}
+		public function set TMB_Y(value:Number):void
+		{
+			edit = true;
+			_source.TMB_Y = value;
 		}
 		
 		public function get TMB_videoPath():String
@@ -119,6 +129,8 @@ package app.model.vo
 						
 		public var BitmapWidth:Number = 0;
 		public var BitmapHeight:Number = 0;
+		
+		public var edit:Boolean = false;
 		
 		public function BuildVO(value:* = null)
 		{

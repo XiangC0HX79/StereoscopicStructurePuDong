@@ -42,7 +42,7 @@ package app.model
 		{			
 			for each(var ha:HazardVO in dict)
 			{
-				ha.edit = true;
+				ha.edit = false;
 			}
 		}
 		

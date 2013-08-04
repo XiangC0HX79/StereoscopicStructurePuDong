@@ -52,37 +52,38 @@ package app.view
 		public function PanelSurroundingMediator()
 		{
 			super(NAME, new PanelSurrounding);
+			
+			panelSurrounding.contentGroup.addElement(facade.retrieveMediator(LayerScentingPicMediator.NAME).getViewComponent() as IVisualElement);	
+			
+			panelSurrounding.contentGroup.addElement(facade.retrieveMediator(LayerClosedPicMediator.NAME).getViewComponent() as IVisualElement);	
 						
-			panelSurrounding.addElement(facade.retrieveMediator(LayerScentingPicMediator.NAME).getViewComponent() as IVisualElement);	
+			panelSurrounding.contentGroup.addElement(facade.retrieveMediator(ImageBuildingMediator.NAME).getViewComponent() as IVisualElement);	
 			
-			panelSurrounding.addElement(facade.retrieveMediator(LayerClosedPicMediator.NAME).getViewComponent() as IVisualElement);	
-			
-			panelSurrounding.addElement(facade.retrieveMediator(LayerDrawMediator.NAME).getViewComponent() as IVisualElement);			
+			panelSurrounding.contentGroup.addElement(facade.retrieveMediator(LayerDrawMediator.NAME).getViewComponent() as IVisualElement);						
 
-			panelSurrounding.addElement(facade.retrieveMediator(LayerCommandingHeightMediator.NAME).getViewComponent() as IVisualElement);
+			panelSurrounding.contentGroup.addElement(facade.retrieveMediator(LayerCommandingHeightMediator.NAME).getViewComponent() as IVisualElement);
 			
-			panelSurrounding.addElement(facade.retrieveMediator(LayerCloseHandlesMediator.NAME).getViewComponent() as IVisualElement);
+			panelSurrounding.contentGroup.addElement(facade.retrieveMediator(LayerCloseHandlesMediator.NAME).getViewComponent() as IVisualElement);
 			
-			panelSurrounding.addElement(facade.retrieveMediator(LayerTrafficMediator.NAME).getViewComponent() as IVisualElement);
+			panelSurrounding.contentGroup.addElement(facade.retrieveMediator(LayerTrafficMediator.NAME).getViewComponent() as IVisualElement);
 			
-			panelSurrounding.addElement(facade.retrieveMediator(LayerHazardMediator.NAME).getViewComponent() as IVisualElement);
+			panelSurrounding.contentGroup.addElement(facade.retrieveMediator(LayerHazardMediator.NAME).getViewComponent() as IVisualElement);
 						
-			panelSurrounding.addElement(facade.retrieveMediator(LayerFireHydrantMediator.NAME).getViewComponent() as IVisualElement);
+			panelSurrounding.contentGroup.addElement(facade.retrieveMediator(LayerFireHydrantMediator.NAME).getViewComponent() as IVisualElement);
 			
-			panelSurrounding.addElement(facade.retrieveMediator(LayerKeyUnitsMediator.NAME).getViewComponent() as IVisualElement);
+			panelSurrounding.contentGroup.addElement(facade.retrieveMediator(LayerKeyUnitsMediator.NAME).getViewComponent() as IVisualElement);
 			
-			panelSurrounding.addElement(facade.retrieveMediator(LayerScentingMediator.NAME).getViewComponent() as IVisualElement);
+			panelSurrounding.contentGroup.addElement(facade.retrieveMediator(LayerScentingMediator.NAME).getViewComponent() as IVisualElement);
 			
-			panelSurrounding.addEventListener(PanelSurrounding.BUILDCLICK,onBuildClick);			
+			panelSurrounding.contentGroup.addEventListener(DragEvent.DRAG_ENTER,onDragEnter);
+			panelSurrounding.contentGroup.addEventListener(DragEvent.DRAG_DROP,onDragDrop);		
 			
-			panelSurrounding.addEventListener(DragEvent.DRAG_ENTER,onDragEnter);
-			panelSurrounding.addEventListener(DragEvent.DRAG_DROP,onDragDrop);		
+			panelSurrounding.contentGroup.addEventListener(MouseEvent.ROLL_OVER,onRollOver);	
+			panelSurrounding.contentGroup.addEventListener(MouseEvent.ROLL_OUT,onRollOut);	
+			panelSurrounding.contentGroup.addEventListener(MouseEvent.CLICK,onClick);		
+			panelSurrounding.contentGroup.addEventListener(MouseEvent.DOUBLE_CLICK,onDoubleClick);	
 			
-			panelSurrounding.addEventListener(MouseEvent.ROLL_OVER,onRollOver);	
-			panelSurrounding.addEventListener(MouseEvent.ROLL_OUT,onRollOut);	
-			panelSurrounding.addEventListener(MouseEvent.CLICK,onClick);		
-			panelSurrounding.addEventListener(MouseEvent.DOUBLE_CLICK,onDoubleClick);			
-			panelSurrounding.addEventListener(MouseEvent.MOUSE_MOVE,onMove);		
+			panelSurrounding.contentGroup.addEventListener(MouseEvent.MOUSE_MOVE,onMove);					
 									
 			iconsProxy = facade.retrieveProxy(IconsProxy.NAME) as IconsProxy;
 		}
@@ -90,11 +91,6 @@ package app.view
 		protected function get panelSurrounding():PanelSurrounding
 		{
 			return viewComponent as PanelSurrounding;
-		}
-		
-		private function onBuildClick(event:Event):void
-		{			
-			sendNotification(ApplicationFacade.NOTIFY_TITLEWINDOW_MOVIE,panelSurrounding.Build.TMB_videoPath);
 		}
 				
 		private function onDragEnter(e:DragEvent):void
@@ -107,9 +103,10 @@ package app.view
 				|| e.dragSource.hasFormat("FireHydrantVO")		
 				|| e.dragSource.hasFormat("KeyUnitVO")				
 				|| e.dragSource.hasFormat("ScentingVO")				
+				|| e.dragSource.hasFormat("BuildVO")				
 			)
 			{  
-				DragManager.acceptDragDrop(panelSurrounding);	
+				DragManager.acceptDragDrop(panelSurrounding.contentGroup);	
 			}  
 		}
 		
@@ -172,6 +169,14 @@ package app.view
 				sc.T_ScentingY = e.localY - sp.y;		
 				
 				sendNotification(ApplicationFacade.NOTIFY_SELECT_MOVE,sc);					
+			}						
+			else if(e.dragSource.hasFormat("BuildVO"))
+			{
+				var bd:BuildVO = e.dragSource.dataForFormat("BuildVO") as BuildVO;
+				bd.TMB_X = e.localX - sp.x + e.dragInitiator.width / 2;
+				bd.TMB_Y = e.localY - sp.y + e.dragInitiator.height / 2;		
+				
+				sendNotification(ApplicationFacade.NOTIFY_SELECT_MOVE,bd);					
 			}		
 		}
 				
@@ -226,7 +231,7 @@ package app.view
 				PanelSurroundingTool.Tool = PanelSurroundingTool.CLOSE_ADD_END;
 				
 				var pt:Point = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
-				pt = panelSurrounding.globalToLocal(pt);
+				pt = panelSurrounding.contentGroup.globalToLocal(pt);
 				
 				sendNotification(ApplicationFacade.NOTIFY_CLOSE_ADD_START,pt);
 			}
@@ -235,14 +240,14 @@ package app.view
 				PanelSurroundingTool.Tool = PanelSurroundingTool.CLOSE_ADD_START;
 				
 				pt = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
-				pt = panelSurrounding.globalToLocal(pt);
+				pt = panelSurrounding.contentGroup.globalToLocal(pt);
 				
 				sendNotification(ApplicationFacade.NOTIFY_CLOSE_ADD_END,pt);				
 			}
 			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_DEL)
 			{				
 				pt = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
-				pt = panelSurrounding.globalToLocal(pt);
+				pt = panelSurrounding.contentGroup.globalToLocal(pt);
 				
 				var closedHandleLineProxy:ClosedHandleLineProxy = facade.retrieveProxy(ClosedHandleLineProxy.NAME) as ClosedHandleLineProxy;
 				closedHandleLineProxy.DelFireHydrant(pt);
@@ -250,14 +255,14 @@ package app.view
 			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.SCENTING_ADD)
 			{				
 				pt = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
-				pt = panelSurrounding.globalToLocal(pt);
+				pt = panelSurrounding.contentGroup.globalToLocal(pt);
 				
 				sendNotification(ApplicationFacade.NOTIFY_SCENTING_ADD_START,pt);	
 			}
 			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.SCENTING_DEL)
 			{				
 				pt = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
-				pt = panelSurrounding.globalToLocal(pt);
+				pt = panelSurrounding.contentGroup.globalToLocal(pt);
 								
 				var scentingLineProxy:ScentingLineProxy = facade.retrieveProxy(ScentingLineProxy.NAME) as ScentingLineProxy;
 				scentingLineProxy.DelScentingLine(pt);
@@ -269,7 +274,7 @@ package app.view
 			if(PanelSurroundingTool.Tool == PanelSurroundingTool.SCENTING_ADD)
 			{				
 				var pt:Point = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
-				pt = panelSurrounding.globalToLocal(pt);
+				pt = panelSurrounding.contentGroup.globalToLocal(pt);
 				
 				sendNotification(ApplicationFacade.NOTIFY_SCENTING_ADD_END,pt);	
 			}
@@ -280,14 +285,14 @@ package app.view
 			if(PanelSurroundingTool.Tool == PanelSurroundingTool.CLOSE_ADD_END)
 			{								
 				var pt:Point = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
-				pt = panelSurrounding.globalToLocal(pt);
+				pt = panelSurrounding.contentGroup.globalToLocal(pt);
 				
 				sendNotification(ApplicationFacade.NOTIFY_CLOSE_ADD_MOVE,pt);
 			}
 			else if(PanelSurroundingTool.Tool == PanelSurroundingTool.SCENTING_ADD)
 			{				
 				pt = (event.target as DisplayObject).localToGlobal(new Point(event.localX,event.localY));
-				pt = panelSurrounding.globalToLocal(pt);
+				pt = panelSurrounding.contentGroup.globalToLocal(pt);
 				
 				sendNotification(ApplicationFacade.NOTIFY_SCENTING_ADD_MOVE,pt);	
 			}
@@ -304,7 +309,7 @@ package app.view
 		{
 			switch(notification.getName())
 			{
-				case ApplicationFacade.NOTIFY_INIT_BUILD:				
+				case ApplicationFacade.NOTIFY_INIT_BUILD:	
 					panelSurrounding.Build = notification.getBody() as BuildVO;
 					break;
 			}

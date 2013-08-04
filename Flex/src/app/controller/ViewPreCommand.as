@@ -42,6 +42,7 @@ package app.controller
 			facade.registerMediator(new MenuStereoScopicStructureMediator);
 			facade.registerMediator(new MenuStereoScopicEditMediator);
 			
+			facade.registerMediator(new ImageBuildingMediator);	
 			facade.registerMediator(new LayerScentingPicMediator);	
 			facade.registerMediator(new LayerClosedPicMediator);		
 			facade.registerMediator(new LayerDrawMediator);		

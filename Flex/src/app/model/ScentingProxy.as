@@ -42,7 +42,7 @@ package app.model
 		{			
 			for each(var sc:ScentingVO in dict)
 			{
-				sc.edit = true;
+				sc.edit = false;
 			}
 		}
 		

@@ -27,6 +27,7 @@ package app.model
 	import flash.net.URLRequestMethod;
 	
 	import mx.collections.ArrayCollection;
+	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.events.ResultEvent;
 	
@@ -78,6 +79,19 @@ package app.model
 			sendNotification(ApplicationFacade.NOTIFY_APP_LOADINGTEXT,"系统初始化：基础信息加载完成...");		
 			
 			sendNotification(ApplicationFacade.NOTIFY_INIT_BUILD,build);	
+		}
+		
+		public function Save():AsyncToken
+		{
+			var s:String = "";
+			s += "0 " + build.TMB_ID + " " + build.TMB_X + " " + build.TMB_Y + ";"
+			
+			return send("SaveSurrouding",onSaveSurrouding,s);
+		}
+		
+		private function onSaveSurrouding(event:ResultEvent):void
+		{			
+			build.edit = false;
 		}
 	}
 }

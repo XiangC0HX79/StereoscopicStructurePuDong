@@ -42,7 +42,7 @@ package app.model
 		{			
 			for each(var ku:KeyUnitVO in dict)
 			{
-				ku.edit = true;
+				ku.edit = false;
 			}
 		}
 		
